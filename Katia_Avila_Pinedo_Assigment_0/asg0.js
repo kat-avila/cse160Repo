@@ -27,9 +27,29 @@ function main() {
     v1[2] = 0; //z
     // console.log(v1);
 
+    //handle draw event
+    drawButton.onclick = function handleDrawEvent() {
+        console.log("hanlderEVENT triggger");
+
+        //clear canvas
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);   
+        //reset to black
+        ctx.fillStyle = 'rgba(0, 0, 0, 1.0)'; // Set color to blue
+        ctx.fillRect(0, 0, canvas.width, canvas.height);        // Fill a rectangle with the color
+
+
+        //read values of text boxes
+        // let v1xCord = document.getElementById('v1xCord');
+        // console.log("v1xcord", v1xCord);
+
+        // call draw vector(v1, "red")
+        // drawVector(v1, "red");
+        return false;
+    }
+
     // draw vector in 2D
     function drawVector(v, color) {
-        var ctx = canvas.getContext('2d');
+        // var ctx = canvas.getContext('2d');
         // set stroke color
         ctx.strokeStyle = color;
         //start a new path
@@ -41,7 +61,10 @@ function main() {
         ctx.lineTo(x, y); 
         ctx.stroke();
     }
+
     drawVector(v1, "red");
+
+
 }
 
 
