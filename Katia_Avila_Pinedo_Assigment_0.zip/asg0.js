@@ -26,7 +26,7 @@ function main() {
         var ctx = canvas.getContext('2d');
 
         // set stroke color
-        ctx.strokeStle = color;
+        ctx.strokeStyle = color;
         //start a new path
         ctx.beginPath();
         var x = v1[0];
@@ -36,7 +36,7 @@ function main() {
         ctx.lineTo(x * 20, y * 20); // scaled by 20
         ctx.stroke();
     }
-    
+
     drawVector(v1, "red");
 }
 
