@@ -30,20 +30,17 @@ function main() {
     // draw vector in 2D
     function drawVector(v, color) {
         var ctx = canvas.getContext('2d');
-
         // set stroke color
         ctx.strokeStyle = color;
         //start a new path
         ctx.beginPath();
         var x = rectOrigin[0] + v1[0];
         var y = rectOrigin[1] + (-1 * v1[1]); //adjust for opposing direction in coordinate system vs canvas
-
         ctx.moveTo(rectOrigin[0], rectOrigin[1]); // start at origin of rectangle in canvas
         // draw vector 
         ctx.lineTo(x, y); 
         ctx.stroke();
     }
-
     drawVector(v1, "red");
 }
 
