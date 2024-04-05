@@ -12,40 +12,47 @@ function main() {
     // setup a black canvas
     ctx.fillStyle = 'rgba(0, 0, 0, 1.0)'; // Set color to blue
     ctx.fillRect(0, 0, canvas.width, canvas.height);        // Fill a rectangle with the color
-    var rectOrigin = [canvas.width/2 , canvas.height/2 ]; // offset + (1/2 * width or height)
+    var rectOrigin = [canvas.width / 2, canvas.height / 2]; // offset + (1/2 * width or height)
     console.log(canvas.width, canvas.height, rectOrigin[0], rectOrigin[1]);
 
     // Draw a blue rectangle
     // ctx.fillStyle = 'rgba(0, 0, 0, 1.0)'; // Set color to blue
     // ctx.fillRect(120, 10, 150, 150);        // Fill a rectangle with the color
     // var rectOrigin = [120 + (150/2), 10 + (150/2)]; // offset + (1/2 * width or height)
-                
-    // instantiate vector v1
+
+    // instantiate vector v1 and v2
     let v1 = new Vector3();
+    let v2 = new Vector3();
 
     //handle draw event
     drawButton.onclick = function handleDrawEvent() {
-        console.log("hanlderEVENT triggger");
-
         //clear canvas
-        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);   
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
         //reset to black
         ctx.fillStyle = 'rgba(0, 0, 0, 1.0)'; // Set color to blue
         ctx.fillRect(0, 0, canvas.width, canvas.height);        // Fill a rectangle with the color
 
-        //read values of text boxes
-         let v1xCord = document.getElementById('v1xCord').value;
-        //  console.log("v1xcord", v1xCord);
-         let v1yCord = document.getElementById('v1yCord').value;
-        //  console.log("v1ycord", v1yCord);
-
+        //create vector 1, read values of text boxes
+        let v1xCord = document.getElementById('v1xCord').value;
+        let v1yCord = document.getElementById('v1yCord').value;
         //set coordinates
         v1[0] = v1xCord * 20; //x coordinate, scaled by 20
-        v1[1] = v1yCord* 20; //y coordinate, scaled by 20
+        v1[1] = v1yCord * 20; //y coordinate, scaled by 20
+        v1[2] = 0; //z
+        // call draw vector1
+        drawVector(v1, "red");
+
+        //create vector 2, read values of text boxes
+        let v2xCord = document.getElementById('v2xCord').value;
+        let v2yCord = document.getElementById('v2yCord').value;
+        //set coordinates
+        v1[0] = v2xCord * 20; //x coordinate, scaled by 20
+        v1[1] = v2yCord * 20; //y coordinate, scaled by 20
         v1[2] = 0; //z
 
-        // call draw vector(v1, "red")
-        drawVector(v1, "red");
+        // call draw vector2
+        drawVector(v2, "green");
+
         return false;
     }
 
@@ -60,7 +67,7 @@ function main() {
         var y = rectOrigin[1] + (-1 * v1[1]); //adjust for opposing direction in coordinate system vs canvas
         ctx.moveTo(rectOrigin[0], rectOrigin[1]); // start at origin of rectangle in canvas
         // draw vector 
-        ctx.lineTo(x, y); 
+        ctx.lineTo(x, y);
         ctx.stroke();
     }
 
