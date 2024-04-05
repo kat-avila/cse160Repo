@@ -44,9 +44,10 @@ class Vector3 {
       * @return this
       */
     add(other) {
-        // Insert your code here.
+        console.log(this.elements, other)
         // This function should change this vector (this.elements) and not create a new vector.
-
+        this.elements[0] = this.elements[0] + other.elements[0];
+        console.log("this x", this.elements[0])
         // Don't delete the return statement.
         return this;
     };
