@@ -23,26 +23,27 @@
     <input type="number" id="v1xCord" name="v1xCord">
     <label for="v1yCord">y </label>
     <input type="number" id="v1yCord" name="v1yCord">
-    <br/>
+    <br />
     v2:
-    <label for="v1xCord">x </label>
+    <label for="v2xCord">x </label>
     <input type="number" id="v2xCord" name="v2xCord">
-    <label for="v1yCord">y </label>
+    <label for="v2yCord">y </label>
     <input type="number" id="v2yCord" name="v2yCord">
-    <br/>
-    <input  type="submit" value="Draw" id="drawButton" name="Draw">
+    <br />
+    <input type="submit" value="Draw" id="drawButton" name="Draw">
 
-    <br/>
-    <br/>
-    Operation: 
-    <select>
-      <option value="add">Add</option>
-      <option value="subtract">Subtract</option>
-      <option value="multiply">Multiply</option>
-    </select>
+    <br />
+    <br />
+
 
     <form id="operationForm">
-      <label for="operations">Scalar</label>
+      Operation:
+      <select name="operators" id="operators">
+        <option value="add">Add</option>
+        <option value="subtract">Subtract</option>
+        <option value="multiply">Multiply</option>
+      </select>
+      <label for="scalar">Scalar</label>
       <input type="number" id="scalar" name="scalar">
       <br>
       <input type="submit" value="Draw" id="operationButton" name="operationButton">
