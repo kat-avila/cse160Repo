@@ -88,9 +88,11 @@ function main() {
             v1.sub(v2);
         } else { 
             // perform multiplication
-            console.log("mult");
+            v1.mul(scalar);
+            v2.mul(scalar);
+            console.log(v1);
+            console.log(v2);
         }
-        console.log(v1);
 
         return false;
     };
