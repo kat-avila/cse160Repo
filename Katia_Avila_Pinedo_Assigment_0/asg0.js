@@ -85,8 +85,8 @@ function main() {
             v1.sub(v2);
         } else if (operation == 'multiply') { 
             // perform multiplication
-            let v3 = v1.mul(scalar);
-            let v4 = v2.mul(scalar);
+            var v3 = v1.mul(scalar);
+            var v4 = v2.mul(scalar);
             drawVector(v3, "green");
             drawVector(v4, "green");
         } else if (operation == 'divide') {
@@ -98,6 +98,11 @@ function main() {
         } else if (operation == 'magnitude') {
             console.log("Magnitude v1: ", v1.magnitude());
             console.log("Magnitude v2: ", v2.magnitude());
+        } else if (operation == 'normalize') {
+            let v3 = v1.normalize();
+            let v4 = v2.normalize();
+            drawVector(v3, "green");
+            drawVector(v4, "green");
         }
 
         return false;

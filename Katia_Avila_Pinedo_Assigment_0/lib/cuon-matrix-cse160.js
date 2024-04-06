@@ -122,9 +122,9 @@ class Vector3 {
       */
     magnitude() {
         // Insert your code here.
-        var x = this[0] * this[0]; //x^2
-        var y = this[1] * this[1]; //y^2
-        var z = this[2] * this[2]; //z^2
+        let x = this[0] * this[0]; //x^2
+        let y = this[1] * this[1]; //y^2
+        let z = this[2] * this[2]; //z^2
         let m = Math.sqrt(x + y + z); // Modify this line to calculate this vector's magnitude.
         // Don't delete the return statement.
         return m;
@@ -135,9 +135,11 @@ class Vector3 {
       * @return this
       */
     normalize() {
-        // Insert your code here.
         // This function should change this vector (this.elements) and not create a new vector.
-
+        let mag = this.magnitude() / 20; // adjust for scale
+        this[0] = (this[0] / mag) ; //x^2
+        this[1] = (this[1] / mag) ; //y^2
+        this[2] = (this[2] / mag) ; //z^2
         // Don't delete the return statement.
         return this;
     };
