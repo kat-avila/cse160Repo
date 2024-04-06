@@ -71,7 +71,9 @@ class Vector3 {
       */
     div(scalar) {
         // This function should change this vector (this.elements) and not create a new vector.
-       
+        this[0] = (this[0]  / scalar);
+        this[1] = (this[1] / scalar);
+        this[2] = (this[2] / scalar);
         // Don't delete the return statement.
         return this;
     };

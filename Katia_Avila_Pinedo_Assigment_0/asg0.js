@@ -13,7 +13,6 @@ function main() {
     ctx.fillStyle = 'rgba(0, 0, 0, 1.0)'; // Set color to blue
     ctx.fillRect(0, 0, canvas.width, canvas.height);        // Fill a rectangle with the color
     var rectOrigin = [canvas.width / 2, canvas.height / 2]; // offset + (1/2 * width or height)
-    // console.log(canvas.width, canvas.height, rectOrigin[0], rectOrigin[1]);
 
     // Draw a blue rectangle
     // ctx.fillStyle = 'rgba(0, 0, 0, 1.0)'; // Set color to blue
@@ -41,7 +40,6 @@ function main() {
 
     //handle draw event
     function handleDrawEvent() {
-        console.log("draw vectors");
         //clear canvas
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
         //reset to black
@@ -73,7 +71,6 @@ function main() {
 
     //handle operations event
     function handleDrawOperationEvent() {
-        console.log("operation button");
         handleDrawEvent();
         // read value of operation selector
         let operation = document.getElementById('operators').value;
@@ -86,12 +83,16 @@ function main() {
         } else if (operation == 'subtract') {
             // subtract v2 from v1
             v1.sub(v2);
-        } else { 
+        } else if (operation == 'multiply') { 
             // perform multiplication
             let v3 = v1.mul(scalar);
             let v4 = v2.mul(scalar);
-            // console.log(v3);
-            // console.log(v4);
+            drawVector(v3, "green");
+            drawVector(v4, "green");
+        } else {
+            // perform division
+            let v3 = v1.div(scalar);
+            let v4 = v2.div(scalar);
             drawVector(v3, "green");
             drawVector(v4, "green");
         }
