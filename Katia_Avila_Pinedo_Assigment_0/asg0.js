@@ -89,12 +89,15 @@ function main() {
             let v4 = v2.mul(scalar);
             drawVector(v3, "green");
             drawVector(v4, "green");
-        } else {
+        } else if (operation == 'divide') {
             // perform division
             let v3 = v1.div(scalar);
             let v4 = v2.div(scalar);
             drawVector(v3, "green");
             drawVector(v4, "green");
+        } else if (operation == 'magnitude') {
+            console.log("Magnitude v1: ", v1.magnitude());
+            console.log("Magnitude v2: ", v2.magnitude());
         }
 
         return false;

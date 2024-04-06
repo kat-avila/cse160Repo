@@ -122,8 +122,10 @@ class Vector3 {
       */
     magnitude() {
         // Insert your code here.
-        let m = 0; // Modify this line to calculate this vector's magnitude.
-
+        var x = this[0] * this[0]; //x^2
+        var y = this[1] * this[1]; //y^2
+        var z = this[2] * this[2]; //z^2
+        let m = Math.sqrt(x + y + z); // Modify this line to calculate this vector's magnitude.
         // Don't delete the return statement.
         return m;
     };
