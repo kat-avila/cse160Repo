@@ -66,7 +66,7 @@ function main() {
         v2[1] = v2yCord * 20; //y coordinate, scaled by 20
         v2[2] = 0; //z
         // call draw vector2
-        drawVector(v2, "green");
+        drawVector(v2, "blue");
 
         return false;
     }
@@ -88,10 +88,12 @@ function main() {
             v1.sub(v2);
         } else { 
             // perform multiplication
-            v1.mul(scalar);
-            v2.mul(scalar);
-            console.log(v1);
-            console.log(v2);
+            let v3 = v1.mul(scalar);
+            let v4 = v2.mul(scalar);
+            // console.log(v3);
+            // console.log(v4);
+            drawVector(v3, "green");
+            drawVector(v4, "green");
         }
 
         return false;
