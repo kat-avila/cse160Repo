@@ -45,9 +45,13 @@ class Vector3 {
     */
   add(other) {
     // This function should change this vector (this.elements) and not create a new vector.
-    this[0] = (this[0] + other[0]);
-    this[1] = (this[1] + other[1]);
-    this[2] = (this[2] + other[2]);
+    this.elements[0] = this.elements[0] + other.elements[0]; 
+    this.elements[1] = this.elements[1] + other.elements[1]; 
+    this.elements[2] = this.elements[2] + other.elements[2]; 
+    this[0] = this.elements[0]; 
+    this[1] = this.elements[1];
+    this[2] = this.elements[2];  
+
     // Don't delete the return statement.
     return this;
   };
@@ -58,9 +62,12 @@ class Vector3 {
     */
   sub(other) {
     // This function should change this vector (this.elements) and not create a new vector.
-    this[0] = (this[0] - other[0]);
-    this[1] = (this[1] - other[1]);
-    this[2] = (this[2] - other[2]);
+    this.elements[0] = this.elements[0] - other.elements[0]; 
+    this.elements[1] = this.elements[1] - other.elements[1]; 
+    this.elements[2] = this.elements[2] - other.elements[2]; 
+    this[0] = this.elements[0]; 
+    this[1] = this.elements[1];
+    this[2] = this.elements[2];  
     // Don't delete the return statement.
     return this;
   };
@@ -71,9 +78,12 @@ class Vector3 {
     */
   div(scalar) {
     // This function should change this vector (this.elements) and not create a new vector.
-    this[0] = (this[0] / scalar);
-    this[1] = (this[1] / scalar);
-    this[2] = (this[2] / scalar);
+    this.elements[0] = (this.elements[0] / scalar);
+    this.elements[1] = (this.elements[1] / scalar);
+    this.elements[2] = (this.elements[2] / scalar);
+    this[0] = this.elements[0]; 
+    this[1] = this.elements[1];
+    this[2] = this.elements[2];  
     // Don't delete the return statement.
     return this;
   };
@@ -84,9 +94,12 @@ class Vector3 {
     */
   mul(scalar) {
     // This function should change this vector (this.elements) and not create a new vector.
-    this[0] = (this[0] * scalar);
-    this[1] = (this[1] * scalar);
-    this[2] = (this[2] * scalar);
+    this.elements[0] = (this.elements[0] * scalar);
+    this.elements[1] = (this.elements[1] * scalar);
+    this.elements[2] = (this.elements[2] * scalar);
+    this[0] = this.elements[0]; 
+    this[1] = this.elements[1];
+    this[2] = this.elements[2];  
     // Don't delete the return statement.
     return this;
   };
@@ -96,9 +109,9 @@ class Vector3 {
     * @return scalar
     */
   static dot(other1, other2) {
-    let x = ((other1[0] / 20)  * ( other2[0] / 20)) ; //adjust for scale
-    let y = ((other1[1] / 20)  * ( other2[1] / 20)) ; //adjust for scale
-    let z = ((other1[2] / 20)  * ( other2[2] / 20)) ; //adjust for scale
+    let x = ((other1.elements[0])  * ( other2.elements[0])) ; 
+    let y = ((other1.elements[1])  * ( other2.elements[1])) ; 
+    let z = ((other1.elements[2])  * ( other2.elements[2])) ; 
     let d =  x +  y + z ; // Modify this line to calculate this vector's magnitude.
     // Don't delete the return statement.
     return d;
@@ -112,10 +125,12 @@ class Vector3 {
      // a x b = i(a2b3 - a3b2) + j (a3b1-a1b3) + k(a1b2-a2b1)
     // This function should create and return a new vector.
     let v3 = new Vector3(); // Modify this line to calculate cross product between other1 and other2.
-    v3[0] = ((other1[1] * other2[2]) - (other1[2] * other2[1]));
-    v3[1] = ((other1[2] * other2[0]) - (other1[0] * other2[2]));
-    v3[2] = ((other1[0] * other2[1]) - (other1[1] * other2[0]));
-
+    v3.elements[0] = ((other1.elements[1] * other2.elements[2]) - (other1.elements[2] * other2.elements[1]));
+    v3.elements[1] = ((other1.elements[2] * other2.elements[0]) - (other1.elements[0] * other2.elements[2]));
+    v3.elements[2] = ((other1.elements[0] * other2.elements[1]) - (other1.elements[1] * other2.elements[0]));
+    v3[0] = v3.elements[0]; 
+    v3[1] = v3.elements[1];
+    v3[2] = v3.elements[2];  
     // Don't delete the return statement.
     return v3;
   }
@@ -126,9 +141,9 @@ class Vector3 {
     */
   magnitude() {
     // Insert your code here.
-    let x = (this[0] * this[0] ); //x^2, adjust for scale
-    let y = (this[1] * this[1] ); //y^2, adjust for scale
-    let z = (this[2] * this[2] ); //z^2, adjust for scale
+    let x = (this.elements[0] * this.elements[0] ); //x^2
+    let y = (this.elements[1] * this.elements[1] ); //y^2
+    let z = (this.elements[2] * this.elements[2] ); //z^2
     let m = Math.sqrt(x + y + z); // Modify this line to calculate this vector's magnitude.
     // Don't delete the return statement.
     return m;
@@ -140,10 +155,13 @@ class Vector3 {
     */
   normalize() {
     // This function should change this vector (this.elements) and not create a new vector.
-    let mag = this.magnitude() / 20; // adjust for scale
-    this[0] = (this[0] / mag); //x^2
-    this[1] = (this[1] / mag); //y^2
-    this[2] = (this[2] / mag); //z^2
+    let mag = this.magnitude(); // adjust for scale
+    this.elements[0] = (this.elements[0] / mag); //x^2
+    this.elements[1] = (this.elements[1] / mag); //y^2
+    this.elements[2] = (this.elements[2] / mag); //z^2
+    this[0] = this.elements[0]; 
+    this[1] = this.elements[1];
+    this[2] = this.elements[2]; 
     // Don't delete the return statement.
     return this;
   };

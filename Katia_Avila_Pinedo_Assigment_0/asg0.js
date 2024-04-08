@@ -20,29 +20,21 @@ function main() {
     // var rectOrigin = [120 + (150/2), 10 + (150/2)]; // offset + (1/2 * width or height)
 
     // instantiate vector v1 and v2
-    let v1 = new Vector3();
-    let v2 = new Vector3();
+    var v1 = new Vector3([0,0,0]);
+    var v2 = new Vector3([0,0,0]);
     var scale = 20;
 
-    // adjust for scale
-    function descaleVector(v, scale) {
-        let unScaled =  new Vector3()
-        unScaled[0] = v[0] / scale;
-        unScaled[1] = v[1] / scale;
-        unScaled[2] = v[2] / scale;
-        return unScaled;
-    }
     // draw vector in 2D
     function drawVector(v, color) {
-        // var ctx = canvas.getContext('2d');
         // set stroke color
         ctx.strokeStyle = color;
         //start a new path
         ctx.beginPath();
-        var x = rectOrigin[0] + v[0];
-        var y = rectOrigin[1] + (-1 * v[1]); //adjust for opposing direction in coordinate system vs canvas
+        var x = (rectOrigin[0] + (v[0] * scale));
+        var y = rectOrigin[1] + (-1 * v[1] * scale); //adjust for opposing direction in coordinate system vs canvas
         ctx.moveTo(rectOrigin[0], rectOrigin[1]); // start at origin of rectangle in canvas
         // draw vector 
+        // sconsole.log("draw scale ", x,y);
         ctx.lineTo(x, y);
         ctx.stroke();
     }
@@ -59,8 +51,8 @@ function main() {
         let v1xCord = document.getElementById('v1xCord').value;
         let v1yCord = document.getElementById('v1yCord').value;
         //set coordinates
-        v1[0] = v1xCord * scale; //x coordinate, scaled by 20
-        v1[1] = v1yCord * scale; //y coordinate, scaled by 20
+        v1[0] = v1xCord ; //x coordinate, scaled by 20
+        v1[1] = v1yCord ; //y coordinate, scaled by 20
         v1[2] = 0; //z
         // call draw vector1
         drawVector(v1, "red");
@@ -69,8 +61,8 @@ function main() {
         let v2xCord = document.getElementById('v2xCord').value;
         let v2yCord = document.getElementById('v2yCord').value;
         //set coordinates
-        v2[0] = v2xCord * scale; //x coordinate, scaled by 20
-        v2[1] = v2yCord * scale; //y coordinate, scaled by 20
+        v2[0] = v2xCord ; //x coordinate, scaled by 20
+        v2[1] = v2yCord ; //y coordinate, scaled by 20
         v2[2] = 0; //z
         // call draw vector2
         drawVector(v2, "blue");
@@ -80,10 +72,8 @@ function main() {
 
     // finds angle between two vectors using dot product
     function angleBetween(v1, v2) {
-        let v3 = descaleVector(v1, scale);
-        let v4 = descaleVector(v2, scale);
-        let mag1 = (v3.magnitude() ); 
-        let mag2 = (v4.magnitude() );
+        let mag1 = (v1.magnitude() ); 
+        let mag2 = (v2.magnitude() );
 
         let d = Vector3.dot(v1,v2);
         let cosAlpha = d / (mag1 * mag2);
@@ -96,10 +86,8 @@ function main() {
 
     //finds area of triangle formed by two vectors
     function areaTriangle(v1, v2) {
-        let v3 = descaleVector(v1, scale);
-        let v4 = descaleVector(v2, scale);
         // A = mag(axb) / 2
-        let crossProd = Vector3.cross(v3, v4);
+        let crossProd = Vector3.cross(v1, v2);
         let magCross = crossProd.magnitude();
         let areaTri = magCross / 2;
         console.log("Area of the triangle: ", areaTri);
@@ -116,9 +104,12 @@ function main() {
         if (operation == 'add') {
             // add v2 (other) to v1 (this)
             v1.add(v2);
+            console.log("added v1 ", v1.elements);
+            drawVector(v1, "green");
         } else if (operation == 'subtract') {
             // subtract v2 from v1
             v1.sub(v2);
+            drawVector(v1, "green");
         } else if (operation == 'multiply') {
             // perform multiplication
             let v3 = v1.mul(scalar);
