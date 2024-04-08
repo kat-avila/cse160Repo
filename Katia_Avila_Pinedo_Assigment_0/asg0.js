@@ -20,8 +20,8 @@ function main() {
     // var rectOrigin = [120 + (150/2), 10 + (150/2)]; // offset + (1/2 * width or height)
 
     // instantiate vector v1 and v2
-    var v1 = new Vector3([0,0,0]);
-    var v2 = new Vector3([0,0,0]);
+    let v1 = new Vector3([0,0,0]);
+    let v2 = new Vector3([0,0,0]);
     var scale = 20;
 
     // draw vector in 2D
@@ -30,11 +30,10 @@ function main() {
         ctx.strokeStyle = color;
         //start a new path
         ctx.beginPath();
-        var x = (rectOrigin[0] + (v[0] * scale));
-        var y = rectOrigin[1] + (-1 * v[1] * scale); //adjust for opposing direction in coordinate system vs canvas
+        var x = (rectOrigin[0] + (v.elements[0] * scale)); // adjust for scale
+        var y = rectOrigin[1] + (-1 * v.elements[1] * scale); //adjust for opposing direction in coordinate system vs canvas, adjust for scale
         ctx.moveTo(rectOrigin[0], rectOrigin[1]); // start at origin of rectangle in canvas
         // draw vector 
-        // sconsole.log("draw scale ", x,y);
         ctx.lineTo(x, y);
         ctx.stroke();
     }
@@ -51,9 +50,9 @@ function main() {
         let v1xCord = document.getElementById('v1xCord').value;
         let v1yCord = document.getElementById('v1yCord').value;
         //set coordinates
-        v1[0] = v1xCord ; //x coordinate, scaled by 20
-        v1[1] = v1yCord ; //y coordinate, scaled by 20
-        v1[2] = 0; //z
+        v1.elements[0] = v1xCord ; //x coordinate, scaled by 20
+        v1.elements[1] = v1yCord ; //y coordinate, scaled by 20
+        v1.elements[2] = 0; //z
         // call draw vector1
         drawVector(v1, "red");
 
@@ -61,9 +60,9 @@ function main() {
         let v2xCord = document.getElementById('v2xCord').value;
         let v2yCord = document.getElementById('v2yCord').value;
         //set coordinates
-        v2[0] = v2xCord ; //x coordinate, scaled by 20
-        v2[1] = v2yCord ; //y coordinate, scaled by 20
-        v2[2] = 0; //z
+        v2.elements[0] = v2xCord ; //x coordinate
+        v2.elements[1] = v2yCord ; //y coordinate
+        v2.elements[2] = 0; //z
         // call draw vector2
         drawVector(v2, "blue");
 
@@ -104,7 +103,6 @@ function main() {
         if (operation == 'add') {
             // add v2 (other) to v1 (this)
             v1.add(v2);
-            console.log("added v1 ", v1.elements);
             drawVector(v1, "green");
         } else if (operation == 'subtract') {
             // subtract v2 from v1
@@ -139,12 +137,10 @@ function main() {
         return false;
     };
 
-
     // draw vectors when v1 and v2 coordinates are submittes
     drawButton.onclick = handleDrawEvent;
     // conduct operation when scalar submitted
     operationButton.onclick = handleDrawOperationEvent;
-
 
 }
 

@@ -45,13 +45,10 @@ class Vector3 {
     */
   add(other) {
     // This function should change this vector (this.elements) and not create a new vector.
-    this.elements[0] = this.elements[0] + other.elements[0]; 
-    this.elements[1] = this.elements[1] + other.elements[1]; 
-    this.elements[2] = this.elements[2] + other.elements[2]; 
-    this[0] = this.elements[0]; 
-    this[1] = this.elements[1];
-    this[2] = this.elements[2];  
-
+    this.elements[0] = (this.elements[0] + other.elements[0]); 
+    this.elements[1] = (this.elements[1] + other.elements[1]); 
+    this.elements[2] = (this.elements[2] + other.elements[2]); 
+    
     // Don't delete the return statement.
     return this;
   };
@@ -128,9 +125,6 @@ class Vector3 {
     v3.elements[0] = ((other1.elements[1] * other2.elements[2]) - (other1.elements[2] * other2.elements[1]));
     v3.elements[1] = ((other1.elements[2] * other2.elements[0]) - (other1.elements[0] * other2.elements[2]));
     v3.elements[2] = ((other1.elements[0] * other2.elements[1]) - (other1.elements[1] * other2.elements[0]));
-    v3[0] = v3.elements[0]; 
-    v3[1] = v3.elements[1];
-    v3[2] = v3.elements[2];  
     // Don't delete the return statement.
     return v3;
   }
@@ -158,10 +152,7 @@ class Vector3 {
     let mag = this.magnitude(); // adjust for scale
     this.elements[0] = (this.elements[0] / mag); //x^2
     this.elements[1] = (this.elements[1] / mag); //y^2
-    this.elements[2] = (this.elements[2] / mag); //z^2
-    this[0] = this.elements[0]; 
-    this[1] = this.elements[1];
-    this[2] = this.elements[2]; 
+    this.elements[2] = (this.elements[2] / mag); //z^2 
     // Don't delete the return statement.
     return this;
   };
