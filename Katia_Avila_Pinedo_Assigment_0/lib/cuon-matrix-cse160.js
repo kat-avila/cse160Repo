@@ -109,9 +109,18 @@ class Vector3 {
     * @return new vector
     */
   static cross(other1, other2) {
-    // Insert your code here.
+    var a1 = other1[0] / 20; //adjust for scale
+    var a2 = other1[1] / 20;
+    var a3 = other1[2] / 20;
+    var b1 = other2[0] / 20;
+    var b2 = other2[1] / 20;
+    var b3 = other2[2] / 20;
+     // a x b = i(a2b3 - a3b2) + j (a3b1-a1b3) + k(a1b2-a2b1)
     // This function should create and return a new vector.
     let v3 = new Vector3(); // Modify this line to calculate cross product between other1 and other2.
+    v3[0] = (a2 * b3) - (a3 * b2);
+    v3[1] = (a3 * b1) - (a1 * b3);
+    v3[2] = (a1 * b2) - (a2 * b1);
 
     // Don't delete the return statement.
     return v3;
