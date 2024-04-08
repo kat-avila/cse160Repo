@@ -69,6 +69,20 @@ function main() {
         return false;
     }
 
+    // finds angle between two vectors using dot product
+    function angleBetween(v1, v2) {
+        let mag1 = (v1.magnitude() ); 
+        let mag2 = (v2.magnitude() );
+        // UNCAUGH ERROR TRIGGERED BY DOT
+        let d = Vector3.dot(v1,v2);
+        let cosAlpha = d / (mag1 * mag2);
+        let angleRadians = Math.acos(cosAlpha); // angle in radians
+        //convertion to degrees
+        let angleDegrees = angleRadians * (180 / Math.PI);
+        console.log("Angle: ", angleDegrees);
+        return false;   
+    }
+
     //handle operations event
     function handleDrawOperationEvent() {
         handleDrawEvent();
@@ -83,10 +97,10 @@ function main() {
         } else if (operation == 'subtract') {
             // subtract v2 from v1
             v1.sub(v2);
-        } else if (operation == 'multiply') { 
+        } else if (operation == 'multiply') {
             // perform multiplication
-            var v3 = v1.mul(scalar);
-            var v4 = v2.mul(scalar);
+            let v3 = v1.mul(scalar);
+            let v4 = v2.mul(scalar);
             drawVector(v3, "green");
             drawVector(v4, "green");
         } else if (operation == 'divide') {
@@ -103,6 +117,9 @@ function main() {
             let v4 = v2.normalize();
             drawVector(v3, "green");
             drawVector(v4, "green");
+        } else if (operation == 'between') {
+            angleBetween(v1,v2);
+            //console.log("angle ", angle);
         }
 
         return false;
@@ -114,7 +131,7 @@ function main() {
     // conduct operation when scalar submitted
     operationButton.onclick = handleDrawOperationEvent;
 
-    
+
 }
 
 
