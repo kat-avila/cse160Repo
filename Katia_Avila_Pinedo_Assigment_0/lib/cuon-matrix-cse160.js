@@ -109,18 +109,12 @@ class Vector3 {
     * @return new vector
     */
   static cross(other1, other2) {
-    var a1 = other1[0] / 20; //adjust for scale
-    var a2 = other1[1] / 20;
-    var a3 = other1[2] / 20;
-    var b1 = other2[0] / 20;
-    var b2 = other2[1] / 20;
-    var b3 = other2[2] / 20;
      // a x b = i(a2b3 - a3b2) + j (a3b1-a1b3) + k(a1b2-a2b1)
     // This function should create and return a new vector.
     let v3 = new Vector3(); // Modify this line to calculate cross product between other1 and other2.
-    v3[0] = (a2 * b3) - (a3 * b2);
-    v3[1] = (a3 * b1) - (a1 * b3);
-    v3[2] = (a1 * b2) - (a2 * b1);
+    v3[0] = ((other1[1] * other2[2]) - (other1[2] * other2[1]));
+    v3[1] = ((other1[2] * other2[0]) - (other1[0] * other2[2]));
+    v3[2] = ((other1[0] * other2[1]) - (other1[1] * other2[0]));
 
     // Don't delete the return statement.
     return v3;
@@ -132,9 +126,9 @@ class Vector3 {
     */
   magnitude() {
     // Insert your code here.
-    let x = (this[0] / 20 )  * (this[0] / 20 ); //x^2, adjust for scale
-    let y = (this[1] / 20 ) * (this[1] / 20 ); //y^2, adjust for scale
-    let z = (this[2] / 20 ) * (this[2] / 20 ); //z^2, adjust for scale
+    let x = (this[0] * this[0] ); //x^2, adjust for scale
+    let y = (this[1] * this[1] ); //y^2, adjust for scale
+    let z = (this[2] * this[2] ); //z^2, adjust for scale
     let m = Math.sqrt(x + y + z); // Modify this line to calculate this vector's magnitude.
     // Don't delete the return statement.
     return m;
