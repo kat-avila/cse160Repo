@@ -1,17 +1,41 @@
-// Assg1.js Paint!
+// HelloPoint1.js (c) 2012 matsuda
+// modifed for asg1.html Katia Avila Pinedo 4-2024
+// Vertex shader program
+var VSHADER_SOURCE = 
+  'void main() {\n' +
+  '  gl_Position = vec4(0.0, 0.0, 0.0, 1.0);\n' + // Set the vertex coordinates of the point
+  '  gl_PointSize = 10.0;\n' +                    // Set the point size
+  '}\n';
+
+// Fragment shader program
+var FSHADER_SOURCE =
+  'void main() {\n' +
+  '  gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);\n' + // Set the point color
+  '}\n';
+
 function main() {
-    // Retrieve <canvas> element
-    var canvas = document.getElementById('webgl');
-    if (!canvas) {
-        console.log('Failed to retrieve the <canvas> element');
-        return false;
-    }
+  // Retrieve <canvas> element
+  var canvas = document.getElementById('webgl');
 
-    // Get the rendering context for 2DCG
-    var ctx = canvas.getContext('2d');
-    // setup a black canvas
-    ctx.fillStyle = 'rgba(0, 0, 0, 1.0)'; // Set color to blue
-    // Fill a rectangle with the color
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  // Get the rendering context for WebGL
+  var gl = getWebGLContext(canvas);
+  if (!gl) {
+    console.log('Failed to get the rendering context for WebGL');
+    return;
+  }
 
-   }
+  // Initialize shaders
+  if (!initShaders(gl, VSHADER_SOURCE, FSHADER_SOURCE)) {
+    console.log('Failed to intialize shaders.');
+    return;
+  }
+
+  // Specify the color for clearing <canvas>
+  gl.clearColor(0.0, 0.0, 0.0, 1.0);
+
+  // Clear <canvas>
+  gl.clear(gl.COLOR_BUFFER_BIT);
+
+  // Draw a point
+  gl.drawArrays(gl.POINTS, 0, 1);
+}
