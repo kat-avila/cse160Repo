@@ -4,8 +4,8 @@
 <head>
   <meta charset="utf-8" />
   <title>Assigment 1 : Painting (Easy) </title>
-
   <style>
+    h2 {}
   </style>
 </head>
 
@@ -16,37 +16,37 @@
   <p>
     <!-- Add button to clear canvas -->
     <button type="button" id="clear">Clear Canvas</button>
-  <p>
-    <!-- Add buttons to change color -->
-    <!-- <button type="button" id="green">Green</button> -->
-    <!-- <button type="button" id="red">Red</button> -->
-
-  <p>
-    <!-- Add button to change shape -->
+    <u>
+      <h2> Select Brush Shape, Size, & Segment Count </h2>
+    </u>
+  <h4> 
+    Shapes:
     <button type="button" id="pointButton">Point</button>
     <button type="button" id="triButton">Triangle</button>
     <button type="button" id="circleButton">Circle</button>
-
-    <!-- Add Sliders -->
-  <p>
-    Red <input type="range" min="0" max="100" value="0" class="slider" id="redSlide">
-  <p>
-    Green <input type="range" min="0" max="100" value="0" class="slider" id="greenSlide">
-  <p>
-    Blue <input type="range" min="0" max="100" value="0" class="slider" id="blueSlide">
-  <p>
-    Size <input type="range" min="0" max="50" value="10" class="slider" id="sizeSlide">
-  <p>
+    <p></p>
+    Size
+    <input type="range" min="0" max="50" value="10" class="slider" id="sizeSlide">
     Segments in Circle <input type="range" min="3" max="50" value="10" class="slider" id="segmentSlide">
-  <p>
 
-    <script src="../lib/webgl-utils.js"></script>
-    <script src="../lib/webgl-debug.js"></script>
-    <script src="../lib/cuon-utils.js"></script>
-    <script src="Point.js"></script>
-    <script src="Triangle.js"></script>
-    <script src="Circle.js"></script>
-    <script src="asg1.js"></script>
+  </h4>
+
+  <u>
+    <h2> Select Color (RGB)</h2>
+  </u>
+  <h4>
+    Red <input type="range" min="0" max="100" value="0" class="slider" id="redSlide">
+    Green <input type="range" min="0" max="100" value="0" class="slider" id="greenSlide">
+    Blue <input type="range" min="0" max="100" value="0" class="slider" id="blueSlide">
+  </h4>
+
+  <script src="../lib/webgl-utils.js"></script>
+  <script src="../lib/webgl-debug.js"></script>
+  <script src="../lib/cuon-utils.js"></script>
+  <script src="Point.js"></script>
+  <script src="Triangle.js"></script>
+  <script src="Circle.js"></script>
+  <script src="asg1.js"></script>
 </body>
 
 </html>
