@@ -42,7 +42,7 @@ function connectVariablesToGLSL() {
     return;
   }
 
-  // // Get the storage location of a_Position
+  // Get the storage location of a_Position
   a_Position = gl.getAttribLocation(gl.program, 'a_Position');
   if (a_Position < 0) {
     console.log('Failed to get the storage location of a_Position');
@@ -64,11 +64,10 @@ function main() {
   connectVariablesToGLSL();
 
   // Register function (event handler) to be called on a mouse press
-  canvas.onmousedown =  click(ev) ;
+  canvas.onmousedown =  function(ev) {click(ev) };
 
   // Specify the color for clearing <canvas>
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
-
   // Clear <canvas>
   gl.clear(gl.COLOR_BUFFER_BIT);
 }
@@ -76,12 +75,8 @@ function main() {
 var g_points = [];  // The array for the position of a mouse press
 var g_colors = [];  // The array to store the color of a point
 function click(ev) {
-  var x = ev.clientX; // x coordinate of a mouse pointer
-  var y = ev.clientY; // y coordinate of a mouse pointer
-  var rect = ev.target.getBoundingClientRect();
-
-  x = ((x - rect.left) - canvas.width / 2) / (canvas.width / 2);
-  y = (canvas.height / 2 - (y - rect.top)) / (canvas.height / 2);
+  // Extract the event click and return it in WebGL coordinates
+  let [x, y] = convertCoordinatesEventToGL(ev);
 
   // Store the coordinates to g_points array
   g_points.push([x, y]);
@@ -94,6 +89,24 @@ function click(ev) {
     g_colors.push([1.0, 1.0, 1.0, 1.0]);  // White
   }
 
+  // Draw every shape that is supposed to be in the canvas
+  renderAllShapes();
+}
+
+// Extract the event click and return it in WebGL coordinates
+function convertCoordinatesEventToGL(ev) {
+  var x = ev.clientX; // x coordinate of a mouse pointer
+  var y = ev.clientY; // y coordinate of a mouse pointer
+  var rect = ev.target.getBoundingClientRect();
+
+  x = ((x - rect.left) - canvas.width / 2) / (canvas.width / 2);
+  y = (canvas.height / 2 - (y - rect.top)) / (canvas.height / 2);
+ 
+  return ([x,y]);
+}
+
+// Draw every shape that is supposed to be in the canvas
+function renderAllShapes() {
   // Clear <canvas>
   gl.clear(gl.COLOR_BUFFER_BIT);
 
@@ -109,4 +122,5 @@ function click(ev) {
     // Draw
     gl.drawArrays(gl.POINTS, 0, 1);
   }
+
 }
