@@ -57,14 +57,30 @@ function connectVariablesToGLSL() {
   }
 }
 
+let g_selectedColor = [1.0, 1.0, 1.0, 1.0];
+
+function addActionsForHTMLUI() {
+  // Button Events (Shape Type)
+  console.log("set up acitons");
+  document.getElementById('green').onclick = function () {
+    g_selectedColor = [0.0, 1.0, 0.0, 1.0];
+    console.log("green button click");
+  };
+  document.getElementById('red').onclick = function () { g_selectedColor = [1.0, 0.0, 0.0, 1.0]; console.log("green button click"); };
+
+}
+
 function main() {
   // Set up canvas and gl variables
   setupWebGL();
   // Set up GLSL shade programs and connect glsl variables
   connectVariablesToGLSL();
+  console.log("setting up");
+  // Set up actions for the HTML UI elements
+  addActionsForHTMLUI();
 
   // Register function (event handler) to be called on a mouse press
-  canvas.onmousedown =  function(ev) {click(ev) };
+  canvas.onmousedown = function (ev) { click(ev) };
 
   // Specify the color for clearing <canvas>
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
@@ -80,14 +96,15 @@ function click(ev) {
 
   // Store the coordinates to g_points array
   g_points.push([x, y]);
-  // Store the coordinates to g_points array
-  if (x >= 0.0 && y >= 0.0) {      // First quadrant
-    g_colors.push([1.0, 0.0, 0.0, 1.0]);  // Red
-  } else if (x < 0.0 && y < 0.0) { // Third quadrant
-    g_colors.push([0.0, 1.0, 0.0, 1.0]);  // Green
-  } else {                         // Others
-    g_colors.push([1.0, 1.0, 1.0, 1.0]);  // White
-  }
+  // Store the coordinates to g_points array, start with white color, seclect color to change
+  g_colors.push(g_selectedColor);
+  // if (x >= 0.0 && y >= 0.0) {      // First quadrant
+  //   g_colors.push([1.0, 0.0, 0.0, 1.0]);  // Red
+  // } else if (x < 0.0 && y < 0.0) { // Third quadrant
+  //   g_colors.push([0.0, 1.0, 0.0, 1.0]);  // Green
+  // } else {                         // Others
+  //   g_colors.push([1.0, 1.0, 1.0, 1.0]);  // White
+  // }
 
   // Draw every shape that is supposed to be in the canvas
   renderAllShapes();
@@ -101,8 +118,8 @@ function convertCoordinatesEventToGL(ev) {
 
   x = ((x - rect.left) - canvas.width / 2) / (canvas.width / 2);
   y = (canvas.height / 2 - (y - rect.top)) / (canvas.height / 2);
- 
-  return ([x,y]);
+
+  return ([x, y]);
 }
 
 // Draw every shape that is supposed to be in the canvas
