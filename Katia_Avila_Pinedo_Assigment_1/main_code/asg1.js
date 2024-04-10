@@ -91,7 +91,6 @@ function main() {
   setupWebGL();
   // Set up GLSL shade programs and connect glsl variables
   connectVariablesToGLSL();
-  console.log("setting up");
   // Set up actions for the HTML UI elements
   addActionsForHTMLUI();
 
@@ -104,14 +103,6 @@ function main() {
   gl.clear(gl.COLOR_BUFFER_BIT);
 }
 
-class Point {
-  constructor() {
-    this.type = 'point';
-    this.position = [0.0, 0.0, 0.0];
-    this.color = [1.0, 1.0, 1.0, 1.0];
-    this.size = 5.0;
-  }
-}
 var g_shapesList = [];
 
 // var g_points = [];  // The array for the position of a mouse press
@@ -170,20 +161,7 @@ function renderAllShapes() {
   var len = g_shapesList.length;
 
   for (var i = 0; i < len; i++) {
-    var xy = g_shapesList[i].position;
-    var rgba = g_shapesList[i].color;
-    var size = g_shapesList[i].size;
-
-    // Pass the position of a point to a_Position variable
-    gl.vertexAttrib3f(a_Position, xy[0], xy[1], 0.0);
-    // Pass the color of a point to u_FragColor variable
-    gl.uniform4f(u_FragColor, rgba[0], rgba[1], rgba[2], rgba[3]);
-
-    // Pass the color of a point to u_Size variable
-    gl.uniform1f(u_Size, size);
-
-    // Draw
-    gl.drawArrays(gl.POINTS, 0, 1);
+    g_shapesList[i].render();
   }
 
 }
