@@ -61,12 +61,13 @@ let g_selectedColor = [1.0, 1.0, 1.0, 1.0];
 
 function addActionsForHTMLUI() {
   // Button Events (Shape Type)
-  console.log("set up acitons");
-  document.getElementById('green').onclick = function () {
-    g_selectedColor = [0.0, 1.0, 0.0, 1.0];
-    console.log("green button click");
-  };
-  document.getElementById('red').onclick = function () { g_selectedColor = [1.0, 0.0, 0.0, 1.0]; console.log("green button click"); };
+  document.getElementById('green').onclick = function () { g_selectedColor = [0.0, 1.0, 0.0, 1.0]; };
+  document.getElementById('red').onclick = function () { g_selectedColor = [1.0, 0.0, 0.0, 1.0]; };
+
+  // Slider Events
+  document.getElementById('redSlide').addEventListener('mouseup', function() {g_selectedColor[0] = this.value/100})
+  document.getElementById('greenSlide').addEventListener('mouseup', function() {g_selectedColor[1] = this.value/100})
+  document.getElementById('blueSlide').addEventListener('mouseup', function() {g_selectedColor[2] = this.value/100})
 
 }
 
@@ -97,7 +98,7 @@ function click(ev) {
   // Store the coordinates to g_points array
   g_points.push([x, y]);
   // Store the coordinates to g_points array, start with white color, seclect color to change
-  g_colors.push(g_selectedColor);
+  g_colors.push(g_selectedColor.slice());
   // if (x >= 0.0 && y >= 0.0) {      // First quadrant
   //   g_colors.push([1.0, 0.0, 0.0, 1.0]);  // Red
   // } else if (x < 0.0 && y < 0.0) { // Third quadrant
