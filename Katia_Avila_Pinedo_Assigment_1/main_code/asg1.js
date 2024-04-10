@@ -29,7 +29,8 @@ function setupWebGL() {
   // Retrieve <canvas> element
   canvas = document.getElementById('webgl');
   // Get the rendering context for WebGL
-  gl = getWebGLContext(canvas);
+  // gl = getWebGLContext(canvas);
+  gl = canvas.getContext("webgl", {preserveDrawingBuffer: true});
   if (!gl) {
     console.log('Failed to get the rendering context for WebGL');
     return;
@@ -50,14 +51,12 @@ function connectVariablesToGLSL() {
     console.log('Failed to get the storage location of a_Position');
     return;
   }
-
   // Get the storage location of u_FragColor
   u_FragColor = gl.getUniformLocation(gl.program, 'u_FragColor');
   if (!u_FragColor) {
     console.log('Failed to get the storage location of u_FragColor');
     return;
   }
-
   // Get the storage location of u_Size
   u_Size = gl.getUniformLocation(gl.program, 'u_Size');
   if (!u_Size) {
@@ -84,7 +83,6 @@ function addActionsForHTMLUI() {
   // Size Slider Events
   document.getElementById('sizeSlide').addEventListener('mouseup', function() {g_selectedSize = this.value})
 
-
 }
 
 function main() {
@@ -97,7 +95,7 @@ function main() {
 
   // Register function (event handler) to be called on a mouse press
   canvas.onmousedown = function (ev) { click(ev) };
-
+  canvas.onmousemove = function (ev) {if (ev.buttons == 1) {click(ev) } };
   // Specify the color for clearing <canvas>
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
   // Clear <canvas>
@@ -105,11 +103,6 @@ function main() {
 }
 
 var g_shapesList = [];
-
-// var g_points = [];  // The array for the position of a mouse press
-// var g_colors = [];  // The array to store the color of a point
-// var g_sizes = [];
-
 
 function click(ev) {
   // Extract the event click and return it in WebGL coordinates
@@ -121,21 +114,6 @@ function click(ev) {
   point.color = g_selectedColor.slice();
   point.size = g_selectedSize;
   g_shapesList.push(point);
-
-  // // Store the coordinates to g_points array
-  // g_points.push([x, y]);
-  // // Store the coordinates to g_points array, start with white color, seclect color to change
-  // g_colors.push(g_selectedColor.slice());
-  // // Store the size tp the g_sizes array
-  // g_sizes.push(g_selectedSize);
-
-  // if (x >= 0.0 && y >= 0.0) {      // First quadrant
-  //   g_colors.push([1.0, 0.0, 0.0, 1.0]);  // Red
-  // } else if (x < 0.0 && y < 0.0) { // Third quadrant
-  //   g_colors.push([0.0, 1.0, 0.0, 1.0]);  // Green
-  // } else {                         // Others
-  //   g_colors.push([1.0, 1.0, 1.0, 1.0]);  // White
-  // }
 
   // Draw every shape that is supposed to be in the canvas
   renderAllShapes();
