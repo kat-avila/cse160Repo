@@ -79,8 +79,7 @@ let g_selectedTriangleType = 0; //RIGHT
 
 function addActionsForHTMLUI() {
   // Button Events (Shape Type)
-  document.getElementById('triChoices').onclick =   function () {g_selectedTriangleType = document.getElementById('triChoices').selectedIndex;   console.log(g_selectedTriangleType);
-};
+  document.getElementById('triChoices').onclick =   function () {g_selectedTriangleType = document.getElementById('triChoices').selectedIndex;};
   console.log(g_selectedTriangleType);
   document.getElementById('clear').onclick = function () { g_shapesList = []; renderAllShapes();};
   document.getElementById('pointButton').onclick = function () { g_selectedType = POINT};
@@ -91,7 +90,8 @@ function addActionsForHTMLUI() {
   document.getElementById('redSlide').addEventListener('mouseup', function() {g_selectedColor[0] = this.value/100})
   document.getElementById('greenSlide').addEventListener('mouseup', function() {g_selectedColor[1] = this.value/100})
   document.getElementById('blueSlide').addEventListener('mouseup', function() {g_selectedColor[2] = this.value/100})
-  
+  document.getElementById('alphaSlide').addEventListener('mouseup', function() {g_selectedColor[3] = this.value/100})
+
   // Size Slider Events
   document.getElementById('sizeSlide').addEventListener('mouseup', function() {g_selectedSize = this.value})
   document.getElementById('segmentSlide').addEventListener('mouseup', function() {g_selectedSegment = this.value})
