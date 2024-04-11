@@ -76,10 +76,15 @@ let g_selectedSize = 5; // set with initial value
 let g_selectedType = POINT; // default shape
 let g_selectedSegment = 10; // default num of seg in circ
 let g_selectedTriangleType = 0; //RIGHT
+let g_selectedTriangleFace = 0; //RIGHT
+let g_selectedTriangleImg = 0; // True img
 
 function addActionsForHTMLUI() {
   // Button Events (Shape Type)
+  document.getElementById('triFaceChoices').onclick =   function () {g_selectedTriangleFace = document.getElementById('triFaceChoices').selectedIndex;};
   document.getElementById('triChoices').onclick =   function () {g_selectedTriangleType = document.getElementById('triChoices').selectedIndex;};
+  document.getElementById('triImgChoices').onclick =   function () {g_selectedTriangleImg = document.getElementById('triImgChoices').selectedIndex;};
+
   document.getElementById('clear').onclick = function () { g_shapesList = []; renderAllShapes();};
   document.getElementById('pointButton').onclick = function () { g_selectedType = POINT};
   document.getElementById('triButton').onclick = function () { g_selectedType = TRIANGLE};
@@ -134,6 +139,8 @@ function click(ev) {
   point.size = g_selectedSize;
   point.segments = g_selectedSegment;
   point.triType = g_selectedTriangleType;
+  point.triFace = g_selectedTriangleFace;
+  point.triFlip = g_selectedTriangleImg;
 
   g_shapesList.push(point);
 
