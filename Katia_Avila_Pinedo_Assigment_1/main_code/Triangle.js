@@ -4,6 +4,7 @@ class Triangle {
       this.position = [0.0, 0.0, 0.0];
       this.color = [1.0, 1.0, 1.0, 1.0];
       this.size = 5.0 ;
+      this.triType = 0; // default right triangle
     }
   
     render() {
@@ -19,7 +20,13 @@ class Triangle {
   
       // Draw
       var d = this.size/200.0; // delta
-      drawTriangle([xy[0], xy[1], xy[0]+d, xy[1]+d, xy[0], xy[1]+d]);
+      if (this.triType == 0) { // RIGHT
+        drawTriangle([xy[0], xy[1], xy[0]+d, xy[1], xy[0], xy[1]+d]);
+      } else if (this.triType == 1) { // SCALENE
+        drawTriangle([xy[0]-(2*d/3), xy[1], xy[0]+(2*d), xy[1], xy[0], xy[1]+(3*d/5)]);
+      } else { // Equilateral
+        drawTriangle([xy[0]-d, xy[1], xy[0]+d, xy[1], xy[0], xy[1]+d]);
+      }
     }
   }
 

@@ -69,16 +69,19 @@ function connectVariablesToGLSL() {
 const POINT = 0;
 const TRIANGLE = 1;
 const CIRCLE = 2; 
+
 // Globals related to UI elments
 let g_selectedColor = [1.0, 1.0, 1.0, 1.0]; // default color
 let g_selectedSize = 5; // set with initial value
 let g_selectedType = POINT; // default shape
 let g_selectedSegment = 10; // default num of seg in circ
+let g_selectedTriangleType = 0; //RIGHT
 
 function addActionsForHTMLUI() {
   // Button Events (Shape Type)
-  // document.getElementById('green').onclick = function () { g_selectedColor = [0.0, 1.0, 0.0, 1.0]; };
-  // document.getElementById('red').onclick = function () { g_selectedColor = [1.0, 0.0, 0.0, 1.0]; };
+  document.getElementById('triChoices').onclick =   function () {g_selectedTriangleType = document.getElementById('triChoices').selectedIndex;   console.log(g_selectedTriangleType);
+};
+  console.log(g_selectedTriangleType);
   document.getElementById('clear').onclick = function () { g_shapesList = []; renderAllShapes();};
   document.getElementById('pointButton').onclick = function () { g_selectedType = POINT};
   document.getElementById('triButton').onclick = function () { g_selectedType = TRIANGLE};
@@ -131,6 +134,7 @@ function click(ev) {
   point.color = g_selectedColor.slice();
   point.size = g_selectedSize;
   point.segments = g_selectedSegment;
+  point.triType = g_selectedTriangleType;
 
   g_shapesList.push(point);
 
