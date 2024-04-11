@@ -80,7 +80,6 @@ let g_selectedTriangleType = 0; //RIGHT
 function addActionsForHTMLUI() {
   // Button Events (Shape Type)
   document.getElementById('triChoices').onclick =   function () {g_selectedTriangleType = document.getElementById('triChoices').selectedIndex;};
-  console.log(g_selectedTriangleType);
   document.getElementById('clear').onclick = function () { g_shapesList = []; renderAllShapes();};
   document.getElementById('pointButton').onclick = function () { g_selectedType = POINT};
   document.getElementById('triButton').onclick = function () { g_selectedType = TRIANGLE};
