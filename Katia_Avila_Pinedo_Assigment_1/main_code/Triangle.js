@@ -9,12 +9,12 @@ class Triangle {
     this.triFlip = 0; // default true img
     this.drawing = false; // default not drawing triangle
     this.drawingCoord = [[0, 0], [0, 0], [0, 0]]; // default triangle at origin
+    this.drawingColr = [0, 0, 0, 0] // RGBA black transparent
   }
 
   render() {
     if (this.drawing) {
-      var rgba = this.color;
-      gl.uniform4f(u_FragColor, rgba[0], rgba[1], rgba[2], rgba[3]);
+      gl.uniform4f(u_FragColor, this.drawingColr[0], this.drawingColr[1], this.drawingColr[2], this.drawingColr[3]);
 
       var ab = this.drawingCoord[0];
       var cd = this.drawingCoord[1];

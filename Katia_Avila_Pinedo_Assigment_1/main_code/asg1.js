@@ -85,12 +85,36 @@ function addActionsForHTMLUI() {
   // Button Events (Shape Type)
   document.getElementById('clear').onclick = function () { g_shapesList = []; g_drawingList = []; renderAllShapes(); };
   document.getElementById('showDrawingButton').onclick = function () {
-    console.log("Pushing to your list");
     let tri1 = new Triangle();
+    let tri2 = new Triangle();
+    let tri3 = new Triangle();
+    let tri4 = new Triangle();
+    let tri5 = new Triangle();
+    let tri6 = new Triangle();
+    let tri7 = new Triangle();
+    let tri8 = new Triangle();
+    let tri9 = new Triangle();
+    let tri10 = new Triangle();
+    let tri11 = new Triangle();
+    let tri12 = new Triangle();
+    let tri13 = new Triangle();
+    let tri14 = new Triangle();
+    let tri15 = new Triangle();
+    let tri16 = new Triangle();
+    let tri17 = new Triangle();
+    let tri18 = new Triangle();
+    let tri19 = new Triangle();
+    let tri20 = new Triangle();
+    let tri21 = new Triangle();
+    let tri22 = new Triangle();
+    let tri23 = new Triangle();
+    let tri24 = new Triangle();
+
+
     tri1.position = [];
-    tri1.color = [0.85, 0.7, 0.6];
+    tri1.drawingColr = [255, 255, 140, 1]; // FIXME : no color change
     tri1.drawing = true;
-    tri1.drawingCoord = [[-0.2, 0.9], [-2, 6], [1, 6]];
+    tri1.drawingCoord = [[-0.2, 0.9], [-0.2, 0.6], [0.1, 0.6]];
     g_drawingList.push(tri1);
 
     renderAllShapes();
@@ -128,7 +152,7 @@ function main() {
   canvas.onmousedown = function (ev) { click(ev) };
   canvas.onmousemove = function (ev) { if (ev.buttons == 1) { click(ev) } };
   // Specify the color for clearing <canvas>
-  gl.clearColor(0.0, 0.0, 0.0, 1.0);
+  gl.clearColor(0.0, 0.0, 0.0, 1.0); 
   // Clear <canvas>
   gl.clear(gl.COLOR_BUFFER_BIT);
 }
