@@ -84,22 +84,19 @@ function addActionsForHTMLUI() {
   document.getElementById('clear').onclick = function () { g_shapesList = []; g_drawingList = []; renderAllShapes(); };
   document.getElementById('showDrawingButton').onclick = function () { 
     if (g_drawingList.length == 0) { //if show triggered and list empty
-      let tri1 = new Triangle();
+      var tri1 = new Triangle();
       tri1.drawing = true;
-      tri1.drawingCoord = [[-0.2, 0.9], [-0.2, 0.6], [0.1, 0.6]];
-      g_drawingList.push(tri1);
-      // let tri2 = new Triangle();
-      // tri2.drawing = true;
-      // tri1.drawingCoord = [[-0.2, 0.9], [-0.2, 0.6], [0.1, 0.6]];
-      // g_drawingList.push(tri1);
-      // let tri3 = new Triangle();
-      // tri3.drawing = true;
-      // tri1.drawingCoord = [[-0.2, 0.9], [-0.2, 0.6], [0.1, 0.6]];
-      // g_drawingList.push(tri1);
-      // let tri4 = new Triangle();
-      // tri4.drawing = true;
-      // tri1.drawingCoord = [[-0.2, 0.9], [-0.2, 0.6], [0.1, 0.6]];
-      // g_drawingList.push(tri1);
+      tri1.drawingCoord = [[-0.2, 0.99], [-0.2, 0.6], [0.2, 0.6]];
+      var tri2 = new Triangle();
+      tri2.drawing = true;
+      tri2.drawingCoord = [[-0.2, 0.99], [0.2, 0.6], [0.2, 0.99]];
+      var tri3 = new Triangle();
+      tri3.drawing = true;
+      tri3.drawingCoord = [[-0.8, 0.4], [-0.2, 0.4], [-0.4, 0.6]];
+      var tri4 = new Triangle();
+      tri4.drawing = true;
+      tri4.drawingCoord = [[-0.3, 0.3], [0.3, 0.3], [0, 0.6]];
+      g_drawingList.push(tri1, tri2, tri3, tri4);
       // let tri5 = new Triangle();
       // tri5.drawing = true;
       // tri1.drawingCoord = [[-0.2, 0.9], [-0.2, 0.6], [0.1, 0.6]];
