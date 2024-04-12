@@ -78,14 +78,18 @@ let g_selectedSegment = 10; // default num of seg in circ
 let g_selectedTriangleType = 0; //RIGHT
 let g_selectedTriangleFace = 0; //RIGHT
 let g_selectedTriangleImg = 0; // True img
+let g_selectedShowDrawing = 0; // do not show drawing default
 
 function addActionsForHTMLUI() {
   // Button Events (Shape Type)
+  console.log(g_selectedShowDrawing);
+  document.getElementById('clear').onclick = function () { g_shapesList = []; renderAllShapes();};
+  document.getElementById('showDrawingButton').onclick = function () { g_selectedShowDrawing = document.getElementById('showDrawingButton').checked; console.log("Show Drawing clicked", g_selectedShowDrawing);};
+
   document.getElementById('triFaceChoices').onclick =   function () {g_selectedTriangleFace = document.getElementById('triFaceChoices').selectedIndex;};
   document.getElementById('triChoices').onclick =   function () {g_selectedTriangleType = document.getElementById('triChoices').selectedIndex;};
   document.getElementById('triImgChoices').onclick =   function () {g_selectedTriangleImg = document.getElementById('triImgChoices').selectedIndex;};
 
-  document.getElementById('clear').onclick = function () { g_shapesList = []; renderAllShapes();};
   document.getElementById('pointButton').onclick = function () { g_selectedType = POINT};
   document.getElementById('triButton').onclick = function () { g_selectedType = TRIANGLE};
   document.getElementById('circleButton').onclick = function () { g_selectedType = CIRCLE};
