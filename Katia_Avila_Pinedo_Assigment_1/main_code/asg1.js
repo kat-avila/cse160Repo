@@ -30,7 +30,7 @@ function setupWebGL() {
   canvas = document.getElementById('webgl');
   // Get the rendering context for WebGL
   // gl = getWebGLContext(canvas);
-  gl = canvas.getContext("webgl", {preserveDrawingBuffer: true});
+  gl = canvas.getContext("webgl", { preserveDrawingBuffer: true });
   if (!gl) {
     console.log('Failed to get the rendering context for WebGL');
     return;
@@ -68,7 +68,7 @@ function connectVariablesToGLSL() {
 // Constants
 const POINT = 0;
 const TRIANGLE = 1;
-const CIRCLE = 2; 
+const CIRCLE = 2;
 
 // Globals related to UI elments
 let g_selectedColor = [1.0, 1.0, 1.0, 1.0]; // default color
@@ -80,31 +80,41 @@ let g_selectedTriangleFace = 0; //RIGHT
 let g_selectedTriangleImg = 0; // True img
 let g_selectedShowDrawing = 0; // do not show drawing default
 
+
 function addActionsForHTMLUI() {
   // Button Events (Shape Type)
-  console.log(g_selectedShowDrawing);
-  document.getElementById('clear').onclick = function () { g_shapesList = []; renderAllShapes();};
-  document.getElementById('showDrawingButton').onclick = function () { g_selectedShowDrawing = document.getElementById('showDrawingButton').checked; console.log("Show Drawing clicked", g_selectedShowDrawing);};
+  document.getElementById('clear').onclick = function () { g_shapesList = []; g_drawingList = []; renderAllShapes(); };
+  document.getElementById('showDrawingButton').onclick = function () {
+    console.log("Pushing to your list");
+    let tri1 = new Triangle();
+    tri1.position = [];
+    tri1.color = [0.85, 0.7, 0.6];
+    tri1.drawing = true;
+    tri1.drawingCoord = [[-0.2, 0.9], [-2, 6], [1, 6]];
+    g_drawingList.push(tri1);
 
-  document.getElementById('triFaceChoices').onclick =   function () {g_selectedTriangleFace = document.getElementById('triFaceChoices').selectedIndex;};
-  document.getElementById('triChoices').onclick =   function () {g_selectedTriangleType = document.getElementById('triChoices').selectedIndex;};
-  document.getElementById('triImgChoices').onclick =   function () {g_selectedTriangleImg = document.getElementById('triImgChoices').selectedIndex;};
+    renderAllShapes();
+  };
 
-  document.getElementById('pointButton').onclick = function () { g_selectedType = POINT};
-  document.getElementById('triButton').onclick = function () { g_selectedType = TRIANGLE};
-  document.getElementById('circleButton').onclick = function () { g_selectedType = CIRCLE};
+  document.getElementById('triFaceChoices').onclick = function () { g_selectedTriangleFace = document.getElementById('triFaceChoices').selectedIndex; };
+  document.getElementById('triChoices').onclick = function () { g_selectedTriangleType = document.getElementById('triChoices').selectedIndex; };
+  document.getElementById('triImgChoices').onclick = function () { g_selectedTriangleImg = document.getElementById('triImgChoices').selectedIndex; };
+
+  document.getElementById('pointButton').onclick = function () { g_selectedType = POINT };
+  document.getElementById('triButton').onclick = function () { g_selectedType = TRIANGLE };
+  document.getElementById('circleButton').onclick = function () { g_selectedType = CIRCLE };
 
   // Color Slider Events
-  document.getElementById('redSlide').addEventListener('mouseup', function() {g_selectedColor[0] = this.value/100})
-  document.getElementById('greenSlide').addEventListener('mouseup', function() {g_selectedColor[1] = this.value/100})
-  document.getElementById('blueSlide').addEventListener('mouseup', function() {g_selectedColor[2] = this.value/100})
-  document.getElementById('alphaSlide').addEventListener('mouseup', function() {g_selectedColor[3] = this.value/100})
+  document.getElementById('redSlide').addEventListener('mouseup', function () { g_selectedColor[0] = this.value / 100 })
+  document.getElementById('greenSlide').addEventListener('mouseup', function () { g_selectedColor[1] = this.value / 100 })
+  document.getElementById('blueSlide').addEventListener('mouseup', function () { g_selectedColor[2] = this.value / 100 })
+  document.getElementById('alphaSlide').addEventListener('mouseup', function () { g_selectedColor[3] = this.value / 100 })
 
   // Size Slider Events
-  document.getElementById('sizeSlide').addEventListener('mouseup', function() {g_selectedSize = this.value})
-  document.getElementById('segmentSlide').addEventListener('mouseup', function() {g_selectedSegment = this.value})
-
+  document.getElementById('sizeSlide').addEventListener('mouseup', function () { g_selectedSize = this.value })
+  document.getElementById('segmentSlide').addEventListener('mouseup', function () { g_selectedSegment = this.value })
 }
+
 
 function main() {
   // Set up canvas and gl variables
@@ -116,7 +126,7 @@ function main() {
 
   // Register function (event handler) to be called on a mouse press
   canvas.onmousedown = function (ev) { click(ev) };
-  canvas.onmousemove = function (ev) {if (ev.buttons == 1) {click(ev) } };
+  canvas.onmousemove = function (ev) { if (ev.buttons == 1) { click(ev) } };
   // Specify the color for clearing <canvas>
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
   // Clear <canvas>
@@ -124,8 +134,9 @@ function main() {
 }
 
 var g_shapesList = [];
-
+var g_drawingList = [];
 function click(ev) {
+
   // Extract the event click and return it in WebGL coordinates
   let [x, y] = convertCoordinatesEventToGL(ev);
 
@@ -138,7 +149,7 @@ function click(ev) {
   } else {
     point = new Circle();
   }
-  point.position = [x,y];
+  point.position = [x, y];
   point.color = g_selectedColor.slice();
   point.size = g_selectedSize;
   point.segments = g_selectedSegment;
@@ -152,6 +163,7 @@ function click(ev) {
   renderAllShapes();
 }
 
+// Load the personal drawing 
 // Extract the event click and return it in WebGL coordinates
 function convertCoordinatesEventToGL(ev) {
   var x = ev.clientX; // x coordinate of a mouse pointer
@@ -169,9 +181,14 @@ function renderAllShapes() {
   // Clear <canvas>
   gl.clear(gl.COLOR_BUFFER_BIT);
 
-  // var len = g_points.length;
-  var len = g_shapesList.length;
+  // render all drawing shapes
+  var len = g_drawingList.length;
+  for (var i = 0; i < len; i++) {
+    g_drawingList[i].render();
+  }
 
+  // render all user drawn shapes
+  var len = g_shapesList.length;
   for (var i = 0; i < len; i++) {
     g_shapesList[i].render();
   }
