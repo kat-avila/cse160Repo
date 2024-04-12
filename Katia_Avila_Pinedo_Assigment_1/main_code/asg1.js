@@ -141,37 +141,30 @@ function addActionsForHTMLUI() {
       var tri19 = new Triangle();
       tri19.drawing = true;
       tri19.drawingCoord = [[0.3, -0.2], [0.3, -0.7], [0.7, -0.7]];
-      // let tri20 = new Triangle();
-      // tri20.drawing = true;
-      // tri1.drawingCoord = [[-0.2, 0.9], [-0.2, 0.6], [0.1, 0.6]];
-      // g_drawingList.push(tri1);
-      // let tri21 = new Triangle();
-      // tri21.drawing = true;
-      // tri1.drawingCoord = [[-0.2, 0.9], [-0.2, 0.6], [0.1, 0.6]];
-      // g_drawingList.push(tri1);
-      // let tri22 = new Triangle();
-      // tri22.drawing = true;
-      // tri1.drawingCoord = [[-0.2, 0.9], [-0.2, 0.6], [0.1, 0.6]];
-      // g_drawingList.push(tri1);
-      // let tri23 = new Triangle();
-      // tri23.drawing = true;
-      // tri1.drawingCoord = [[-0.2, 0.9], [-0.2, 0.6], [0.1, 0.6]];
-      // g_drawingList.push(tri1);
-      // let tri24 = new Triangle();
-      // tri24.drawing = true;
-      // tri1.drawingCoord = [[-0.2, 0.9], [-0.2, 0.6], [0.1, 0.6]];
-      // g_drawingList.push(tri1);
-      // let tri25 = new Triangle();
-      // tri25.drawing = true;
-      // tri1.drawingCoord = [[-0.2, 0.9], [-0.2, 0.6], [0.1, 0.6]];
-      // g_drawingList.push(tri1);
-      // let tri26 = new Triangle();
-      // tri26.drawing = true;
-      // tri1.drawingCoord = [[-0.2, 0.9], [-0.2, 0.6], [0.1, 0.6]];
-      // g_drawingList.push(tri1);
+      var tri20 = new Triangle();
+      tri20.drawing = true;
+      tri20.drawingCoord = [[-0.7, -0.7], [-0.5, -0.7], [-0.6, -0.9]];
+      var tri21 = new Triangle();
+      tri21.drawing = true;
+      tri21.drawingCoord = [[-0.5, -0.7], [-0.3, -0.7], [-0.4, -0.9]];
+      var tri22 = new Triangle();
+      tri22.drawing = true;
+      tri22.drawingCoord = [[-0.3, -0.7], [-0.1, -0.7], [-0.2, -0.9]];
+      var tri23 = new Triangle();
+      tri23.drawing = true;
+      tri23.drawingCoord = [[-0.1, -0.7], [0.1, -0.7], [0, -0.9]];
+      var tri24 = new Triangle();
+      tri24.drawing = true;
+      tri24.drawingCoord = [[0.1, -0.7], [0.3, -0.7], [0.2, -0.9]];
+      var tri25 = new Triangle();
+      tri25.drawing = true;
+      tri25.drawingCoord = [[0.3, -0.7], [0.5, -0.7], [0.4, -0.9]];
+      var tri26 = new Triangle();
+      tri26.drawing = true;
+      tri26.drawingCoord = [[0.5, -0.7], [0.7, -0.7], [0.6, -0.9]];
   
       // // tri1.drawingColr = [255, 255, 140, 1]; // FIXME : no color change
-      g_drawingList.push(tri1, tri2, tri3, tri4, tri5, tri6, tri7, tri8, tri9, tri10, tri11, tri12, tri13, tri14, tri15, tri16, tri17, tri18, tri19);
+      g_drawingList.push(tri1, tri2, tri3, tri4, tri5, tri6, tri7, tri8, tri9, tri10, tri11, tri12, tri13, tri14, tri15, tri16, tri17, tri18, tri19, tri20, tri21, tri22, tri23, tri24, tri25, tri26);
       renderAllShapes();
     } 
   };
@@ -264,7 +257,6 @@ function renderAllShapes() {
   // render all drawing shapes
   var len = g_drawingList.length;
   for (var i = 0; i < len; i++) {
-    console.log(i);
     g_drawingList[i].render();
   }
 
