@@ -2,21 +2,65 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8" />
-  <title>Draw a blue rectangle (canvas version)</title>
+    <meta charset="utf-8" />
+    <title>Draw a blue rectangle (canvas version)</title>
 </head>
 
-<body onload="main()">
-  hello world
-  <!-- <canvas id="example" width="400" height="400">
-    Please use a browser that supports "canvas"
-  </canvas> -->
-  <script src="asg0.js"></script>
 
-  <!-- load lib -->
-  <script src="../lib/cuon-matrix-cse160.js"></script>
+<!-- <script src="../lib/three" type="module">
+   
+ </script>  -->
 
+<body>
+    HELLO
+    <canvas id="c"></canvas>
+    <!-- load lib -->
+    <!-- <script src="asg5A.js"></script> -->
+    <script src="../lib/webgl-utils.js"></script>
+    <script src="../lib/webgl-debug.js"></script>
+    <script src="../lib/cuon-utils.js"></script>
+    <!-- load three.js -->
+    <script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-modules-shims.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.127.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three/examples/jsm/",
+                "three/examples/jsm/": "https://unpkg.com/three@0.127.0/examples/jsm/"
+            }
+        }
+    </script>
+    <script type="module">
+        import * as THREE from "three";
+        function main() {
+            const canvas = document.querySelector('#c');
+            const renderer = new THREE.WebGLRenderer({ antialias: true, canvas });
 
+            const fov = 75;
+            const aspect = 2; // the canvas default
+            const near = 0.1;
+            const far = 5;
+            const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+            camera.position.z = 2;
+
+            const scene = new THREE.Scene();
+
+            const boxWidth = 1;
+            const boxHeight = 1;
+            const boxDepth = 1;
+            const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
+
+            const material = new THREE.MeshBasicMaterial({ color: 0x44aa88 }); // greenish blue
+
+            const cube = new THREE.Mesh(geometry, material);
+            scene.add(cube);
+
+            renderer.render(scene, camera);
+        }
+
+        main();
+
+    </script>
 
 </body>
 
