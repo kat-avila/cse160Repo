@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import {GUI} from 'three/addons/libs/lil-gui.module.min.js';
+import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
 
 main();
 
@@ -19,8 +19,8 @@ function main() {
     }
 
     const canvas = document.querySelector('#c');
-    canvas.width = "1000" ;
-    canvas.height = "800" ;
+    canvas.width = "1000";
+    canvas.height = "800";
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, canvas });
 
@@ -39,18 +39,51 @@ function main() {
     controls.target.set(0, 5, 0);
     controls.update();
 
-    // createa scene
+    // create scene
     const scene = new THREE.Scene();
     // add lighting
     const color = 0xFFFFFF;
+    // const skyColor = 0xB1E1FF;  // light blue
+    // const groundColor = 0xB97A20;  // brownish orange
     const intensity = 1;
     const light = new THREE.DirectionalLight(color, intensity);
-    // light.position.set(-1, 2, 4);
+    // const light = new THREE.HemisphereLight(skyColor, groundColor, intensity);
+    light.position.set(0, 10, 0);
+    light.target.position.set(-5, 0, 0);
     scene.add(light);
+    scene.add(light.target);
+
+
     // light controls
+    // HELPER FOR TARGET LIGHT
+    const helper = new THREE.DirectionalLightHelper(light);
+    scene.add(helper);
+    function updateLight() {
+        light.target.updateMatrixWorld();
+        helper.update();
+    }
+    updateLight();
+
     const gui = new GUI();
     gui.addColor(new ColorGUIHelper(light, 'color'), 'value').name('color');
+    // gui.addColor(new ColorGUIHelper(light, 'color'), 'value').name('skyColor');
+    // gui.addColor(new ColorGUIHelper(light, 'groundColor'), 'value').name('groundColor');
     gui.add(light, 'intensity', 0, 2, 0.01);
+    // gui.add(light.target.position, 'x', -10, 10);
+    // gui.add(light.target.position, 'z', -10, 10);
+    // gui.add(light.target.position, 'y', 0, 10);
+
+    // control traget
+    makeXYZGUI(gui, light.position, 'position', updateLight);
+    makeXYZGUI(gui, light.target.position, 'target', updateLight);
+    function makeXYZGUI(gui, vector3, name, onChangeFn) {
+        const folder = gui.addFolder(name);
+        folder.add(vector3, 'x', -10, 10).onChange(onChangeFn);
+        folder.add(vector3, 'y', 0, 10).onChange(onChangeFn);
+        folder.add(vector3, 'z', -10, 10).onChange(onChangeFn);
+        folder.open();
+    }
+
 
     //make plane
     const planeSize = 40;
@@ -72,16 +105,18 @@ function main() {
     mesh.rotation.x = Math.PI * -.5;
     scene.add(mesh);
 
+  
+
     // CREATE SPHERE
     const sphereRadius = 3;
     const sphereWidthDivisions = 32;
     const sphereHeightDivisions = 16;
     const sphereGeo = new THREE.SphereGeometry(sphereRadius, sphereWidthDivisions, sphereHeightDivisions);
-    const sphereMat = new THREE.MeshPhongMaterial({color: '#CA8'});
+    const sphereMat = new THREE.MeshPhongMaterial({ color: '#CA8' });
     const sphere = new THREE.Mesh(sphereGeo, sphereMat);
     sphere.position.set(-sphereRadius + 8, sphereRadius + 2, 0);
     scene.add(sphere);
-    
+
     // CREATE CUBES
     // creatre cube geometry
     const cubeSize = 4;
