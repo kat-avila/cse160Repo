@@ -8,12 +8,13 @@ function main() {
     // SET UP CANVAS, RENDERER
     const canvas = document.querySelector('#c');
     canvas.width = "1000";
-    canvas.height = "800";
+    canvas.height = "1000";
     // const renderer = new THREE.WebGLRenderer({ antialias: true, canvas });
     const renderer = new THREE.WebGLRenderer({
         antialias: true,
         canvas,
         logarithmicDepthBuffer: true,
+        alpha: true,
     });
 
     // PERSPECTIVE CAMERA
