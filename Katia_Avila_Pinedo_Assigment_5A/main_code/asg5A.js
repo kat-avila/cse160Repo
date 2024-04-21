@@ -5,26 +5,13 @@ import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
 main();
 
 function main() {
-    class ColorGUIHelper {
-        constructor(object, prop) {
-            this.object = object;
-            this.prop = prop;
-        }
-        get value() {
-            return `#${this.object[this.prop].getHexString()}`;
-        }
-        set value(hexString) {
-            this.object[this.prop].set(hexString);
-        }
-    }
-
+    // SET UP CANVAS, RENDERER
     const canvas = document.querySelector('#c');
     canvas.width = "1000";
     canvas.height = "800";
-
     const renderer = new THREE.WebGLRenderer({ antialias: true, canvas });
 
-    // create perspective camera
+    // PERSPECTIVE CAMERA
     const fov = 75; // field of view, 75 deg in vert
     const aspect = 2; // 300x150 the canvas default
     const near = 0.1; //fustrum start
@@ -39,7 +26,7 @@ function main() {
     controls.target.set(0, 5, 0);
     controls.update();
 
-    // create scene
+    // CREATE SCENE
     const scene = new THREE.Scene();
     // add lighting
     const color = 0xFFFFFF;
@@ -64,18 +51,19 @@ function main() {
     }
     updateLight();
 
-    const gui = new GUI();
-    gui.addColor(new ColorGUIHelper(light, 'color'), 'value').name('color');
+    // GUI COLOR
+    const guiColor = new GUI();
+    guiColor.addColor(new ColorGUIHelper(light, 'color'), 'value').name('color');
     // gui.addColor(new ColorGUIHelper(light, 'color'), 'value').name('skyColor');
     // gui.addColor(new ColorGUIHelper(light, 'groundColor'), 'value').name('groundColor');
-    gui.add(light, 'intensity', 0, 2, 0.01);
+    guiColor.add(light, 'intensity', 0, 2, 0.01);
     // gui.add(light.target.position, 'x', -10, 10);
     // gui.add(light.target.position, 'z', -10, 10);
     // gui.add(light.target.position, 'y', 0, 10);
 
     // control traget
-    makeXYZGUI(gui, light.position, 'position', updateLight);
-    makeXYZGUI(gui, light.target.position, 'target', updateLight);
+    makeXYZGUI(guiColor, light.position, 'position', updateLight);
+    makeXYZGUI(guiColor, light.target.position, 'target', updateLight);
     function makeXYZGUI(gui, vector3, name, onChangeFn) {
         const folder = gui.addFolder(name);
         folder.add(vector3, 'x', -10, 10).onChange(onChangeFn);
@@ -84,8 +72,7 @@ function main() {
         folder.open();
     }
 
-
-    //make plane
+    // MAKE PLANE
     const planeSize = 40;
     const loader = new THREE.TextureLoader();
     const texture = loader.load('../lib/portal.jpg');
@@ -105,8 +92,6 @@ function main() {
     mesh.rotation.x = Math.PI * -.5;
     scene.add(mesh);
 
-  
-
     // CREATE SPHERE
     const sphereRadius = 3;
     const sphereWidthDivisions = 32;
@@ -124,13 +109,11 @@ function main() {
     const boxHeight = 4;
     const boxDepth = 4;
     const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
-
     const cubes = [
         // makeInstance(geometry, 0x44aa88, 0),
         makeInstance(geometry, 0x8844aa, -2),
         // makeInstance(geometry, 0xaa8844, 2),
     ];
-
     function makeInstance(geometry, color, x) {
         // BoxGeometry can use 6 materials one for each face. ConeGeometry can use 2 materials, one for the bottom and one for the cone. CylinderGeometry can use 3 materials, bottom, top, and side. 
         // CUBE MESH
@@ -180,5 +163,6 @@ function main() {
         requestAnimationFrame(render); // request to animate
     }
     requestAnimationFrame(render);
+    
 }
 

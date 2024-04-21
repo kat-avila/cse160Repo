@@ -4,15 +4,30 @@
 <head>
     <meta charset="utf-8" />
     <title>Draw a blue rectangle (canvas version)</title>
+    <style>
+        .split {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+        }
+
+        .split>div {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
 </head>
-
-
-<!-- <script src="../lib/three" type="module">
-   
- </script>  -->
 
 <body>
     <canvas id="c"></canvas>
+    <!-- orbit controls -->
+    <div class="split">
+        <div id="view1" tabindex="1"></div>
+        <div id="view2" tabindex="2"></div>
+    </div>
     <!-- load lib -->
     <script src="../lib/webgl-utils.js"></script>
     <script src="../lib/webgl-debug.js"></script>
@@ -29,6 +44,9 @@
         }
     </script>
     <script type="module" src="asg5A.js"></script>
+    <!-- load GUI helpers -->
+    <script src="../lib/helpers/ColorGUIHelper.js"></script>
+    <script src="../lib/helpers/MinMaxGUIHelper.js"></script>
 
 </body>
 
