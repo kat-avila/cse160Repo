@@ -8,7 +8,7 @@ function main() {
     // SET UP CANVAS, RENDERER
     const canvas = document.querySelector('#c');
     canvas.width = "1000";
-    canvas.height = "1000";
+    canvas.height = "800";
     // const renderer = new THREE.WebGLRenderer({ antialias: true, canvas });
     const renderer = new THREE.WebGLRenderer({
         antialias: true,
@@ -19,12 +19,10 @@ function main() {
 
     // PERSPECTIVE CAMERA
     const fov = 75; // field of view, 75 deg in vert
-    const aspect = 2; // 300x150 the canvas default
+    const aspect = canvas.width / canvas.height; // 300x150 the canvas default
     const near = 0.1; //fustrum start
     const far = 100;  //fustrum end
     const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-    // cube at origin, give space to observe
-    // camera.position.z = 2;
     camera.position.set(0, 10, 20);
 
     //orbit controls
