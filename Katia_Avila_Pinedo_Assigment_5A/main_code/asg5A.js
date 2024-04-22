@@ -113,7 +113,7 @@ function main() {
     });
     var torusMesh1 = new THREE.Mesh(torusGeo1, materialTorus1);
     scene.add(torusMesh1);
-   
+
     // CREATE RING 2
     var torusGeo2 = new THREE.TorusGeometry(20, 0.5, 25, 100)
     const materialTorus2 = new THREE.MeshPhongMaterial({
@@ -123,16 +123,82 @@ function main() {
     var torusMesh2 = new THREE.Mesh(torusGeo2, materialTorus2);
     scene.add(torusMesh2);
 
+    // CREATE CYLINDER
+    // pickle rick
+    const geometryCyl1 = new THREE.CylinderGeometry(1.5, 4, 10, 32);
+    const materialCyl1 = new THREE.MeshBasicMaterial({ map: loadColorTexture("../lib/pickleRick.jpg") });
+    const cylinder1 = new THREE.Mesh(geometryCyl1, materialCyl1);
+    cylinder1.position.set(-15, 5, 15);
+    scene.add(cylinder1);
+    // nimbus
+    const geometryCyl2 = new THREE.CylinderGeometry(1.5, 4, 15, 32);
+    const materialCyl2 = new THREE.MeshBasicMaterial({ map: loadColorTexture("../lib/nimbus.jpg") });
+    const cylinder2 = new THREE.Mesh(geometryCyl2, materialCyl2);;
+    cylinder2.position.set(12, 7.5, -15);
+    scene.add(cylinder2);
+    // bugs
+    const geometryCyl3 = new THREE.CylinderGeometry(2, 2, 8, 32);
+    const materialCyl3 = new THREE.MeshBasicMaterial({ map: loadColorTexture("../lib/bugs.jpg") });
+    const cylinder3 = new THREE.Mesh(geometryCyl3, materialCyl3);;
+    cylinder3.position.set(-6, 4, 6);
+    scene.add(cylinder3);
 
     // CREATE SPHERE
-    const sphereRadius = 3;
-    const sphereWidthDivisions = 32;
-    const sphereHeightDivisions = 16;
-    const sphereGeo = new THREE.SphereGeometry(sphereRadius, sphereWidthDivisions, sphereHeightDivisions);
-    const sphereMat = new THREE.MeshPhongMaterial({ color: '#CA8' });
-    const sphere = new THREE.Mesh(sphereGeo, sphereMat);
-    sphere.position.set(-sphereRadius + 8, sphereRadius + 2, 0);
-    scene.add(sphere);
+    // me seeks
+    const sphereRadius1 = 2;
+    const sphereWidthDivisions1 = 32;
+    const sphereHeightDivisions1 = 16;
+    const sphereGeo1 = new THREE.SphereGeometry(sphereRadius1, sphereWidthDivisions1, sphereHeightDivisions1);
+    const sphereMat1 = new THREE.MeshPhongMaterial({ map: loadColorTexture("../lib/meSeeks.jpg") });
+    const sphere1 = new THREE.Mesh(sphereGeo1, sphereMat1);
+    sphere1.position.set(15, sphereRadius1, 18);
+    scene.add(sphere1);
+    // mr poopy
+    const sphereRadius2 = 4;
+    const sphereWidthDivisions2 = 32;
+    const sphereHeightDivisions2 = 16;
+    const sphereGeo2 = new THREE.SphereGeometry(sphereRadius2, sphereWidthDivisions2, sphereHeightDivisions2);
+    const sphereMat2 = new THREE.MeshPhongMaterial({ map: loadColorTexture("../lib/mrPoopy.jpg") });
+    const sphere2 = new THREE.Mesh(sphereGeo2, sphereMat2);
+    sphere2.position.set(0, sphereRadius2, -15);
+    scene.add(sphere2);
+    // morty face
+    const sphereRadius3 = 8;
+    const sphereWidthDivisions3 = 32;
+    const sphereHeightDivisions3 = 16;
+    const sphereGeo3 = new THREE.SphereGeometry(sphereRadius3, sphereWidthDivisions3, sphereHeightDivisions3);
+    const sphereMat3 = new THREE.MeshPhongMaterial({ map: loadColorTexture("../lib/mortyFace.jpg") });
+    const sphere3 = new THREE.Mesh(sphereGeo3, sphereMat3);
+    sphere3.position.set(-5, sphereRadius3 + 10, -20);
+    scene.add(sphere3);
+     // rick face
+     const sphereRadius4 = 8;
+     const sphereWidthDivisions4 = 32;
+     const sphereHeightDivisions4 = 16;
+     const sphereGeo4 = new THREE.SphereGeometry(sphereRadius4, sphereWidthDivisions4, sphereHeightDivisions4);
+     const sphereMat4 = new THREE.MeshPhongMaterial({ map: loadColorTexture("../lib/rickFace.jpg") });
+     const sphere4 = new THREE.Mesh(sphereGeo4, sphereMat4);
+     sphere4.position.set(15, 20, -20 + sphereRadius4);
+     scene.add(sphere4);
+     // scary terry
+    const sphereRadius5 = 3;
+    const sphereWidthDivisions5= 4;
+    const sphereHeightDivisions5 = 2;
+    const sphereGeo5 = new THREE.SphereGeometry(sphereRadius5, sphereWidthDivisions5, sphereHeightDivisions5);
+    const sphereMat5 = new THREE.MeshPhongMaterial({ map: loadColorTexture("../lib/scaryterry.jpg") });
+    const sphere5 = new THREE.Mesh(sphereGeo5, sphereMat5);
+    sphere5.position.set(10 - sphereRadius5, sphereRadius5 + 5, 18);
+    scene.add(sphere5);
+     // scary terry
+     const sphereRadius6 = 5;
+     const sphereWidthDivisions6= 32;
+     const sphereHeightDivisions6 = 2;
+     const sphereGeo6 = new THREE.SphereGeometry(sphereRadius6, sphereWidthDivisions6, sphereHeightDivisions6);
+     const sphereMat6 = new THREE.MeshPhongMaterial({ map: loadColorTexture("../lib/mrJelly.png") });
+     const sphere6 = new THREE.Mesh(sphereGeo6, sphereMat6);
+     sphere6.position.set(-5, sphereRadius6, 15);
+     scene.add(sphere6);
+
 
     // CREATE CUBES
     // Portal Cube
@@ -144,6 +210,20 @@ function main() {
     const cubePortal = new THREE.Mesh(geometryPortal, materialPortal);
     cubePortal.position.set(-15, 5, -10);
     scene.add(cubePortal);
+    //portal cube 2
+    const materialPortal2 = new THREE.MeshBasicMaterial({ map: loadColorTexture('../lib/portal2.jpg') });
+    const cubePortal2 = new THREE.Mesh(geometryPortal, materialPortal2);
+    cubePortal2.position.set(18, 5, 6);
+    scene.add(cubePortal2);
+    //family picture
+    const boxWidthPortalFamily = 15;
+    const boxHeightPortalFamily= 15;
+    const boxDepthPortalFamily= 3;
+    const geometryPortalFamily= new THREE.BoxGeometry(boxWidthPortalFamily, boxHeightPortalFamily, boxDepthPortalFamily);
+    const materialFamily= new THREE.MeshBasicMaterial({ map: loadColorTexture('../lib/family.jpg') });
+    const cubeFamily= new THREE.Mesh(geometryPortalFamily, materialFamily);
+    cubeFamily.position.set(0, 0, 0);
+    scene.add(cubeFamily);
 
     // creatre cube geometry
     const cubeSize = 4;
@@ -153,14 +233,15 @@ function main() {
     const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
     const cubes = [
         makeEvilMorty(0, 0, 0), // evil morty cube
-        makeDrunkRick(0, 0, 0), // drunk rick cube
-        makeAcid(0, 0, 0),     //acid cube
-        makeInstance(geometry, 0xaa8844, 18),
+        makeDrunkRick(0, 8, 0), // drunk rick cube
+        makeAcid(0, 8, 0),     //acid cube
+        makeInstance(geometry, 15, 15, -10),
         makeEvilMorty(10, -20, 8), // evil morty cube
+        makeDrunkRick(0, 8, 18), // drunk rick cube
         makeAcid(0, 10, -20),     //acid cube
-        makeInstance(geometry, 0xaa8844, 2),
+        makeInstance(geometry, 2, 15, 0),
     ];
-    function makeEvilMorty(x ,y ,z) {
+    function makeEvilMorty(x, y, z) {
         const boxWidth = 5;
         const boxHeight = 5;
         const boxDepth = 5;
@@ -181,10 +262,10 @@ function main() {
         return cube;
     }
 
-    function makeDrunkRick(x, y , z) {
-        const boxWidth = 4;
-        const boxHeight = 4;
-        const boxDepth = 4;
+    function makeDrunkRick(x, y, z) {
+        const boxWidth = 2;
+        const boxHeight = 1;
+        const boxDepth = 2;
         const geometryEV = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
         const materials = [
             new THREE.MeshBasicMaterial({ map: loadColorTexture('../lib/drunkRick/drunkRick1.jpg') }),
@@ -204,8 +285,8 @@ function main() {
 
     function makeAcid(x, y, z) {
         const boxWidth = 6;
-        const boxHeight = 6;
-        const boxDepth = 6;
+        const boxHeight = 4;
+        const boxDepth = 5;
         const geometryEV = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
         const materials = [
             new THREE.MeshBasicMaterial({ map: loadColorTexture('../lib/acid/acid1.jpg') }),
@@ -222,8 +303,7 @@ function main() {
         return cube;
     }
 
-
-    function makeInstance(geometry, color, x) {
+    function makeInstance(geometry, x, y, z) {
         // BoxGeometry can use 6 materials one for each face. ConeGeometry can use 2 materials, one for the bottom and one for the cone. CylinderGeometry can use 3 materials, bottom, top, and side. 
         // CUBE MESH
         // const cube = new THREE.Mesh(geometry, material);
@@ -237,7 +317,7 @@ function main() {
         ];
         // const cube = new THREE.Mesh(geometry, material);
         const cube = new THREE.Mesh(geometry, materials);
-        cube.position.set(cubeSize + 1, (cubeSize / 2) + 2, 0);
+        cube.position.set(cubeSize + x, (cubeSize / 2) + y, z);
         scene.add(cube);
         cube.position.x = x;
 
