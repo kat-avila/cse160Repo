@@ -1,6 +1,8 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
+import {OBJLoader} from 'three/addons/loaders/OBJLoader.js';
+// import {MTLLoader} from 'three/addons/loaders/MTLLoader.js';
 
 main();
 
@@ -79,13 +81,13 @@ function main() {
     // MAKE PLANE
     const planeSize = 40;
     const loader = new THREE.TextureLoader();
-    const texture = loader.load('../lib/portal.jpg');
-    texture.wrapS = THREE.RepeatWrapping;
-    texture.wrapT = THREE.RepeatWrapping;
+    const texture = loader.load('../lib/fallinginportal.png');
+    // texture.wrapS = THREE.RepeatWrapping;
+    // texture.wrapT = THREE.RepeatWrapping;
     texture.magFilter = THREE.NearestFilter;
     texture.colorSpace = THREE.SRGBColorSpace;
-    const repeats = planeSize / 2;
-    texture.repeat.set(repeats, repeats);
+    // const repeats = planeSize / 2;
+    // texture.repeat.set(repeats, repeats);
     // make plane geometry, material, and mesh
     const planeGeo = new THREE.PlaneGeometry(planeSize, planeSize);
     const planeMat = new THREE.MeshPhongMaterial({
@@ -95,6 +97,14 @@ function main() {
     const mesh = new THREE.Mesh(planeGeo, planeMat);
     mesh.rotation.x = Math.PI * -.5;
     scene.add(mesh);
+
+    // LOAD OBJ 3D MODEL
+    const objLoader = new OBJLoader();
+    objLoader.load('../lib/model/ufo 2.obj', (root) => {
+        root.position.set(0,10, 0);
+        scene.add(root);
+    });
+
 
     // CREATE SPHERE
     const sphereRadius = 3;
@@ -107,6 +117,16 @@ function main() {
     scene.add(sphere);
 
     // CREATE CUBES
+    // Portal Cube
+    const boxWidthPortal = 4;
+    const boxHeightPortal = 8;
+    const boxDepthPortal = 8;
+    const geometryPortal = new THREE.BoxGeometry(boxWidthPortal, boxHeightPortal, boxDepthPortal);
+    const materialPortal = new THREE.MeshBasicMaterial({ map: loadColorTexture('../lib/portal.jpg') });
+    const cubePortal = new THREE.Mesh(geometryPortal, materialPortal);
+    cubePortal.position.set(-15, 5, -10);
+    scene.add(cubePortal);
+
     // creatre cube geometry
     const cubeSize = 4;
     const boxWidth = 4;
@@ -130,7 +150,6 @@ function main() {
             new THREE.MeshBasicMaterial({ map: loadColorTexture('../lib/trippingFade.jpg') }),
             new THREE.MeshBasicMaterial({ map: loadColorTexture('../lib/vintage.jpg') }),
         ];
-
         // const cube = new THREE.Mesh(geometry, material);
         const cube = new THREE.Mesh(geometry, materials);
         cube.position.set(cubeSize + 1, (cubeSize / 2) + 2, 0);
