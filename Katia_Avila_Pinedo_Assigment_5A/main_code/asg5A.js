@@ -11,7 +11,6 @@ function main() {
     const canvas = document.querySelector('#c');
     canvas.width = "2000";
     canvas.height = "1000";
-    // const renderer = new THREE.WebGLRenderer({ antialias: true, canvas });
     const renderer = new THREE.WebGLRenderer({
         antialias: true,
         canvas,
@@ -34,60 +33,90 @@ function main() {
 
     // CREATE SCENE
     const scene = new THREE.Scene();
-    // add lighting
-    const color = 0xFFFFFF;
-    // const skyColor = 0xB1E1FF;  // light blue
-    // const groundColor = 0xB97A20;  // brownish orange
-    const intensity = 1;
+    // add lighting, directional
+    const color = 0x00FF00;
+    const intensity = 0.5;
     const light = new THREE.DirectionalLight(color, intensity);
-    // const light = new THREE.HemisphereLight(skyColor, groundColor, intensity);
-    light.position.set(0, 10, 0);
-    light.target.position.set(-5, 0, 0);
     scene.add(light);
-    scene.add(light.target);
 
+    // morty rick face light
+    const color1 = 0xFFC0CB;
+    const intensity1 = 1.5;
+    const light1 = new THREE.DirectionalLight(color1, intensity1);
+    light1.position.set(20, 25, 0);
+    light1.target.position.set(-5, 18, -20);
+    scene.add(light1);
+    scene.add(light1.target);
 
-    // light controls
+    // pickleRick spotlight
+    const color2 = 0xFF0000;
+    const intensity2 = 80;
+    const light2 = new THREE.SpotLight(color2, intensity2);
+    light2.position.set(-20, 15, 20);
+    light2.target.position.set(-20, 0, 15);
+    light2.angle = 0.5;
+    scene.add(light2);
+    scene.add(light2.target);
+    
     // HELPER FOR TARGET LIGHT
-    const helper = new THREE.DirectionalLightHelper(light);
-    scene.add(helper);
+    const helper1 = new THREE.DirectionalLightHelper(light1);
+    scene.add(helper1);
+    const helper2 = new THREE.SpotLightHelper(light2);
+    scene.add(helper2);
     function updateLight() {
-        light.target.updateMatrixWorld();
-        helper.update();
+        light1.target.updateMatrixWorld();
+        light2.target.updateMatrixWorld();
+        helper1.update();
+        helper2.update();
     }
     updateLight();
 
     // GUI COLOR
-    const guiColor = new GUI();
-    guiColor.addColor(new ColorGUIHelper(light, 'color'), 'value').name('color');
-    // gui.addColor(new ColorGUIHelper(light, 'color'), 'value').name('skyColor');
-    // gui.addColor(new ColorGUIHelper(light, 'groundColor'), 'value').name('groundColor');
-    guiColor.add(light, 'intensity', 0, 2, 0.01);
-    // gui.add(light.target.position, 'x', -10, 10);
-    // gui.add(light.target.position, 'z', -10, 10);
-    // gui.add(light.target.position, 'y', 0, 10);
-
+    const gui = new GUI();
     // control traget
-    makeXYZGUI(guiColor, light.position, 'position', updateLight);
-    makeXYZGUI(guiColor, light.target.position, 'target', updateLight);
-    function makeXYZGUI(gui, vector3, name, onChangeFn) {
+    makeLight1GUI(gui, light1, light1.position, light1.target.position, 'Light1 : SetUp', updateLight);
+    makeLight2GUI(gui, light2, light2.position, light2.target.position, 'Light2 : SetUp', updateLight);
+    function makeLight1GUI(gui, lightNum, posVector, tarVector, name, onChangeFn) {
         const folder = gui.addFolder(name);
-        folder.add(vector3, 'x', -10, 10).onChange(onChangeFn);
-        folder.add(vector3, 'y', 0, 10).onChange(onChangeFn);
-        folder.add(vector3, 'z', -10, 10).onChange(onChangeFn);
+        folder.addColor(new ColorGUIHelper(lightNum, 'color'), 'value').name('color');
+        folder.add(lightNum, 'intensity', 0, 2, 0.01);
+        folder.add(posVector, 'x', -10, 10).onChange(onChangeFn);
+        folder.add(posVector, 'y', 0, 10).onChange(onChangeFn);
+        folder.add(posVector, 'z', -10, 10).onChange(onChangeFn);
         folder.open();
+
+        const folder1 = gui.addFolder("Light1 : Target");
+        folder1.add(tarVector, 'x', -10, 10).onChange(onChangeFn);
+        folder1.add(tarVector, 'y', 0, 10).onChange(onChangeFn);
+        folder1.add(tarVector, 'z', -10, 10).onChange(onChangeFn);
+        folder1.open();
+    }
+
+    function makeLight2GUI(gui, lightNum, posVector, tarVector, name, onChangeFn) {
+        const folder = gui.addFolder(name);
+        folder.addColor(new ColorGUIHelper(lightNum, 'color'), 'value').name('color');
+        folder.add(lightNum, 'intensity', 0, 2, 0.01);
+        folder.add(lightNum, 'penumbra', 0, 1, 0.01);
+        folder.add(lightNum, 'angle', 0, 2, 0.1);
+
+        folder.add(posVector, 'x', -10, 10).onChange(onChangeFn);
+        folder.add(posVector, 'y', 0, 10).onChange(onChangeFn);
+        folder.add(posVector, 'z', -10, 10).onChange(onChangeFn);
+        folder.open();
+
+        const folder1 = gui.addFolder("Light2 : Target");
+        folder1.add(tarVector, 'x', -10, 10).onChange(onChangeFn);
+        folder1.add(tarVector, 'y', 0, 10).onChange(onChangeFn);
+        folder1.add(tarVector, 'z', -10, 10).onChange(onChangeFn);
+        folder1.open();
     }
 
     // MAKE PLANE
     const planeSize = 40;
     const loader = new THREE.TextureLoader();
     const texture = loader.load('../lib/fallinginportal.png');
-    // texture.wrapS = THREE.RepeatWrapping;
-    // texture.wrapT = THREE.RepeatWrapping;
     texture.magFilter = THREE.NearestFilter;
     texture.colorSpace = THREE.SRGBColorSpace;
-    // const repeats = planeSize / 2;
-    // texture.repeat.set(repeats, repeats);
     // make plane geometry, material, and mesh
     const planeGeo = new THREE.PlaneGeometry(planeSize, planeSize);
     const planeMat = new THREE.MeshPhongMaterial({
