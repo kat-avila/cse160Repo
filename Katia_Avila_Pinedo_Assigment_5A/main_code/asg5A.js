@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
-import {OBJLoader} from 'three/addons/loaders/OBJLoader.js';
+import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
 // import {MTLLoader} from 'three/addons/loaders/MTLLoader.js';
 
 main();
@@ -9,8 +9,8 @@ main();
 function main() {
     // SET UP CANVAS, RENDERER
     const canvas = document.querySelector('#c');
-    canvas.width = "1000";
-    canvas.height = "800";
+    canvas.width = "2000";
+    canvas.height = "1000";
     // const renderer = new THREE.WebGLRenderer({ antialias: true, canvas });
     const renderer = new THREE.WebGLRenderer({
         antialias: true,
@@ -23,7 +23,7 @@ function main() {
     const fov = 75; // field of view, 75 deg in vert
     const aspect = canvas.width / canvas.height; // 300x150 the canvas default
     const near = 0.1; //fustrum start
-    const far = 100;  //fustrum end
+    const far = 200;  //fustrum end
     const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
     camera.position.set(0, 10, 20);
 
@@ -101,9 +101,27 @@ function main() {
     // LOAD OBJ 3D MODEL
     const objLoader = new OBJLoader();
     objLoader.load('../lib/model/ufo 2.obj', (root) => {
-        root.position.set(0,10, 0);
+        root.position.set(0, 10, 0);
         scene.add(root);
     });
+
+    // CREATE RING 1
+    var torusGeo1 = new THREE.TorusGeometry(13, 0.5, 25, 100)
+    const materialTorus1 = new THREE.MeshPhongMaterial({
+        color: "#ffff00",
+        side: THREE.DoubleSide,
+    });
+    var torusMesh1 = new THREE.Mesh(torusGeo1, materialTorus1);
+    scene.add(torusMesh1);
+   
+    // CREATE RING 2
+    var torusGeo2 = new THREE.TorusGeometry(20, 0.5, 25, 100)
+    const materialTorus2 = new THREE.MeshPhongMaterial({
+        color: "#34ff14",
+        side: THREE.DoubleSide,
+    });
+    var torusMesh2 = new THREE.Mesh(torusGeo2, materialTorus2);
+    scene.add(torusMesh2);
 
 
     // CREATE SPHERE
@@ -134,10 +152,77 @@ function main() {
     const boxDepth = 4;
     const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
     const cubes = [
-        makeInstance(geometry, 0x44aa88, 0),
-        makeInstance(geometry, 0x8844aa, -2),
+        makeEvilMorty(0, 0, 0), // evil morty cube
+        makeDrunkRick(0, 0, 0), // drunk rick cube
+        makeAcid(0, 0, 0),     //acid cube
+        makeInstance(geometry, 0xaa8844, 18),
+        makeEvilMorty(10, -20, 8), // evil morty cube
+        makeAcid(0, 10, -20),     //acid cube
         makeInstance(geometry, 0xaa8844, 2),
     ];
+    function makeEvilMorty(x ,y ,z) {
+        const boxWidth = 5;
+        const boxHeight = 5;
+        const boxDepth = 5;
+        const geometryEV = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
+        const materials = [
+            new THREE.MeshBasicMaterial({ map: loadColorTexture('../lib/evilMorty/evilMorty1.jpg') }),
+            new THREE.MeshBasicMaterial({ map: loadColorTexture('../lib/evilMorty/evilMorty2.jpg') }),
+            new THREE.MeshBasicMaterial({ map: loadColorTexture('../lib/evilMorty/evilMorty3.jpg') }),
+            new THREE.MeshBasicMaterial({ map: loadColorTexture('../lib/evilMorty/evilMorty4.jpg') }),
+            new THREE.MeshBasicMaterial({ map: loadColorTexture('../lib/evilMorty/evilMorty5.jpg') }),
+            new THREE.MeshBasicMaterial({ map: loadColorTexture('../lib/evilMorty/evilMorty6.jpg') }),
+
+        ];
+        const cube = new THREE.Mesh(geometryEV, materials);
+        cube.position.set(0 + x, 25 + y, 0 + z);
+        scene.add(cube);
+
+        return cube;
+    }
+
+    function makeDrunkRick(x, y , z) {
+        const boxWidth = 4;
+        const boxHeight = 4;
+        const boxDepth = 4;
+        const geometryEV = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
+        const materials = [
+            new THREE.MeshBasicMaterial({ map: loadColorTexture('../lib/drunkRick/drunkRick1.jpg') }),
+            new THREE.MeshBasicMaterial({ map: loadColorTexture('../lib/drunkRick/drunkRick2.jpg') }),
+            new THREE.MeshBasicMaterial({ map: loadColorTexture('../lib/drunkRick/drunkRick3.jpg') }),
+            new THREE.MeshBasicMaterial({ map: loadColorTexture('../lib/drunkRick/drunkRick4.jpg') }),
+            new THREE.MeshBasicMaterial({ map: loadColorTexture('../lib/drunkRick/drunkRick5.jpg') }),
+            new THREE.MeshBasicMaterial({ map: loadColorTexture('../lib/drunkRick/drunkRick6.jpg') }),
+
+        ];
+        const cube = new THREE.Mesh(geometryEV, materials);
+        cube.position.set(5 + x, 16 + y, -10 + z);
+        scene.add(cube);
+
+        return cube;
+    }
+
+    function makeAcid(x, y, z) {
+        const boxWidth = 6;
+        const boxHeight = 6;
+        const boxDepth = 6;
+        const geometryEV = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
+        const materials = [
+            new THREE.MeshBasicMaterial({ map: loadColorTexture('../lib/acid/acid1.jpg') }),
+            new THREE.MeshBasicMaterial({ map: loadColorTexture('../lib/acid/acid2.png') }),
+            new THREE.MeshBasicMaterial({ map: loadColorTexture('../lib/acid/acid3.jpg') }),
+            new THREE.MeshBasicMaterial({ map: loadColorTexture('../lib/acid/acid4.jpg') }),
+            new THREE.MeshBasicMaterial({ map: loadColorTexture('../lib/acid/acid5.jpg') }),
+            new THREE.MeshBasicMaterial({ map: loadColorTexture('../lib/acid/acid6.jpg') }),
+        ];
+        const cube = new THREE.Mesh(geometryEV, materials);
+        cube.position.set(-13 + x, 8 + y, 10 + z);
+        scene.add(cube);
+
+        return cube;
+    }
+
+
     function makeInstance(geometry, color, x) {
         // BoxGeometry can use 6 materials one for each face. ConeGeometry can use 2 materials, one for the bottom and one for the cone. CylinderGeometry can use 3 materials, bottom, top, and side. 
         // CUBE MESH
