@@ -1,5 +1,5 @@
-// ColoredPoint.js (c) 2012 matsuda
-// modifed for asg1.html Katia Avila Pinedo 4-2024
+// Starter code from Assigment1 personal submission
+// modifed for Assigment2 Katia Avila Pinedo 4-2024
 
 // Vertex shader program
 var VSHADER_SOURCE = `
@@ -236,8 +236,10 @@ function main() {
   canvas.onmousemove = function (ev) { if (ev.buttons == 1) { click(ev) } };
   // Specify the color for clearing <canvas>
   gl.clearColor(0.0, 0.0, 0.0, 1.0); 
-  // Clear <canvas>
+
+  // Render
   gl.clear(gl.COLOR_BUFFER_BIT);
+  renderAllShapes();
 }
 
 var g_shapesList = [];
@@ -285,9 +287,6 @@ function convertCoordinatesEventToGL(ev) {
 
 // Draw every shape that is supposed to be in the canvas
 function renderAllShapes() {
-  // Clear <canvas>
-  gl.clear(gl.COLOR_BUFFER_BIT);
-
   // render all drawing shapes
   var len = g_drawingList.length;
   for (var i = 0; i < len; i++) {
@@ -295,9 +294,15 @@ function renderAllShapes() {
   }
 
   // render all user drawn shapes
-  var len = g_shapesList.length;
-  for (var i = 0; i < len; i++) {
-    g_shapesList[i].render();
-  }
+  // var len = g_shapesList.length;
+  // for (var i = 0; i < len; i++) {
+  //   g_shapesList[i].render();
+  // }
 
+  // test triangle
+  // drawTriangle3D([-1.0,0.0,0.0, -0.5,-1.0,0.0, 1.0,0.0,0.0]);
+  // Draw a cube
+  var body = new Cube();
+  body.color = [0.83, 0.71, 0.59, 1.0];
+  body.render();
 }
