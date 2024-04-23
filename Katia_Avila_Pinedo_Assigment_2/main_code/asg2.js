@@ -6,8 +6,9 @@ var VSHADER_SOURCE = `
   attribute vec4 a_Position;
   uniform float u_Size;
   uniform mat4 u_ModelMatrix;
+  uniform mat4 u_GlobalRotateMatrix;
   void main() { 
-    gl_Position = u_ModelMatrix * a_Position;
+    gl_Position = u_GlobalRotateMatrix * u_ModelMatrix * a_Position;
     gl_PointSize = u_Size;
   }`
 // Fragment shader program
@@ -25,6 +26,7 @@ let a_Position;
 let u_FragColor;
 let u_Size;
 let u_ModelMatrix;
+let u_GlobalRotateMatrix;
 
 // Setup WebGL
 function setupWebGL() {
@@ -72,6 +74,13 @@ function connectVariablesToGLSL() {
     return;
   }
 
+    // Get the storage location of u_GlobalRotateMatrix
+    u_GlobalRotateMatrix = gl.getUniformLocation(gl.program, 'u_GlobalRotateMatrix');
+    if (!u_GlobalRotateMatrix) {
+      console.log('Failed to get the storage location of u_GlobalRotateMatrix');
+      return;
+    }
+
   //set an initial value for this matrix indentity
   var indentityM = new Matrix4();
   gl.uniformMatrix4fv(u_ModelMatrix, false, indentityM.elements);
@@ -86,7 +95,8 @@ const CIRCLE = 2;
 let g_selectedColor = [1.0, 1.0, 1.0, 1.0]; // default color
 let g_selectedSize = 5; // set with initial value
 let g_selectedType = POINT; // default shape
-let g_selectedSegment = 10; // default num of seg in circ
+let g_selectedSegment = 10; // default num of seg in circle
+let g_globalAngle = 5; // camera angle
 
 function addActionsForHTMLUI() {
   // Button Events (Shape Type)
@@ -103,7 +113,7 @@ function addActionsForHTMLUI() {
   document.getElementById('alphaSlide').addEventListener('mouseup', function () { g_selectedColor[3] = this.value / 100 })
 
   // Size Slider Events
-  document.getElementById('sizeSlide').addEventListener('mouseup', function () { g_selectedSize = this.value })
+  document.getElementById('angleSlide').addEventListener('mouseup', function () { g_globalAngle = this.value; renderAllShapes(); })
   document.getElementById('segmentSlide').addEventListener('mouseup', function () { g_selectedSegment = this.value })
 }
 
@@ -171,18 +181,28 @@ function renderAllShapes() {
   // Clear <canvas>
   gl.clear(gl.COLOR_BUFFER_BIT);
 
+  // Pass matrix to u_ModelMatrix attribute
+  var globalRotMat = new Matrix4().rotate(g_globalAngle, 0, 1,0);
+  gl.uniformMatrix4fv(u_GlobalRotateMatrix, false, globalRotMat.elements);
+
   // render all user drawn shapes
   var len = g_shapesList.length;
   for (var i = 0; i < len; i++) {
     g_shapesList[i].render();
   }
 
-   // test triangle
-  //drawTriangle3D([-1.0,0.0,0.0, -0.5,-1.0,0.0, 1.0,0.0,0.0]);
-  // TORSO cube
-  var torso = new Cube();
-  torso.color = [0.83, 0.71, 0.59, 1.0];
-  torso.matrix.translate(-.25, -.25, 0.0);
-  torso.matrix.scale(0.5, 0.5, .5);
-  torso.render();
+  // COLLARBONE cube
+  var collar = new Cube();
+  collar.color = [0.83, 0.71, 0.59, 1.0];
+  collar.matrix.translate(-0.35, 0.3, 0.0);
+  collar.matrix.scale(0.75, 0.15, .5);
+  collar.render();
+
+  // left arm, top section cube
+  var armLT = new Cube();
+  armLT.color = [0.83, 0.71, 0.59, 1.0];
+  armLT.matrix.translate(-.4, 0.2, 0.0);
+  armLT.matrix.rotate(45, 0 ,0 ,1);
+  armLT.matrix.scale(0.1, 0.15, .1);
+  armLT.render();
 }
