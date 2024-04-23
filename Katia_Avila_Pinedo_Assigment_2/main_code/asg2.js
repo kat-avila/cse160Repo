@@ -113,7 +113,7 @@ function addActionsForHTMLUI() {
   document.getElementById('alphaSlide').addEventListener('mouseup', function () { g_selectedColor[3] = this.value / 100 })
 
   // Size Slider Events
-  document.getElementById('angleSlide').addEventListener('mouseup', function () { g_globalAngle = this.value; renderAllShapes(); })
+  document.getElementById('angleSlide').addEventListener('mousemove', function () { g_globalAngle = this.value; renderAllShapes(); })
   document.getElementById('segmentSlide').addEventListener('mouseup', function () { g_selectedSegment = this.value })
 }
 
@@ -194,24 +194,17 @@ function renderAllShapes() {
   // COLLARBONE cube
   var collar = new Cube();
   collar.color = [0.83, 0.71, 0.59, 1.0];
-  // collar.matrix.translate(-0.35, 0.3, 0.0);
-  collar.matrix.scale(0.5, 0.5, 0.5);
+  collar.matrix.translate(-0.35, 0.3, 0.0);
+  collar.matrix.scale(0.75, 0.15, .5);
   collar.render();
 
-  // // COLLARBONE cube
-  // var collar = new Cube();
-  // collar.color = [0.83, 0.71, 0.59, 1.0];
-  // collar.matrix.translate(-0.35, 0.3, 0.0);
-  // collar.matrix.scale(0.75, 0.15, .5);
-  // collar.render();
-
-  // // left arm, top section cube
-  // var armLT = new Cube();
-  // armLT.color = [0.83, 0.71, 0.59, 1.0];
-  // armLT.matrix.translate(-.4, 0.2, 0.0);
-  // armLT.matrix.rotate(45, 0 ,0 ,1);
-  // armLT.matrix.scale(0.1, 0.15, .1);
-  // armLT.render();
+  // left arm, top section cube
+  var armLT = new Cube();
+  armLT.color = [0.83, 0.71, 0.59, 1.0];
+  armLT.matrix.translate(-.4, 0.2, 0.0);
+  armLT.matrix.rotate(45, 0 ,0 ,1);
+  armLT.matrix.scale(0.1, 0.15, 0.1);
+  armLT.render();
 
   
 }
