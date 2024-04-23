@@ -191,20 +191,58 @@ function renderAllShapes() {
     g_shapesList[i].render();
   }
 
+  // main body    torso.color = [0.91, 0.8, 0.69, 1.0];
+  // tan body    pecR.color = [0.83, 0.71, 0.59, 1.0];
+  // dark skin    [0.66, 0.52, 0.37, 1.0]
+
+  // TORSO
+  var torso = new Cube();
+  torso.color = [0.91, 0.8, 0.69, 1.0];
+  torso.matrix.translate(-0.35, -0.35, 0.0);
+  torso.matrix.scale(0.75, 0.65, .1);
+  torso.render();
+
   // COLLARBONE cube
   var collar = new Cube();
-  collar.color = [0.83, 0.71, 0.59, 1.0];
-  collar.matrix.translate(-0.35, 0.3, 0.0);
-  collar.matrix.scale(0.75, 0.15, .5);
+  collar.color = [0.37, 0.63, 0.5, 1];
+  collar.matrix.translate(-0.45, 0.3, 0.0);
+  collar.matrix.scale(0.95, 0.15, .1);
   collar.render();
 
   // left arm, top section cube
   var armLT = new Cube();
-  armLT.color = [0.83, 0.71, 0.59, 1.0];
-  armLT.matrix.translate(-.4, 0.2, 0.0);
+  armLT.color = [0.91, 0.8, 0.69, 1.0];
+  armLT.matrix.translate(-.7, -0.01, 0.0);
   armLT.matrix.rotate(45, 0 ,0 ,1);
-  armLT.matrix.scale(0.1, 0.15, 0.1);
+  armLT.matrix.scale(0.4, 0.1, 0.1);
   armLT.render();
 
+  // left pec
+  var pecL = new Cube();
+  pecL.color = [0.83, 0.71, 0.59, 1.0];
+  pecL.matrix.translate(-.26, 0.2, -0.1);
+  pecL.matrix.scale(0.25, 0.1, 0.04);
+  pecL.render();
+  // right pec
+  var pecR = new Cube();
+  pecR.color = [0.83, 0.71, 0.59, 1.0];
+  pecR.matrix.translate(0.05, 0.2, -0.1);
+  pecR.matrix.scale(0.25, 0.1, 0.04);
+  pecR.render();
+  // left pec nip
+  var pecNipL = new Cube();
+  pecNipL.color =  [0.66, 0.52, 0.37, 1.0];
+  pecNipL.matrix.translate(-.14, 0.2, -0.12);
+  pecNipL.matrix.rotate(45, 0 ,0 ,1);
+  pecNipL.matrix.scale(0.05, 0.05, 0.025);
+  pecNipL.render();
+  // right pec nip
+  var pecNipR = new Cube();
+  pecNipR.color = [0.66, 0.52, 0.37, 1.0];
+  pecNipR.matrix.translate(0.17, 0.2, -0.12);
+  pecNipR.matrix.rotate(45, 0 ,0 ,1);
+  pecNipR.matrix.scale(0.05, 0.05, 0.025);
+  pecNipR.render();
+   
   
 }

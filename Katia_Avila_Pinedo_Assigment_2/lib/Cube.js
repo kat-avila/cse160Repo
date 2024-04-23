@@ -17,36 +17,36 @@ class Cube {
         gl.uniformMatrix4fv(u_ModelMatrix, false, this.matrix.elements);
 
         // Front of cube
-        drawTriangle3D([0.0,0.0,0.0, 0.0,1.0,0.0, 1.0,1.0,0.0]);
-        drawTriangle3D([1.0,1.0,0.0, 1.0,0.0,0.0, 0.0,0.0,0.0]);
+        drawTriangle3D([0.0,0.0,0.0, 0.0,0.25,0.0, 0.25,0.25,0.0]);
+        drawTriangle3D([0.25,0.25,0.0, 0.25,0.0,0.0, 0.0,0.0,0.0]);
         // faux lighting
         // gl.uniform4f(u_FragColor, rgba[0] * 0.9, rgba[1] * 0.9, rgba[2] * 0.9, rgba[3]);
         // back face side of cube
-        drawTriangle3D([0.0,0.0,-1.0, 0.0,1.0,-1.0, 1.0,1.0, -1.0]);
-        drawTriangle3D([1.0,1.0,-1.0, 1.0,0.0,-1.0, 0.0,0.0, -1.0]);
+        drawTriangle3D([0.0,0.0,-0.25, 0.0,0.25,-0.25, 0.25,0.25, -0.25]);
+        drawTriangle3D([0.25,0.25,-0.25, 0.25,0.0,-0.25, 0.0,0.0, -0.25]);
         
 
         // faux lighting
         gl.uniform4f(u_FragColor, rgba[0] * 0.7, rgba[1] * 0.7, rgba[2] * 0.7, rgba[3]);
         // right side of cube
-        drawTriangle3D([1.0,0.0,0.0, 1.0,1.0,0.0, 1.0,0.0,-1.0]);  
-        drawTriangle3D([1.0,1.0,0.0, 1.0,0.0,-1.0, 1, 1, -1]);  
+        drawTriangle3D([0.25,0.0,0.0, 0.25,0.25,0.0, 0.25,0.0,-0.25]);  
+        drawTriangle3D([0.25,0.25,0.0, 0.25,0.0,-0.25, 0.25, 0.25, -0.25]);  
         // faux lighting
         gl.uniform4f(u_FragColor, rgba[0] * 0.7, rgba[1] * 0.7, rgba[2] * 0.7, rgba[3]);
         // left side of cube
-        drawTriangle3D([0.0,0.0,0.0, 0.0,1.0,0.0, 0.0,1.0,-1.0]);
-        drawTriangle3D([0.0,0.0,0.0, 0.0,0.0,-1.0, 0.0,1.0,-1.0]);
+        drawTriangle3D([0.0,0.0,0.0, 0.0,0.25,0.0, 0.0,0.25,-0.25]);
+        drawTriangle3D([0.0,0.0,0.0, 0.0,0.0,-0.25, 0.0,0.25,-0.25]);
         
         // faux lighting
         gl.uniform4f(u_FragColor, rgba[0] * 0.8, rgba[1] * 0.8, rgba[2] * 0.8, rgba[3]);
         // top side of cube
-        drawTriangle3D([0.0,1.0,0.0, 1.0,1.0,0.0, 0.0,1.0,-1.0]);  
-        drawTriangle3D([1.0,1.0,0.0, 0.0,1.0,-1.0, 1, 1, -1]);  
+        drawTriangle3D([0.0,0.25,0.0, 0.25,0.25,0.0, 0.0,0.25,-0.25]);  
+        drawTriangle3D([0.25,0.25,0.0, 0.0,0.25,-0.25, 0.25, 0.25, -0.25]);  
         // faux lighting
         gl.uniform4f(u_FragColor, rgba[0] * 0.8, rgba[1] * 0.8, rgba[2] * 0.8, rgba[3]);
         // bottom side of cube
-        drawTriangle3D([0.0,0.0,0.0, 0.0,0.0,-1.0, 1.0,0.0,0.0]);
-        drawTriangle3D([1.0,0.0,0.0, 1.0,0.0,-1.0, 0.0,0.0,-1.0]);
+        drawTriangle3D([0.0,0.0,0.0, 0.0,0.0,-0.25, 0.25,0.0,0.0]);
+        drawTriangle3D([0.25,0.0,0.0, 0.25,0.0,-0.25, 0.0,0.0,-0.25]);
    
     }
 }
