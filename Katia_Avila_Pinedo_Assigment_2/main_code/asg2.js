@@ -1,5 +1,5 @@
-// Starter code from Assigment1 personal submission
-// modifed for Assigment2 Katia Avila Pinedo 4-2024
+// ColoredPoint.js (c) 2012 matsuda
+// modifed for asg1.html Katia Avila Pinedo 4-2024
 
 // Vertex shader program
 var VSHADER_SOURCE = `
@@ -8,6 +8,7 @@ var VSHADER_SOURCE = `
   uniform mat4 u_ModelMatrix;
   void main() { 
     gl_Position = u_ModelMatrix * a_Position;
+    gl_PointSize = u_Size;
   }`
 // Fragment shader program
 var FSHADER_SOURCE = `
@@ -23,13 +24,13 @@ let gl;
 let a_Position;
 let u_FragColor;
 let u_Size;
+let u_ModelMatrix;
 
 // Setup WebGL
 function setupWebGL() {
   // Retrieve <canvas> element
   canvas = document.getElementById('webgl');
   // Get the rendering context for WebGL
-  // gl = getWebGLContext(canvas);
   gl = canvas.getContext("webgl", { preserveDrawingBuffer: true });
   if (!gl) {
     console.log('Failed to get the rendering context for WebGL');
@@ -57,16 +58,23 @@ function connectVariablesToGLSL() {
     console.log('Failed to get the storage location of u_FragColor');
     return;
   }
-   // Get the storage location of u_Size
-   u_ModelMatrix = gl.getUniformLocation(gl.program, 'u_ModelMatrix');
-   if (!u_ModelMatrix) {
-     console.log('Failed to get the storage location of u_ModelMatrix');
-     return;
-   }
+  // Get the storage location of u_Size
+  u_Size = gl.getUniformLocation(gl.program, 'u_Size');
+  if (!u_Size) {
+    console.log('Failed to get the storage location of u_Size');
+    return;
+  }
 
-   //set an initial value for this matrix indentity
-   var indentityM = new Matrix4();
-   gl.uniformMatrix4fv(u_ModelMatrix, false, indentityM.elements);
+  // Get the storage location of u_ModelMatrix
+  u_ModelMatrix = gl.getUniformLocation(gl.program, 'u_ModelMatrix');
+  if (!u_ModelMatrix) {
+    console.log('Failed to get the storage location of u_ModelMatrix');
+    return;
+  }
+
+  //set an initial value for this matrix indentity
+  var indentityM = new Matrix4();
+  gl.uniformMatrix4fv(u_ModelMatrix, false, indentityM.elements);
 }
 
 // Constants
@@ -79,18 +87,10 @@ let g_selectedColor = [1.0, 1.0, 1.0, 1.0]; // default color
 let g_selectedSize = 5; // set with initial value
 let g_selectedType = POINT; // default shape
 let g_selectedSegment = 10; // default num of seg in circ
-let g_selectedTriangleType = 0; //RIGHT
-let g_selectedTriangleFace = 0; //RIGHT
-let g_selectedTriangleImg = 0; // True img
 
 function addActionsForHTMLUI() {
   // Button Events (Shape Type)
-  document.getElementById('clear').onclick = function () { g_shapesList = []; g_drawingList = []; renderAllShapes(); };
- // removed show drawing button functionality
-
-  document.getElementById('triFaceChoices').onclick = function () { g_selectedTriangleFace = document.getElementById('triFaceChoices').selectedIndex; };
-  document.getElementById('triChoices').onclick = function () { g_selectedTriangleType = document.getElementById('triChoices').selectedIndex; };
-  document.getElementById('triImgChoices').onclick = function () { g_selectedTriangleImg = document.getElementById('triImgChoices').selectedIndex; };
+  document.getElementById('clear').onclick = function () { g_shapesList = []; renderAllShapes(); };
 
   document.getElementById('pointButton').onclick = function () { g_selectedType = POINT };
   document.getElementById('triButton').onclick = function () { g_selectedType = TRIANGLE };
@@ -120,15 +120,14 @@ function main() {
   canvas.onmousedown = function (ev) { click(ev) };
   canvas.onmousemove = function (ev) { if (ev.buttons == 1) { click(ev) } };
   // Specify the color for clearing <canvas>
-  gl.clearColor(0.0, 0.0, 0.0, 1.0); 
-
-  // Render
+  gl.clearColor(0.0, 0.0, 0.0, 1.0);
+  // Clear <canvas>
   gl.clear(gl.COLOR_BUFFER_BIT);
+
   renderAllShapes();
 }
 
 var g_shapesList = [];
-var g_drawingList = [];
 function click(ev) {
 
   // Extract the event click and return it in WebGL coordinates
@@ -147,9 +146,6 @@ function click(ev) {
   point.color = g_selectedColor.slice();
   point.size = g_selectedSize;
   point.segments = g_selectedSegment;
-  point.triType = g_selectedTriangleType;
-  point.triFace = g_selectedTriangleFace;
-  point.triFlip = g_selectedTriangleImg;
 
   g_shapesList.push(point);
 
@@ -172,13 +168,16 @@ function convertCoordinatesEventToGL(ev) {
 
 // Draw every shape that is supposed to be in the canvas
 function renderAllShapes() {
+  // Clear <canvas>
+  gl.clear(gl.COLOR_BUFFER_BIT);
+
   // render all user drawn shapes
   var len = g_shapesList.length;
   for (var i = 0; i < len; i++) {
     g_shapesList[i].render();
   }
 
-  // test triangle
+   // test triangle
   //drawTriangle3D([-1.0,0.0,0.0, -0.5,-1.0,0.0, 1.0,0.0,0.0]);
   // TORSO cube
   var torso = new Cube();

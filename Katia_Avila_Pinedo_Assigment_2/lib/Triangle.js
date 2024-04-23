@@ -4,57 +4,41 @@ class Triangle {
     this.position = [0.0, 0.0, 0.0];
     this.color = [1.0, 1.0, 1.0, 1.0];
     this.size = 5.0;
-    this.triType = 0; // default right triangle
-    this.triFace = 0; // default face right
-    this.triFlip = 0; // default true img
-    this.drawing = false; // default not drawing triangle
-    this.drawingCoord = [[0, 0], [0, 0], [0, 0]]; // default triangle at origin
   }
 
   render() {
-    if (this.drawing) {
-      var rgba = this.color;
-      gl.uniform4f(u_FragColor, rgba[0], rgba[1], rgba[2], rgba[3]);
+    var xy = this.position;
+    var rgba = this.color;
+    var size = this.size;
 
-      var ab = this.drawingCoord[0];
-      var cd = this.drawingCoord[1];
-      var ef = this.drawingCoord[2];
-      drawTriangle([ab[0], ab[1], cd[0], cd[1], ef[0], ef[1]]);
-      // console.log("THIS triangle is drawing", this.drawingCoord);
-    } else {
-      var xy = this.position;
-      var rgba = this.color;
-      var size = this.size;
+    // Pass the color of a point to u_FragColor variable
+    gl.uniform4f(u_FragColor, rgba[0], rgba[1], rgba[2], rgba[3]);
 
-      // Pass the color of a point to u_FragColor variable
-      gl.uniform4f(u_FragColor, rgba[0], rgba[1], rgba[2], rgba[3]);
+    // Pass the color of a point to u_Size variable
+    gl.uniform1f(u_Size, size);
 
-      // Pass the color of a point to u_Size variable
-      gl.uniform1f(u_Size, size);
-
-      // Draw
-      // flip image on selection
-      if (this.triFlip == 0) {
-        var d = this.size / 200.0; // delta
-      } else if (this.triFlip == 1) {
-        var d = - (this.size / 200.0); // delta
+    // Draw
+    // flip image on selection
+    if (this.triFlip == 0) {
+      var d = this.size / 200.0; // delta
+    } else if (this.triFlip == 1) {
+      var d = - (this.size / 200.0); // delta
+    }
+    // flip shape face direction on selection
+    if (this.triType == 0) { // RIGHT
+      if (this.triFace == 0) {
+        drawTriangle([xy[0], xy[1], xy[0] + d, xy[1], xy[0], xy[1] + d]);
+      } else if (this.triFace == 1) {
+        drawTriangle([xy[0], xy[1], xy[0] - d, xy[1], xy[0], xy[1] + d]);
       }
-      // flip shape face direction on selection
-      if (this.triType == 0) { // RIGHT
-        if (this.triFace == 0) {
-          drawTriangle([xy[0], xy[1], xy[0] + d, xy[1], xy[0], xy[1] + d]);
-        } else if (this.triFace == 1) {
-          drawTriangle([xy[0], xy[1], xy[0] - d, xy[1], xy[0], xy[1] + d]);
-        }
-      } else if (this.triType == 1) { // SCALENE
-        if (this.triFace == 0) {
-          drawTriangle([xy[0] - (2 * d / 3), xy[1], xy[0] + (2 * d), xy[1], xy[0], xy[1] + (3 * d / 5)]);
-        } else if (this.triFace == 1) {
-          drawTriangle([xy[0] - (2 * d / 3), xy[1], xy[0] - (2 * d), xy[1], xy[0], xy[1] + (3 * d / 5)]);
-        }
-      } else { // Equilateral
-        drawTriangle([xy[0] - d, xy[1], xy[0] + d, xy[1], xy[0], xy[1] + d]);
+    } else if (this.triType == 1) { // SCALENE
+      if (this.triFace == 0) {
+        drawTriangle([xy[0] - (2 * d / 3), xy[1], xy[0] + (2 * d), xy[1], xy[0], xy[1] + (3 * d / 5)]);
+      } else if (this.triFace == 1) {
+        drawTriangle([xy[0] - (2 * d / 3), xy[1], xy[0] - (2 * d), xy[1], xy[0], xy[1] + (3 * d / 5)]);
       }
+    } else { // Equilateral
+      drawTriangle([xy[0] - d, xy[1], xy[0] + d, xy[1], xy[0], xy[1] + d]);
     }
   }
 }
