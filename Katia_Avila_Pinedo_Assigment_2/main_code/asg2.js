@@ -5,9 +5,9 @@
 var VSHADER_SOURCE = `
   attribute vec4 a_Position;
   uniform float u_Size;
+  uniform mat4 u_ModelMatrix;
   void main() { 
-    gl_Position = a_Position;
-    gl_PointSize = u_Size;
+    gl_Position = u_ModelMatrix * a_Position;
   }`
 // Fragment shader program
 var FSHADER_SOURCE = `
@@ -57,12 +57,16 @@ function connectVariablesToGLSL() {
     console.log('Failed to get the storage location of u_FragColor');
     return;
   }
-  // Get the storage location of u_Size
-  u_Size = gl.getUniformLocation(gl.program, 'u_Size');
-  if (!u_Size) {
-    console.log('Failed to get the storage location of u_Size');
-    return;
-  }
+   // Get the storage location of u_Size
+   u_ModelMatrix = gl.getUniformLocation(gl.program, 'u_ModelMatrix');
+   if (!u_ModelMatrix) {
+     console.log('Failed to get the storage location of u_ModelMatrix');
+     return;
+   }
+
+   //set an initial value for this matrix indentity
+   var indentityM = new Matrix4();
+   gl.uniformMatrix4fv(u_ModelMatrix, false, indentityM.elements);
 }
 
 // Constants
@@ -82,126 +86,7 @@ let g_selectedTriangleImg = 0; // True img
 function addActionsForHTMLUI() {
   // Button Events (Shape Type)
   document.getElementById('clear').onclick = function () { g_shapesList = []; g_drawingList = []; renderAllShapes(); };
-  document.getElementById('showDrawingButton').onclick = function () { 
-    if (g_drawingList.length == 0) { //if show triggered and list empty
-      // head
-      var tri1 = new Triangle();
-      tri1.drawing = true;
-      tri1.drawingCoord = [[-0.2, 0.99], [-0.2, 0.6], [0.2, 0.6]];
-      tri1.color = [0.82, 0.7, 0.54, 1.0]; // tan
-      var tri2 = new Triangle();
-      tri2.drawing = true;
-      tri2.drawingCoord = [[-0.2, 0.99], [0.2, 0.6], [0.2, 0.99]];
-      tri2.color = [0.82, 0.7, 0.54, 1.0]; // tan
-
-      // shoulders and neck
-      var tri3 = new Triangle();
-      tri3.drawing = true;
-      tri3.drawingCoord = [[-0.8, 0.4], [-0.2, 0.4], [-0.4, 0.6]];
-      tri3.color = [0.69, 0.79, 0.99, 1.0]; // angelic blue
-      var tri4 = new Triangle();
-      tri4.drawing = true;
-      tri4.drawingCoord = [[-0.3, 0.3], [0.3, 0.3], [0, 0.6]];
-      tri4.color = [0.99, 0.96, 0.75, 1.0]; // pale yellow
-      var tri5 = new Triangle();
-      tri5.drawing = true;
-      tri5.drawingCoord = [[0.2, 0.4], [0.4, 0.6], [0.8, 0.4]];
-      tri5.color = [0.69, 0.79, 0.99, 1.0]; // angelic blue
-
-      // wings
-      var tri6 = new Triangle();
-      tri6.drawing = true;
-      tri6.drawingCoord = [[-0.8, 0.2], [-0.6, 0.2], [-0.6, 0.4]];
-      tri6.color = [0.69, 0.79, 0.99, 1.0]; // angelic blue
-      var tri7 = new Triangle();
-      tri7.drawing = true;
-      tri7.drawingCoord = [[-0.6, 0.4], [-0.6, 0.1], [-0.3, 0.4]];
-      tri7.color = [0.69, 0.79, 0.99, 1.0]; // angelic blue
-      var tri8 = new Triangle();
-      tri8.drawing = true;
-      tri8.drawingCoord = [[0.4, 0.4], [0.7, 0.4], [0.7, 0.1]];
-      tri8.color = [0.69, 0.79, 0.99, 1.0]; // angelic blue
-      var tri9 = new Triangle();
-      tri9.drawing = true;
-      tri9.drawingCoord = [[0.7, 0.4], [0.7, 0.2], [0.9, 0.2]];
-      tri9.color = [0.69, 0.79, 0.99, 1.0]; // angelic blue
-      var tri10 = new Triangle();
-      tri10.drawing = true;
-      tri10.drawingCoord = [[-0.8, 0.1], [-0.6, 0.1], [-0.6, 0.3]];
-      tri10.color = [0.69, 0.79, 0.99, 1.0]; // angelic blue
-      var tri11 = new Triangle();
-      tri11.drawing = true;
-      tri11.drawingCoord = [[-0.8, 0], [-0.6, 0], [-0.6, 0.2]];
-      tri11.color = [0.69, 0.79, 0.99, 1.0]; // angelic blue
-      var tri12 = new Triangle();
-      tri12.drawing = true;
-      tri12.drawingCoord = [[0.7, 0.3], [0.7, 0.1], [0.9, 0.1]];
-      tri12.color = [0.69, 0.79, 0.99, 1.0]; // angelic blue
-      var tri13 = new Triangle();
-      tri13.drawing = true;
-      tri13.drawingCoord = [[0.7, 0], [0.7, 0.2], [0.9, 0]];
-      tri13.color = [0.69, 0.79, 0.99, 1.0]; // angelic blue
-
-      // torso
-      var tri14 = new Triangle();
-      tri14.drawing = true;
-      tri14.drawingCoord = [[-0.3, 0.3], [0.3, 0.3], [0.3, -0.2]];
-      tri14.color = [0.99, 0.96, 0.75, 1.0]; // pale yellow
-      var tri15 = new Triangle();
-      tri15.drawing = true;
-      tri15.drawingCoord = [[-0.3, 0.3], [-0.3, -0.2], [0.3, -0.2]];
-      tri15.color = [0.99, 0.96, 0.75, 1.0]; // pale yellow
-      var tri16 = new Triangle();
-      tri16.drawing = true;
-      tri16.drawingCoord = [[-0.3, -0.2], [-0.3, -0.7], [0.3, -0.2]];
-      tri16.color = [0.99, 0.96, 0.75, 1.0]; // pale yellow
-      var tri17 = new Triangle();
-      tri17.drawing = true;
-      tri17.drawingCoord = [[-0.3, -0.7], [0.3, -0.7], [0.3, -0.2]];
-      tri17.color = [0.99, 0.96, 0.75, 1.0]; // pale yellow
-
-      // dress & frill
-      var tri18 = new Triangle();
-      tri18.drawing = true;
-      tri18.drawingCoord = [[-0.7, -0.7], [-0.3, -0.7], [-0.3, -0.2]];
-      tri18.color = [0.99, 0.96, 0.75, 1.0]; // pale yellow
-      var tri19 = new Triangle();
-      tri19.drawing = true;
-      tri19.drawingCoord = [[0.3, -0.2], [0.3, -0.7], [0.7, -0.7]];
-      tri19.color = [0.99, 0.96, 0.75, 1.0]; // pale yellow
-      var tri20 = new Triangle();
-      tri20.drawing = true;
-      tri20.drawingCoord = [[-0.7, -0.7], [-0.5, -0.7], [-0.6, -0.9]];
-      tri20.color = [0.99, 0.84, 0, 1.0]; // GOLD yellow
-      var tri21 = new Triangle();
-      tri21.drawing = true;
-      tri21.drawingCoord = [[-0.5, -0.7], [-0.3, -0.7], [-0.4, -0.9]];
-      tri21.color = [0.99, 0.84, 0, 1.0]; // GOLD yellow
-      var tri22 = new Triangle();
-      tri22.drawing = true;
-      tri22.drawingCoord = [[-0.3, -0.7], [-0.1, -0.7], [-0.2, -0.9]];
-      tri22.color = [0.99, 0.84, 0, 1.0]; // GOLD yellow
-      var tri23 = new Triangle();
-      tri23.drawing = true;
-      tri23.drawingCoord = [[-0.1, -0.7], [0.1, -0.7], [0, -0.9]];
-      tri23.color = [0.99, 0.84, 0, 1.0]; // GOLD yellow
-      var tri24 = new Triangle();
-      tri24.drawing = true;
-      tri24.drawingCoord = [[0.1, -0.7], [0.3, -0.7], [0.2, -0.9]];
-      tri24.color = [0.99, 0.84, 0, 1.0]; // GOLD yellow
-      var tri25 = new Triangle();
-      tri25.drawing = true;
-      tri25.drawingCoord = [[0.3, -0.7], [0.5, -0.7], [0.4, -0.9]];
-      tri25.color = [0.99, 0.84, 0, 1.0]; // GOLD yellow
-      var tri26 = new Triangle();
-      tri26.drawing = true;
-      tri26.drawingCoord = [[0.5, -0.7], [0.7, -0.7], [0.6, -0.9]];
-      tri26.color = [0.99, 0.84, 0, 1.0]; // GOLD yellow
-
-      g_drawingList.push(tri1, tri2, tri3, tri4, tri5, tri6, tri7, tri8, tri9, tri10, tri11, tri12, tri13, tri14, tri15, tri16, tri17, tri18, tri19, tri20, tri21, tri22, tri23, tri24, tri25, tri26);
-      renderAllShapes();
-    } 
-  };
+ // removed show drawing button functionality
 
   document.getElementById('triFaceChoices').onclick = function () { g_selectedTriangleFace = document.getElementById('triFaceChoices').selectedIndex; };
   document.getElementById('triChoices').onclick = function () { g_selectedTriangleType = document.getElementById('triChoices').selectedIndex; };
@@ -287,22 +172,18 @@ function convertCoordinatesEventToGL(ev) {
 
 // Draw every shape that is supposed to be in the canvas
 function renderAllShapes() {
-  // render all drawing shapes
-  var len = g_drawingList.length;
+  // render all user drawn shapes
+  var len = g_shapesList.length;
   for (var i = 0; i < len; i++) {
-    g_drawingList[i].render();
+    g_shapesList[i].render();
   }
 
-  // render all user drawn shapes
-  // var len = g_shapesList.length;
-  // for (var i = 0; i < len; i++) {
-  //   g_shapesList[i].render();
-  // }
-
   // test triangle
-  // drawTriangle3D([-1.0,0.0,0.0, -0.5,-1.0,0.0, 1.0,0.0,0.0]);
-  // Draw a cube
-  var body = new Cube();
-  body.color = [0.83, 0.71, 0.59, 1.0];
-  body.render();
+  //drawTriangle3D([-1.0,0.0,0.0, -0.5,-1.0,0.0, 1.0,0.0,0.0]);
+  // TORSO cube
+  var torso = new Cube();
+  torso.color = [0.83, 0.71, 0.59, 1.0];
+  torso.matrix.translate(-.25, -.25, 0.0);
+  torso.matrix.scale(0.5, 0.5, .5);
+  torso.render();
 }
