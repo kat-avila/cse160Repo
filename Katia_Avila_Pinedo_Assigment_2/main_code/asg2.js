@@ -38,6 +38,7 @@ function setupWebGL() {
     console.log('Failed to get the rendering context for WebGL');
     return;
   }
+  gl.enable(gl.DEPTH_TEST);
 }
 
 // Setup GLSL
@@ -132,7 +133,7 @@ function main() {
   // Specify the color for clearing <canvas>
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
   // Clear <canvas>
-  gl.clear(gl.COLOR_BUFFER_BIT);
+  // gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
   renderAllShapes();
 }
@@ -163,7 +164,6 @@ function click(ev) {
   renderAllShapes();
 }
 
-// Load the personal drawing 
 // Extract the event click and return it in WebGL coordinates
 function convertCoordinatesEventToGL(ev) {
   var x = ev.clientX; // x coordinate of a mouse pointer
@@ -179,7 +179,7 @@ function convertCoordinatesEventToGL(ev) {
 // Draw every shape that is supposed to be in the canvas
 function renderAllShapes() {
   // Clear <canvas>
-  gl.clear(gl.COLOR_BUFFER_BIT);
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
   // Pass matrix to u_ModelMatrix attribute
   var globalRotMat = new Matrix4().rotate(g_globalAngle, 0, 1,0);
