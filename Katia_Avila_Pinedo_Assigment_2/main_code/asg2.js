@@ -101,6 +101,8 @@ let g_globalAngle = 5; // camera angle
 let g_rightTopAngle = 0; // angle top right arm
 let g_rightBottomAngle = 0; // angle bottom right
 let g_leftTopAngle = 0; // angle top left arm
+let g_leftBottomAngle = 0; // angle bottom left
+
 
 function addActionsForHTMLUI() {
   // Button Events (Shape Type)
@@ -121,6 +123,7 @@ function addActionsForHTMLUI() {
   document.getElementById('rightTopSlide').addEventListener('mousemove', function () { g_rightTopAngle = this.value; renderAllShapes(); })
   document.getElementById('rightBottomSlide').addEventListener('mousemove', function () { g_rightBottomAngle = this.value; renderAllShapes(); })
   document.getElementById('leftTopSlide').addEventListener('mousemove', function () { g_leftTopAngle = this.value; renderAllShapes(); })
+  document.getElementById('leftBottomSlide').addEventListener('mousemove', function () { g_leftBottomAngle = this.value; renderAllShapes(); })
 
   document.getElementById('segmentSlide').addEventListener('mouseup', function () { g_selectedSegment = this.value })
 }
@@ -251,9 +254,9 @@ function renderAllShapes() {
   var armLB = new Cube();
   armLB.color =[0.37, 0.63, 0.5, 1];
   armLB.matrix.set(leftArmCoordMart);
-  armLB.matrix.translate(0.236, 0, 0.0);
-  // armLB.matrix.rotate(-g_leftBottomAngle, 0, 0, 1);
-  armLB.matrix.scale(0.2, 1.1, 0.2);
+  armLB.matrix.translate(0, 0.28, 0.0);
+  armLB.matrix.rotate(-g_leftBottomAngle, 0, 0, 1);
+  armLB.matrix.scale(0.2, 1.2, 0.2);
   armLB.render();
 
 
