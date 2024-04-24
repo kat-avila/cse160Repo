@@ -97,7 +97,7 @@ let g_selectedColor = [1.0, 1.0, 1.0, 1.0]; // default color
 let g_selectedSize = 5; // set with initial value
 let g_selectedType = POINT; // default shape
 let g_selectedSegment = 10; // default num of seg in circle
-let g_globalAngle = 5; // camera angle
+let g_globalAngle = 0; // camera angle
 let g_rightTopAngle = 0; // angle top right arm
 let g_rightBottomAngle = 0; // angle bottom right
 let g_leftTopAngle = 0; // angle top left arm
@@ -254,8 +254,9 @@ function renderAllShapes() {
   var armLB = new Cube();
   armLB.color =[0.37, 0.63, 0.5, 1];
   armLB.matrix.set(leftArmCoordMart);
-  armLB.matrix.translate(0, 0.28, 0.0);
-  armLB.matrix.rotate(-g_leftBottomAngle, 0, 0, 1);
+  armLB.matrix.translate(0, 0.27, 0.0);
+  armLB.matrix.rotate( -90, 0, 0, 1);
+  armLB.matrix.rotate(g_leftBottomAngle, 0, 0, 1);
   armLB.matrix.scale(0.2, 1.2, 0.2);
   armLB.render();
 
@@ -263,28 +264,35 @@ function renderAllShapes() {
   // left pec
   var pecL = new Cube();
   pecL.color = [0.83, 0.71, 0.59, 1.0];
-  pecL.matrix.translate(-0.09, 0.25, -0.05);
-  pecL.matrix.scale(0.3, 0.3, 0.1);
+  pecL.matrix.set(torsoCoordMatrix);
+  pecL.matrix.translate(0.0, 0.3, -0.05);
+  pecL.matrix.scale(0.38, 0.3, 0.15);
+  var leftPecMatrix = new Matrix4(pecL.matrix);
   pecL.render();
   // right pec
   var pecR = new Cube();
   pecR.color = [0.83, 0.71, 0.59, 1.0];
-  pecR.matrix.translate(0.0, 0.25, -0.05);
-  pecR.matrix.scale(0.3, 0.3, 0.1);
+  pecL.matrix.set(torsoCoordMatrix);
+  pecR.matrix.translate(-0.01, 0.3, -0.05);
+  pecR.matrix.scale(0.38, 0.3, 0.15);
+  var rightPecMatrix = new Matrix4(pecR.matrix);
   pecR.render();
+
   // left pec nip
   var pecNipL = new Cube();
   pecNipL.color =  [0.66, 0.52, 0.37, 1.0];
-  pecNipL.matrix.translate(-0.055, 0.27, -0.075);
+  pecNipL.matrix.set(leftPecMatrix);
+  pecNipL.matrix.translate(0.1, 0.05, -0.25);
   pecNipL.matrix.rotate(45, 0 ,0 ,1);
-  pecNipL.matrix.scale(0.1, 0.1, 0.05);
+  pecNipL.matrix.scale(0.3, 0.3, 0.25);
   pecNipL.render();
   // right pec nip
   var pecNipR = new Cube();
   pecNipR.color = [0.66, 0.52, 0.37, 1.0];
-  pecNipR.matrix.translate(0.04, 0.27, -0.075);
+  pecNipR.matrix.set(rightPecMatrix);
+  pecNipR.matrix.translate(0.15, 0.05, -0.25);
   pecNipR.matrix.rotate(45, 0 ,0 ,1);
-  pecNipR.matrix.scale(0.1, 0.1, 0.05);
+  pecNipR.matrix.scale(0.3, 0.3, 0.25);
   pecNipR.render();
    
   
