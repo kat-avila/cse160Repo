@@ -212,14 +212,12 @@ function renderAllShapes() {
   buldge.matrix.scale(0.3, 1, 0.5);
   buldge.render();
   // BUTT CHEEK LEFT (back view)
-  var buttL = new Cube();
-  buttL.color = [0.71, 0.21, 0.16, 1.0];
-  buttL.matrix.set(buttWholeCoordMatrix);
-  buttL.matrix.translate(0.09, 0, 0.05);
-  buttL.matrix.scale(0.25, 1, 0.15);
-  buttL.render();
-
-
+  var buttBack = new Cube();
+  buttBack.color = [0.71, 0.21, 0.16, 1.0];
+  buttBack.matrix.set(buttWholeCoordMatrix);
+  buttBack.matrix.translate(0.09, 0, 0.05);
+  buttBack.matrix.scale(0.25, 1, 0.15);
+  buttBack.render();
 
   // COLLARBONE cube
   var collar = new Cube();
