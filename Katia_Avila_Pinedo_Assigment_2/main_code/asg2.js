@@ -204,13 +204,20 @@ function renderAllShapes() {
   buttWhole.matrix.scale(1, 2, 1);
   var buttWholeCoordMatrix = new Matrix4(buttWhole.matrix);
   buttWhole.render();
-   // BULDGE 
-   var buldge = new Cube();
-   buldge.color = [0.71, 0.21, 0.16, 1.0];
-   buldge.matrix.set(buttWholeCoordMatrix);
-   buldge.matrix.translate(0.09, 0, -0.25);
-   buldge.matrix.scale(0.3, 1, 0.5);
-   buldge.render();
+  // BULDGE 
+  var buldge = new Cube();
+  buldge.color = [0.71, 0.21, 0.16, 1.0];
+  buldge.matrix.set(buttWholeCoordMatrix);
+  buldge.matrix.translate(0.09, 0, -0.25);
+  buldge.matrix.scale(0.3, 1, 0.5);
+  buldge.render();
+  // BUTT CHEEK LEFT (back view)
+  var buttL = new Cube();
+  buttL.color = [0.71, 0.21, 0.16, 1.0];
+  buttL.matrix.set(buttWholeCoordMatrix);
+  buttL.matrix.translate(0.09, 0, 0.05);
+  buttL.matrix.scale(0.25, 1, 0.15);
+  buttL.render();
 
 
 
