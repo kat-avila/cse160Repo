@@ -126,7 +126,9 @@ var g_seconds = (performance.now()/1000.0) - g_startTime;
 function tick() {
   // Save the current time
   g_seconds = (performance.now() / 1000.0 )- g_startTime;
-  console.log(g_seconds);
+  // Update animation angles
+  updateAnimationAngles();
+
   // Draw everthing
   renderAllShapes();
 
@@ -134,6 +136,11 @@ function tick() {
   requestAnimationFrame(tick);
 }
 
+function updateAnimationAngles() {
+  if (g_thrustAnimation) {
+    g_rightBottomAngle = 45 * Math.sin(g_seconds);
+  }
+}
 
 // Draw every shape that is supposed to be in the canvas
 function renderAllShapes() {
@@ -179,11 +186,12 @@ function renderAllShapes() {
   armRB.color =[0.37, 0.63, 0.5, 1];
   armRB.matrix.set(rightArmCoordMart);
   armRB.matrix.translate(0.23, 0.05, 0.0001);
-  if (g_thrustAnimation) {
-    armRB.matrix.rotate(-35 * Math.sin(g_seconds), 0, 0, 1);
-  } else { 
-    armRB.matrix.rotate(-g_rightBottomAngle, 0, 0, 1);
-  }
+  armRB.matrix.rotate(-g_rightBottomAngle, 0, 0, 1);
+  // if (g_thrustAnimation) {
+  //   armRB.matrix.rotate(-35 * Math.sin(g_seconds), 0, 0, 1);
+  // } else { 
+  //   armRB.matrix.rotate(-g_rightBottomAngle, 0, 0, 1);
+  // }
   console.log(Math.sin(g_seconds));
   armRB.matrix.scale(0.2, 1.1, 0.2);
   armRB.render();
