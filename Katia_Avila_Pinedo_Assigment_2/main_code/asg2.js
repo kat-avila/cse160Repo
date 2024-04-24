@@ -98,6 +98,8 @@ let g_selectedSize = 5; // set with initial value
 let g_selectedType = POINT; // default shape
 let g_selectedSegment = 10; // default num of seg in circle
 let g_globalAngle = 5; // camera angle
+let g_rightTopAngle = 0; // angle top left arm
+let g_leftTopAngle = 0; // angle top left arm
 
 function addActionsForHTMLUI() {
   // Button Events (Shape Type)
@@ -115,6 +117,9 @@ function addActionsForHTMLUI() {
 
   // Size Slider Events
   document.getElementById('angleSlide').addEventListener('mousemove', function () { g_globalAngle = this.value; renderAllShapes(); })
+  document.getElementById('rightTopSlide').addEventListener('mousemove', function () { g_rightTopAngle = this.value; renderAllShapes(); })
+  document.getElementById('leftTopSlide').addEventListener('mousemove', function () { g_leftTopAngle = this.value; renderAllShapes(); })
+
   document.getElementById('segmentSlide').addEventListener('mouseup', function () { g_selectedSegment = this.value })
 }
 
@@ -198,50 +203,67 @@ function renderAllShapes() {
   // TORSO
   var torso = new Cube();
   torso.color = [0.91, 0.8, 0.69, 1.0];
-  torso.matrix.translate(-0.35, -0.35, 0.0);
-  torso.matrix.scale(0.75, 0.65, .1);
+  torso.matrix.translate(-0.1, 0.0, 0.0);
+  var torsoCoordMatrix = new Matrix4(torso.matrix);
+  torso.matrix.scale(0.75, 1.36, .2);
   torso.render();
 
   // COLLARBONE cube
   var collar = new Cube();
   collar.color = [0.37, 0.63, 0.5, 1];
-  collar.matrix.translate(-0.45, 0.3, 0.0);
-  collar.matrix.scale(0.95, 0.15, .1);
+  collar.matrix.set(torsoCoordMatrix);
+  collar.matrix.translate(-0.09, 0.34, 0.0);
+  collar.matrix.scale(1.5, 0.4, .2);
   collar.render();
 
-  // left arm, top section cube
+  // right arm, top section cube
+  var armRT = new Cube();
+  armRT.color = [0.91, 0.8, 0.69, 1.0];
+  armRT.matrix.set(torsoCoordMatrix);
+  armRT.matrix.translate(0.236, 0.34, 0.0);
+  armRT.matrix.rotate(0, 0, 0, 1);
+  armRT.matrix.rotate(g_rightTopAngle, 0, 0, 1);
+  armRT.matrix.scale(1.1, 0.2, 0.2);
+  // var rightArmCoordMart = new Matrix4(armRT.matrix);
+  armRT.render();
+
+  // left arm, top section
   var armLT = new Cube();
   armLT.color = [0.91, 0.8, 0.69, 1.0];
-  armLT.matrix.translate(-.7, -0.01, 0.0);
-  armLT.matrix.rotate(45, 0 ,0 ,1);
-  armLT.matrix.scale(0.4, 0.1, 0.1);
+  armLT.matrix.set(torsoCoordMatrix);
+  armLT.matrix.translate(-0.041, 0.34, 0.0);
+  armLT.matrix.rotate( 90, 0, 0, 1);
+  armLT.matrix.rotate(g_leftTopAngle, 0, 0, 1);
+  armLT.matrix.scale(0.2, 1.1, 0.2);
+  // var leftArmCoordMart = new Matrix4(armLT.matrix);
   armLT.render();
+
 
   // left pec
   var pecL = new Cube();
   pecL.color = [0.83, 0.71, 0.59, 1.0];
-  pecL.matrix.translate(-.26, 0.2, -0.1);
-  pecL.matrix.scale(0.25, 0.1, 0.04);
+  pecL.matrix.translate(-0.09, 0.25, -0.05);
+  pecL.matrix.scale(0.3, 0.3, 0.1);
   pecL.render();
   // right pec
   var pecR = new Cube();
   pecR.color = [0.83, 0.71, 0.59, 1.0];
-  pecR.matrix.translate(0.05, 0.2, -0.1);
-  pecR.matrix.scale(0.25, 0.1, 0.04);
+  pecR.matrix.translate(0.0, 0.25, -0.05);
+  pecR.matrix.scale(0.3, 0.3, 0.1);
   pecR.render();
   // left pec nip
   var pecNipL = new Cube();
   pecNipL.color =  [0.66, 0.52, 0.37, 1.0];
-  pecNipL.matrix.translate(-.14, 0.2, -0.12);
+  pecNipL.matrix.translate(-0.055, 0.27, -0.075);
   pecNipL.matrix.rotate(45, 0 ,0 ,1);
-  pecNipL.matrix.scale(0.05, 0.05, 0.025);
+  pecNipL.matrix.scale(0.1, 0.1, 0.05);
   pecNipL.render();
   // right pec nip
   var pecNipR = new Cube();
   pecNipR.color = [0.66, 0.52, 0.37, 1.0];
-  pecNipR.matrix.translate(0.17, 0.2, -0.12);
+  pecNipR.matrix.translate(0.04, 0.27, -0.075);
   pecNipR.matrix.rotate(45, 0 ,0 ,1);
-  pecNipR.matrix.scale(0.05, 0.05, 0.025);
+  pecNipR.matrix.scale(0.1, 0.1, 0.05);
   pecNipR.render();
    
   
