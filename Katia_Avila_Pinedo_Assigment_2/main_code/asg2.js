@@ -98,7 +98,8 @@ let g_selectedSize = 5; // set with initial value
 let g_selectedType = POINT; // default shape
 let g_selectedSegment = 10; // default num of seg in circle
 let g_globalAngle = 5; // camera angle
-let g_rightTopAngle = 0; // angle top left arm
+let g_rightTopAngle = 0; // angle top right arm
+let g_rightBottomAngle = 0; // angle bottom right
 let g_leftTopAngle = 0; // angle top left arm
 
 function addActionsForHTMLUI() {
@@ -118,6 +119,7 @@ function addActionsForHTMLUI() {
   // Size Slider Events
   document.getElementById('angleSlide').addEventListener('mousemove', function () { g_globalAngle = this.value; renderAllShapes(); })
   document.getElementById('rightTopSlide').addEventListener('mousemove', function () { g_rightTopAngle = this.value; renderAllShapes(); })
+  document.getElementById('rightBottomSlide').addEventListener('mousemove', function () { g_rightBottomAngle = this.value; renderAllShapes(); })
   document.getElementById('leftTopSlide').addEventListener('mousemove', function () { g_leftTopAngle = this.value; renderAllShapes(); })
 
   document.getElementById('segmentSlide').addEventListener('mouseup', function () { g_selectedSegment = this.value })
@@ -221,22 +223,38 @@ function renderAllShapes() {
   armRT.color = [0.91, 0.8, 0.69, 1.0];
   armRT.matrix.set(torsoCoordMatrix);
   armRT.matrix.translate(0.236, 0.34, 0.0);
-  armRT.matrix.rotate(0, 0, 0, 1);
   armRT.matrix.rotate(g_rightTopAngle, 0, 0, 1);
+  var rightArmCoordMart = new Matrix4(armRT.matrix);
   armRT.matrix.scale(1.1, 0.2, 0.2);
-  // var rightArmCoordMart = new Matrix4(armRT.matrix);
   armRT.render();
+  // right arm, bottom section 
+  var armRB = new Cube();
+  armRB.color =[0.37, 0.63, 0.5, 1];
+  armRB.matrix.set(rightArmCoordMart);
+  armRB.matrix.translate(0.23, 0.05, 0.0);
+  armRB.matrix.rotate(-g_rightBottomAngle, 0, 0, 1);
+  armRB.matrix.scale(0.2, 1.1, 0.2);
+  armRB.render();
 
+  
   // left arm, top section
   var armLT = new Cube();
-  armLT.color = [0.91, 0.8, 0.69, 1.0];
+  armLT.color = [0.24, 0.33, 0.29, 1.0];
   armLT.matrix.set(torsoCoordMatrix);
   armLT.matrix.translate(-0.041, 0.34, 0.0);
   armLT.matrix.rotate( 90, 0, 0, 1);
   armLT.matrix.rotate(g_leftTopAngle, 0, 0, 1);
+  var leftArmCoordMart = new Matrix4(armLT.matrix);
   armLT.matrix.scale(0.2, 1.1, 0.2);
-  // var leftArmCoordMart = new Matrix4(armLT.matrix);
   armLT.render();
+  // left arm, bottom section 
+  var armLB = new Cube();
+  armLB.color =[0.37, 0.63, 0.5, 1];
+  armLB.matrix.set(leftArmCoordMart);
+  armLB.matrix.translate(0.236, 0, 0.0);
+  // armLB.matrix.rotate(-g_leftBottomAngle, 0, 0, 1);
+  armLB.matrix.scale(0.2, 1.1, 0.2);
+  armLB.render();
 
 
   // left pec
