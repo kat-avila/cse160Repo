@@ -83,7 +83,8 @@ let g_rightTopAngle = 0; // angle top right arm
 let g_rightBottomAngle = 0; // angle bottom right
 let g_leftTopAngle = 0; // angle top left arm
 let g_leftBottomAngle = 0; // angle bottom left
-
+// animations
+let g_thrustAnimation = false;
 
 function addActionsForHTMLUI() {  
   // Perspective Slider Events
@@ -95,6 +96,11 @@ function addActionsForHTMLUI() {
   // Left Arm Slider Events
   document.getElementById('leftTopSlide').addEventListener('mousemove', function () { g_leftTopAngle = this.value; renderAllShapes(); })
   document.getElementById('leftBottomSlide').addEventListener('mousemove', function () { g_leftBottomAngle = this.value; renderAllShapes(); })
+
+  // Thrust buttons
+  document.getElementById('thrustStart').onclick = function () {g_thrustAnimation = true; };
+  document.getElementById('thrustStop').onclick = function () {g_thrustAnimation = false; };
+
 }
 
 
@@ -165,7 +171,6 @@ function renderAllShapes() {
   armRT.matrix.set(torsoCoordMatrix);
   armRT.matrix.translate(0.236, 0.34, 0.001);
   armRT.matrix.rotate(g_rightTopAngle, 0, 0, 1);
-  // armRT.matrix.rotate(2*Math.sin(g_seconds), 0, 0, 1);
   var rightArmCoordMart = new Matrix4(armRT.matrix);
   armRT.matrix.scale(1.1, 0.2, 0.2);
   armRT.render();
@@ -174,8 +179,11 @@ function renderAllShapes() {
   armRB.color =[0.37, 0.63, 0.5, 1];
   armRB.matrix.set(rightArmCoordMart);
   armRB.matrix.translate(0.23, 0.05, 0.0001);
-  // armRB.matrix.rotate(-g_rightBottomAngle, 0, 0, 1);
-  armRB.matrix.rotate(-35 * Math.sin(g_seconds), 0, 0, 1);
+  if (g_thrustAnimation) {
+    armRB.matrix.rotate(-35 * Math.sin(g_seconds), 0, 0, 1);
+  } else { 
+    armRB.matrix.rotate(-g_rightBottomAngle, 0, 0, 1);
+  }
   console.log(Math.sin(g_seconds));
   armRB.matrix.scale(0.2, 1.1, 0.2);
   armRB.render();
