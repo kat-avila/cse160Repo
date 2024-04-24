@@ -235,11 +235,12 @@ function renderAllShapes() {
   
   // COLLARBONE cube
   var collar = new Cube();
-  collar.color = [0.37, 0.63, 0.5, 1];
+  collar.color = [0.91, 0.8, 0.69, 1.0];
+  collar.colorSplit = [0.37, 0.63, 0.5, 1]
   collar.matrix.set(torsoCoordMatrix);
   collar.matrix.translate(-0.09, 0.34, 0.0);
   collar.matrix.scale(1.5, 0.4, .2);
-  collar.render();
+  collar.renderSplitRect2();
 
   // right arm, top section cube
   var armRT = new Cube();
