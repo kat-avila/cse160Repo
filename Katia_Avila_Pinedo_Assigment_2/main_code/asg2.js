@@ -187,6 +187,7 @@ function renderAllShapes() {
   torso.matrix.translate(-0.1, 0.0, 0.0);
   var torsoCoordMatrix = new Matrix4(torso.matrix);
   torso.matrix.scale(0.75, 1.36, .2);
+  // torso.matrix.translate(-0.2, 0.0, 0.0);
   torso.render();
   // BELT
   var belt = new Cube();
@@ -198,27 +199,22 @@ function renderAllShapes() {
   belt.render();
   // BUTT ALL
   var buttWhole = new Cube();
+  buttWhole.colorSplit =  [0.71, 0.21, 0.16, 1.0];
   buttWhole.color = [0.91, 0.8, 0.69, 1.0];
   buttWhole.matrix.set(beltCoordMatrix);
   buttWhole.matrix.translate(0.0, -0.5, 0);
   buttWhole.matrix.scale(1, 2, 1);
   var buttWholeCoordMatrix = new Matrix4(buttWhole.matrix);
-  buttWhole.render();
+  buttWhole.renderSplitRect3();
   // BULDGE 
   var buldge = new Cube();
-  buldge.color = [0.71, 0.21, 0.16, 1.0];
+  buldge.color = [0.75, 0.19, 0.16, 1.0];
   buldge.matrix.set(buttWholeCoordMatrix);
   buldge.matrix.translate(0.09, 0, -0.25);
   buldge.matrix.scale(0.3, 1, 0.5);
   buldge.render();
-  // BUTT CHEEK LEFT (back view)
-  var buttBack = new Cube();
-  buttBack.color = [0.71, 0.21, 0.16, 1.0];
-  buttBack.matrix.set(buttWholeCoordMatrix);
-  buttBack.matrix.translate(0.09, 0, 0.05);
-  buttBack.matrix.scale(0.25, 1, 0.15);
-  buttBack.render();
-
+  
+  
   // COLLARBONE cube
   var collar = new Cube();
   collar.color = [0.37, 0.63, 0.5, 1];
