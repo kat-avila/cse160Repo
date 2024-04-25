@@ -264,8 +264,9 @@ function renderAllShapes() {
   var zAngMat = new Matrix4().rotate(g_angleZ, 0, 0, 1);
   gl.uniformMatrix4fv(u_ZRotateMatrix, false, zAngMat.elements);
 
-  // main body    torso.color = [0.91, 0.8, 0.69, 1.0];
+  // main body    torso.color = [0.92, 0.8, 0.6, 1.0];
   // tan body    pecR.color = [0.83, 0.71, 0.59, 1.0];
+  // light body  [0.95, 0.87, 0.76, 1.0];
   // dark skin    [0.66, 0.52, 0.37, 1.0]
   // underpands  [0.71, 0.21, 0.16, 1.0];
   // aqua light [0.4, 0.68, 0.49, 1.0]
@@ -275,15 +276,87 @@ function renderAllShapes() {
 
   // TORSO
   var torso = new Cube();
-  torso.color = [0.91, 0.8, 0.69, 1.0];
+  torso.color =  [0.92, 0.8, 0.6, 1.0];
   torso.matrix.translate(-0.1, 0.0, 0);
   var torsoCoordMatrix = new Matrix4(torso.matrix);
   torso.matrix.scale(0.75, 1.36, .2);
   torso.render();
 
+  // left pec
+  var pecL = new Cube();
+  pecL.color = [0.95, 0.87, 0.76, 1.0];
+  pecL.matrix.set(torsoCoordMatrix);
+  pecL.matrix.translate(0.0, 0.3, -0.05);
+  pecL.matrix.scale(0.38, 0.3, 0.15);
+  var leftPecMatrix = new Matrix4(pecL.matrix);
+  pecL.render();
+    // left pec nip
+    var pecNipL = new Cube();
+    pecNipL.color = [0.66, 0.52, 0.37, 1.0];
+    pecNipL.matrix.set(leftPecMatrix);
+    pecNipL.matrix.translate(0.1, 0.05, -0.25);
+    pecNipL.matrix.rotate(45, 0, 0, 1);
+    pecNipL.matrix.scale(0.3, 0.3, 0.25);
+    pecNipL.render();
+  // right pec
+  var pecR = new Cube();
+  pecR.color = [0.95, 0.87, 0.76, 1.0];
+  pecL.matrix.set(torsoCoordMatrix);
+  pecR.matrix.translate(-0.01, 0.3, -0.05);
+  pecR.matrix.scale(0.38, 0.3, 0.15);
+  var rightPecMatrix = new Matrix4(pecR.matrix);
+  pecR.render();
+  // right pec nip
+  var pecNipR = new Cube();
+  pecNipR.color = [0.66, 0.52, 0.37, 1.0];
+  pecNipR.matrix.set(rightPecMatrix);
+  pecNipR.matrix.translate(0.15, 0.05, -0.25);
+  pecNipR.matrix.rotate(45, 0, 0, 1);
+  pecNipR.matrix.scale(0.3, 0.3, 0.25);
+  pecNipR.render();
+
+  // ABS LEFT
+  var ab1L = new Cube();
+  ab1L.color =  [0.95, 0.87, 0.76, 1.0];
+  ab1L.matrix.set(torsoCoordMatrix);
+  ab1L.matrix.translate(0.04, 0.18, -0.025);
+  ab1L.matrix.scale(0.2, 0.2, 0.15);
+  ab1L.render();
+  var ab2L = new Cube();
+  ab2L.color =  [0.95, 0.87, 0.76, 1.0];
+  ab2L.matrix.set(torsoCoordMatrix);
+  ab2L.matrix.translate(0.04, 0.12, -0.025);
+  ab2L.matrix.scale(0.2, 0.2, 0.15);
+  ab2L.render();
+  var ab3L = new Cube();
+  ab3L.color =  [0.95, 0.87, 0.76, 1.0];
+  ab3L.matrix.set(torsoCoordMatrix);
+  ab3L.matrix.translate(0.04, 0.06, -0.025);
+  ab3L.matrix.scale(0.2, 0.2, 0.15);
+  ab3L.render();
+  // ABS RIGHT
+  var ab1R = new Cube();
+  ab1R.color =  [0.95, 0.87, 0.76, 1.0];
+  ab1R.matrix.set(torsoCoordMatrix);
+  ab1R.matrix.translate(0.1, 0.18, -0.025);
+  ab1R.matrix.scale(0.2, 0.2, 0.15);
+  ab1R.render();
+  var ab2R = new Cube();
+  ab2R.color =  [0.95, 0.87, 0.76, 1.0];
+  ab2R.matrix.set(torsoCoordMatrix);
+  ab2R.matrix.translate(0.1, 0.12, -0.025);
+  ab2R.matrix.scale(0.2, 0.2, 0.15);
+  ab2R.render();
+  var ab3R = new Cube();
+  ab3R.color =  [0.95, 0.87, 0.76, 1.0];
+  ab3R.matrix.set(torsoCoordMatrix);
+  ab3R.matrix.translate(0.1, 0.06, -0.025);
+  ab3R.matrix.scale(0.2, 0.18, 0.15);
+  ab3R.render();
+
   // COLLARBONE cube
   var collar = new Cube();
-  collar.color = [0.91, 0.8, 0.69, 1.0];
+  collar.color =  [0.92, 0.8, 0.6, 1.0];
   collar.colorSplit = [0.37, 0.63, 0.5, 1]
   collar.matrix.set(torsoCoordMatrix);
   collar.matrix.translate(-0.09, 0.34, 0.0);
@@ -292,7 +365,7 @@ function renderAllShapes() {
   collar.renderSplitRect2();
   // NECK
   var neck = new Cube();
-  neck.color = [0.91, 0.8, 0.69, 1.0];
+  neck.color =  [0.92, 0.8, 0.6, 1.0];
   neck.matrix.set(collarCoordMatrix);
   neck.matrix.translate(0.15, 0.1, 0, 0);
   var neckCoordMatrix = new Matrix4(neck.matrix);
@@ -300,7 +373,7 @@ function renderAllShapes() {
   neck.render();
   // HEAD
   var head = new Cube();
-  head.color =  [0.91, 0.8, 0.69, 1.0];
+  head.color =   [0.92, 0.8, 0.6, 1.0];
   head.matrix.set(neckCoordMatrix);
   head.matrix.translate(-0.06, 0.05, 0);
   head.matrix.scale(0.8,0.8,0.5);
@@ -356,7 +429,7 @@ function renderAllShapes() {
   
   // right arm, top section cube
   var armRT = new Cube();
-  armRT.color = [0.91, 0.8, 0.69, 1.0];
+  armRT.color =  [0.92, 0.8, 0.6, 1.0];
   armRT.matrix.set(torsoCoordMatrix);
   armRT.matrix.translate(0.236, 0.34, 0.001);
   armRT.matrix.rotate(g_rightTopAngle, 0, 0, 1);
@@ -394,40 +467,7 @@ function renderAllShapes() {
   armLB.render();
 
 
-  // left pec
-  var pecL = new Cube();
-  pecL.color = [0.83, 0.71, 0.59, 1.0];
-  pecL.matrix.set(torsoCoordMatrix);
-  pecL.matrix.translate(0.0, 0.3, -0.05);
-  pecL.matrix.scale(0.38, 0.3, 0.15);
-  var leftPecMatrix = new Matrix4(pecL.matrix);
-  pecL.render();
-    // left pec nip
-    var pecNipL = new Cube();
-    pecNipL.color = [0.66, 0.52, 0.37, 1.0];
-    pecNipL.matrix.set(leftPecMatrix);
-    pecNipL.matrix.translate(0.1, 0.05, -0.25);
-    pecNipL.matrix.rotate(45, 0, 0, 1);
-    pecNipL.matrix.scale(0.3, 0.3, 0.25);
-    pecNipL.render();
-  // right pec
-  var pecR = new Cube();
-  pecR.color = [0.83, 0.71, 0.59, 1.0];
-  pecL.matrix.set(torsoCoordMatrix);
-  pecR.matrix.translate(-0.01, 0.3, -0.05);
-  pecR.matrix.scale(0.38, 0.3, 0.15);
-  var rightPecMatrix = new Matrix4(pecR.matrix);
-  pecR.render();
-  // right pec nip
-  var pecNipR = new Cube();
-  pecNipR.color = [0.66, 0.52, 0.37, 1.0];
-  pecNipR.matrix.set(rightPecMatrix);
-  pecNipR.matrix.translate(0.15, 0.05, -0.25);
-  pecNipR.matrix.rotate(45, 0, 0, 1);
-  pecNipR.matrix.scale(0.3, 0.3, 0.25);
-  pecNipR.render();
-
-
+  
 
   // BELT
   var belt = new Cube();
@@ -441,7 +481,7 @@ function renderAllShapes() {
   // BUTT ALL
   var buttWhole = new Cube();
   buttWhole.colorSplit = [0.75, 0.19, 0.16, 1.0];
-  buttWhole.color = [0.91, 0.8, 0.69, 1.0];
+  buttWhole.color =  [0.92, 0.8, 0.6, 1.0];
   buttWhole.matrix.set(beltCoordMatrix);
   buttWhole.matrix.translate(0.0, -0.2, 0.025);
   buttWhole.matrix.scale(1, 0.8, 0.4);
@@ -457,7 +497,7 @@ function renderAllShapes() {
 
   // left leg thigh
   var thighL = new Cube();
-  thighL.color = [0.91, 0.8, 0.69, 1.0];
+  thighL.color =  [0.92, 0.8, 0.6, 1.0];
   thighL.matrix.set(beltCoordMatrix);
   thighL.matrix.translate(0.1, -0.2, 0.0251);
   thighL.matrix.rotate(g_leftThighAngle, 0, 0, 1);
@@ -466,7 +506,7 @@ function renderAllShapes() {
   thighL.render();
   // left leg
   var legL = new Cube();
-  legL.color = [0.24, 0.33, 0.29, 1.0];
+  legL.color =  [0.92, 0.8, 0.6, 1.0];
   legL.matrix.set(thighLCoordMatrix);
   legL.matrix.translate(0, 0.25, -0.0001);
   legL.matrix.rotate(g_leftCalfAngle, 0, 0, 1);
@@ -475,7 +515,7 @@ function renderAllShapes() {
 
   // right leg thigh
   var thighR = new Cube();
-  thighR.color = [0.91, 0.8, 0.69, 1.0];
+  thighR.color =  [0.92, 0.8, 0.6, 1.0];
   thighR.matrix.set(beltCoordMatrix);
   thighR.matrix.translate(0.15, -0.2, 0.0251);
   thighR.matrix.rotate(g_rightThighAngle, 0, 0, 1);
@@ -486,7 +526,7 @@ function renderAllShapes() {
   var rightL = new Cube();
   rightL.color = [0.24, 0.33, 0.29, 1.0];
   rightL.matrix.set(thighRCoordMatrix);
-  rightL.matrix.translate(0.25, 0, -0.0001);
+  rightL.matrix.translate(0.25, 0, -0.001);
   rightL.matrix.rotate(g_rightCalfAngle, 0, 0, 1);
   rightL.matrix.scale(1, 0.4, 0.4);
   rightL.render();
