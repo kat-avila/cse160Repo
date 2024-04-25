@@ -128,15 +128,16 @@ function addActionsForHTMLUI() {
   // Left Leg Slider Events
   document.getElementById('leftThighSlide').addEventListener('mousemove', function () { g_leftThighAngle = this.value; renderAllShapes(); })
   document.getElementById('leftCalfSlide').addEventListener('mousemove', function () { g_leftCalfAngle = this.value; renderAllShapes(); })
- // Right Leg Slider Events
- document.getElementById('rightThighSlide').addEventListener('mousemove', function () { g_rightThighAngle = this.value; renderAllShapes(); })
- document.getElementById('rightCalfSlide').addEventListener('mousemove', function () { g_rightCalfAngle = this.value; renderAllShapes(); })
+  // Right Leg Slider Events
+  document.getElementById('rightThighSlide').addEventListener('mousemove', function () { g_rightThighAngle = this.value; renderAllShapes(); })
+  document.getElementById('rightCalfSlide').addEventListener('mousemove', function () { g_rightCalfAngle = this.value; renderAllShapes(); })
 
   // Thrust animation
   document.getElementById('thrustSlide').addEventListener('mousemove', function () { g_thrustAngle = this.value; renderAllShapes(); })
 
   // Thrust buttons
-  document.getElementById('thrustStart').onclick = function () { g_thrustAnimation = true; 
+  document.getElementById('thrustStart').onclick = function () {
+    g_thrustAnimation = true;
     // set arms down
     g_leftTopAngle = 90;
     document.getElementById('leftTopSlide').value = 90;
@@ -198,7 +199,7 @@ function tick() {
 function updateAnimationAngles() {
   if (g_thrustAnimation) {
     g_thrustAngle = 35 * Math.sin(g_seconds * 2.5); // start animation thrust
-   
+
   }
 }
 
@@ -234,13 +235,13 @@ function renderAllShapes() {
   belt.color = [0.84, 0.77, 0.38, 1.0];
   belt.matrix.set(torsoCoordMatrix);
   belt.matrix.translate(-0.03, -0.04, 0.01);
-  belt.matrix.rotate(g_thrustAngle, 1, 0,0);
+  belt.matrix.rotate(g_thrustAngle, 1, 0, 0);
   var beltCoordMatrix = new Matrix4(belt.matrix);
   belt.matrix.scale(1, 0.25, .3);
   belt.render();
   // BUTT ALL
   var buttWhole = new Cube();
-  buttWhole.colorSplit =   [0.75, 0.19, 0.16, 1.0];
+  buttWhole.colorSplit = [0.75, 0.19, 0.16, 1.0];
   buttWhole.color = [0.91, 0.8, 0.69, 1.0];
   buttWhole.matrix.set(beltCoordMatrix);
   buttWhole.matrix.translate(0.0, -0.2, 0.025);
@@ -257,10 +258,10 @@ function renderAllShapes() {
 
   // left leg thigh
   var thighL = new Cube();
-  thighL.color  = [0.91, 0.8, 0.69, 1.0];
+  thighL.color = [0.91, 0.8, 0.69, 1.0];
   thighL.matrix.set(beltCoordMatrix);
   thighL.matrix.translate(0.1, -0.2, 0.0251);
-  thighL.matrix.rotate(g_leftThighAngle, 0,0,1);
+  thighL.matrix.rotate(g_leftThighAngle, 0, 0, 1);
   var thighLCoordMatrix = new Matrix4(thighL.matrix);
   thighL.matrix.scale(0.4, 1.4, 0.4);
   thighL.render();
@@ -269,36 +270,44 @@ function renderAllShapes() {
   legL.color = [0.24, 0.33, 0.29, 1.0];
   legL.matrix.set(thighLCoordMatrix);
   legL.matrix.translate(0, 0.25, -0.0001);
-  legL.matrix.rotate(g_leftCalfAngle, 0,0,1);
+  legL.matrix.rotate(g_leftCalfAngle, 0, 0, 1);
   legL.matrix.scale(0.4, 1, 0.4);
   legL.render();
 
-    // right leg thigh
-    var thighR = new Cube();
-    thighR.color  = [0.91, 0.8, 0.69, 1.0];
-    thighR.matrix.set(beltCoordMatrix);
-    thighR.matrix.translate(0.15, -0.2, 0.0251);
-    thighR.matrix.rotate(g_rightThighAngle, 0,0,1);
-    var thighRCoordMatrix = new Matrix4(thighR.matrix);
-    thighR.matrix.scale(1.4, 0.4, 0.4);
-    thighR.render();
-    // right leg
-    var rightL = new Cube();
-    rightL.color = [0.24, 0.33, 0.29, 1.0];
-    rightL.matrix.set(thighRCoordMatrix);
-    rightL.matrix.translate(0.25, 0, -0.0001);
-    rightL.matrix.rotate(g_rightCalfAngle, 0,0,1);
-    rightL.matrix.scale(1, 0.4, 0.4);
-    rightL.render();
-  
+  // right leg thigh
+  var thighR = new Cube();
+  thighR.color = [0.91, 0.8, 0.69, 1.0];
+  thighR.matrix.set(beltCoordMatrix);
+  thighR.matrix.translate(0.15, -0.2, 0.0251);
+  thighR.matrix.rotate(g_rightThighAngle, 0, 0, 1);
+  var thighRCoordMatrix = new Matrix4(thighR.matrix);
+  thighR.matrix.scale(1.4, 0.4, 0.4);
+  thighR.render();
+  // right leg
+  var rightL = new Cube();
+  rightL.color = [0.24, 0.33, 0.29, 1.0];
+  rightL.matrix.set(thighRCoordMatrix);
+  rightL.matrix.translate(0.25, 0, -0.0001);
+  rightL.matrix.rotate(g_rightCalfAngle, 0, 0, 1);
+  rightL.matrix.scale(1, 0.4, 0.4);
+  rightL.render();
+
   // COLLARBONE cube
   var collar = new Cube();
   collar.color = [0.91, 0.8, 0.69, 1.0];
   collar.colorSplit = [0.37, 0.63, 0.5, 1]
   collar.matrix.set(torsoCoordMatrix);
   collar.matrix.translate(-0.09, 0.34, 0.0);
+  var collarCoordMatrix = new Matrix4(collar.matrix);
   collar.matrix.scale(1.5, 0.4, .2);
   collar.renderSplitRect2();
+  // NECK
+  var neck = new Cube();
+  neck.color = [0.91, 0.8, 0.69, 1.0];
+  neck.matrix.set(collarCoordMatrix);
+  neck.matrix.translate(0.15, 0.1, 0, 0);
+  neck.matrix.scale(0.3,0.4,0.4);
+  neck.render();
 
   // right arm, top section cube
   var armRT = new Cube();
