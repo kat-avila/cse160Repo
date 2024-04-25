@@ -102,6 +102,12 @@ let g_rightTopAngle = 45; // angle top right arm
 let g_rightBottomAngle = 0; // angle bottom right
 let g_leftTopAngle = -45; // angle top left arm
 let g_leftBottomAngle = 0; // angle bottom left
+let g_leftThighAngle = 160;
+let g_leftCalfAngle = 0;
+let g_rightThighAngle = -90;
+let g_rightCalfAngle = 0;
+
+
 // animations
 let g_thrustAngle = 0; // thrust angle
 let g_thrustAnimation = false;
@@ -119,11 +125,19 @@ function addActionsForHTMLUI() {
   document.getElementById('leftTopSlide').addEventListener('mousemove', function () { g_leftTopAngle = this.value; renderAllShapes(); })
   document.getElementById('leftBottomSlide').addEventListener('mousemove', function () { g_leftBottomAngle = this.value; renderAllShapes(); })
 
+  // Left Leg Slider Events
+  document.getElementById('leftThighSlide').addEventListener('mousemove', function () { g_leftThighAngle = this.value; renderAllShapes(); })
+  document.getElementById('leftCalfSlide').addEventListener('mousemove', function () { g_leftCalfAngle = this.value; renderAllShapes(); })
+ // Right Leg Slider Events
+ document.getElementById('rightThighSlide').addEventListener('mousemove', function () { g_rightThighAngle = this.value; renderAllShapes(); })
+ document.getElementById('rightCalfSlide').addEventListener('mousemove', function () { g_rightCalfAngle = this.value; renderAllShapes(); })
+
   // Thrust animation
   document.getElementById('thrustSlide').addEventListener('mousemove', function () { g_thrustAngle = this.value; renderAllShapes(); })
 
   // Thrust buttons
   document.getElementById('thrustStart').onclick = function () { g_thrustAnimation = true; 
+    // set arms down
     g_leftTopAngle = 90;
     document.getElementById('leftTopSlide').value = 90;
     g_leftBottomAngle = 90;
@@ -132,6 +146,15 @@ function addActionsForHTMLUI() {
     document.getElementById('rightTopSlide').value = -90;
     g_rightBottomAngle = 90;
     document.getElementById('rightBottomSlide').value = 90;
+    // spread legs
+    g_leftThighAngle = 90;
+    document.getElementById("leftThighSlide").value = 90;
+    g_leftCalfAngle = 90;
+    document.getElementById("leftCalfSlide").value = 90;
+    g_rightThighAngle = 0;
+    document.getElementById("rightThighSlide").value = 0;
+    g_rightCalfAngle = -90;
+    document.getElementById("rightCalfSlide").value = -90;
 
   };
 
@@ -174,8 +197,7 @@ function tick() {
 
 function updateAnimationAngles() {
   if (g_thrustAnimation) {
-    g_thrustAngle = 45 * Math.sin(g_seconds * 2.5); // start animation thrust
-    // set arms down
+    g_thrustAngle = 35 * Math.sin(g_seconds * 2.5); // start animation thrust
    
   }
 }
@@ -197,6 +219,8 @@ function renderAllShapes() {
   // tan body    pecR.color = [0.83, 0.71, 0.59, 1.0];
   // dark skin    [0.66, 0.52, 0.37, 1.0]
   // underpands  [0.71, 0.21, 0.16, 1.0];
+  // aqua light [0.4, 0.68, 0.49, 1.0]
+  // aqua dark [0.24, 0.33, 0.29, 1.0];
 
   // TORSO
   var torso = new Cube();
@@ -204,7 +228,6 @@ function renderAllShapes() {
   torso.matrix.translate(-0.1, 0.0, 0);
   var torsoCoordMatrix = new Matrix4(torso.matrix);
   torso.matrix.scale(0.75, 1.36, .2);
-  // torso.matrix.translate(-0.2, 0.0, 0.0);
   torso.render();
   // BELT
   var belt = new Cube();
@@ -212,26 +235,61 @@ function renderAllShapes() {
   belt.matrix.set(torsoCoordMatrix);
   belt.matrix.translate(-0.03, -0.04, 0.01);
   belt.matrix.rotate(g_thrustAngle, 1, 0,0);
-  belt.matrix.scale(1, 0.25, .3);
   var beltCoordMatrix = new Matrix4(belt.matrix);
+  belt.matrix.scale(1, 0.25, .3);
   belt.render();
   // BUTT ALL
   var buttWhole = new Cube();
-  buttWhole.colorSplit =  [0.71, 0.21, 0.16, 1.0];
+  buttWhole.colorSplit =   [0.75, 0.19, 0.16, 1.0];
   buttWhole.color = [0.91, 0.8, 0.69, 1.0];
   buttWhole.matrix.set(beltCoordMatrix);
-  buttWhole.matrix.translate(0.0, -0.5, 0);
-  buttWhole.matrix.scale(1, 2, 1);
+  buttWhole.matrix.translate(0.0, -0.2, 0.025);
+  buttWhole.matrix.scale(1, 0.8, 0.4);
   var buttWholeCoordMatrix = new Matrix4(buttWhole.matrix);
   buttWhole.renderSplitRect3();
   // BULDGE 
   var buldge = new Cube();
-  buldge.color = [0.75, 0.19, 0.16, 1.0];
+  buldge.color = [0.71, 0.21, 0.16, 1.0];
   buldge.matrix.set(buttWholeCoordMatrix);
   buldge.matrix.translate(0.09, 0, -0.25);
-  buldge.matrix.scale(0.3, 1, 0.5);
+  buldge.matrix.scale(0.3, 0.7, 0.35);
   buldge.render();
-  
+
+  // left leg thigh
+  var thighL = new Cube();
+  thighL.color  = [0.91, 0.8, 0.69, 1.0];
+  thighL.matrix.set(beltCoordMatrix);
+  thighL.matrix.translate(0.1, -0.2, 0.0251);
+  thighL.matrix.rotate(g_leftThighAngle, 0,0,1);
+  var thighLCoordMatrix = new Matrix4(thighL.matrix);
+  thighL.matrix.scale(0.4, 1.4, 0.4);
+  thighL.render();
+  // left leg
+  var legL = new Cube();
+  legL.color = [0.24, 0.33, 0.29, 1.0];
+  legL.matrix.set(thighLCoordMatrix);
+  legL.matrix.translate(0, 0.25, -0.0001);
+  legL.matrix.rotate(g_leftCalfAngle, 0,0,1);
+  legL.matrix.scale(0.4, 1, 0.4);
+  legL.render();
+
+    // right leg thigh
+    var thighR = new Cube();
+    thighR.color  = [0.91, 0.8, 0.69, 1.0];
+    thighR.matrix.set(beltCoordMatrix);
+    thighR.matrix.translate(0.15, -0.2, 0.0251);
+    thighR.matrix.rotate(g_rightThighAngle, 0,0,1);
+    var thighRCoordMatrix = new Matrix4(thighR.matrix);
+    thighR.matrix.scale(1.4, 0.4, 0.4);
+    thighR.render();
+    // right leg
+    var rightL = new Cube();
+    rightL.color = [0.24, 0.33, 0.29, 1.0];
+    rightL.matrix.set(thighRCoordMatrix);
+    rightL.matrix.translate(0.25, 0, -0.0001);
+    rightL.matrix.rotate(g_rightCalfAngle, 0,0,1);
+    rightL.matrix.scale(1, 0.4, 0.4);
+    rightL.render();
   
   // COLLARBONE cube
   var collar = new Cube();
@@ -247,7 +305,6 @@ function renderAllShapes() {
   armRT.color = [0.91, 0.8, 0.69, 1.0];
   armRT.matrix.set(torsoCoordMatrix);
   armRT.matrix.translate(0.236, 0.34, 0.001);
-  // armRT.matrix.rotate(45, 0,0, 1);
   armRT.matrix.rotate(g_rightTopAngle, 0, 0, 1);
   var rightArmCoordMart = new Matrix4(armRT.matrix);
   armRT.matrix.scale(1.1, 0.2, 0.2);
