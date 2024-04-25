@@ -99,13 +99,13 @@ let g_angleX = 25; // camera angle
 let g_angleY = 0; // camera angle
 let g_angleZ = 0; // camera angle
 // right arm
-let g_rightTopAngle = 25; 
+let g_rightTopAngle = 25;
 let g_rightBottomAngle = 0;
 // right leg
 let g_rightThighAngle = -90;
 let g_rightCalfAngle = 0;
 // left arm
-let g_leftTopAngle = -25; 
+let g_leftTopAngle = -25;
 let g_leftBottomAngle = 0;
 // left leg
 let g_leftThighAngle = 160;
@@ -172,10 +172,10 @@ function addActionsForHTMLUI() {
 
   };
 
-  document.getElementById('thrustStop').onclick = function () { 
-    g_thrustAnimation = false; 
+  document.getElementById('thrustStop').onclick = function () {
+    g_thrustAnimation = false;
     // right arm
-    g_rightTopAngle = 25; 
+    g_rightTopAngle = 25;
     document.getElementById('rightTopSlide').value = 25;
     g_rightBottomAngle = 0;
     document.getElementById('rightBottomSlide').value = 0;
@@ -186,7 +186,7 @@ function addActionsForHTMLUI() {
     document.getElementById('rightCalfSlide').value = 0;
 
     // left arm
-    g_leftTopAngle = -25; 
+    g_leftTopAngle = -25;
     document.getElementById('leftTopSlide').value = -25;
     g_leftBottomAngle = 0;
     document.getElementById('leftBottomSlide').value = 0;
@@ -206,7 +206,7 @@ function addActionsForHTMLUI() {
     g_thrustAngle = 0; // thrust angle
     document.getElementById("thrustSlide").value = 0;
 
-  
+
   };
 
 }
@@ -268,6 +268,7 @@ function renderAllShapes() {
   // tan body    pecR.color = [0.83, 0.71, 0.59, 1.0];
   // light body  [0.95, 0.87, 0.76, 1.0];
   // dark skin    [0.66, 0.52, 0.37, 1.0]
+  // fish         [0.67, 0.49, 0.31];
   // underpands  [0.71, 0.21, 0.16, 1.0];
   // aqua light [0.4, 0.68, 0.49, 1.0]
   // aqua dark [0.24, 0.33, 0.29, 1.0];
@@ -276,7 +277,7 @@ function renderAllShapes() {
 
   // TORSO
   var torso = new Cube();
-  torso.color =  [0.92, 0.8, 0.6, 1.0];
+  torso.color = [0.92, 0.8, 0.6, 1.0];
   torso.matrix.translate(-0.1, 0.0, 0);
   var torsoCoordMatrix = new Matrix4(torso.matrix);
   torso.matrix.scale(0.75, 1.36, .2);
@@ -290,14 +291,14 @@ function renderAllShapes() {
   pecL.matrix.scale(0.38, 0.3, 0.15);
   var leftPecMatrix = new Matrix4(pecL.matrix);
   pecL.render();
-    // left pec nip
-    var pecNipL = new Cube();
-    pecNipL.color = [0.66, 0.52, 0.37, 1.0];
-    pecNipL.matrix.set(leftPecMatrix);
-    pecNipL.matrix.translate(0.1, 0.05, -0.25);
-    pecNipL.matrix.rotate(45, 0, 0, 1);
-    pecNipL.matrix.scale(0.3, 0.3, 0.25);
-    pecNipL.render();
+  // left pec nip
+  var pecNipL = new Cube();
+  pecNipL.color = [0.66, 0.52, 0.37, 1.0];
+  pecNipL.matrix.set(leftPecMatrix);
+  pecNipL.matrix.translate(0.1, 0.05, -0.25);
+  pecNipL.matrix.rotate(45, 0, 0, 1);
+  pecNipL.matrix.scale(0.3, 0.3, 0.25);
+  pecNipL.render();
   // right pec
   var pecR = new Cube();
   pecR.color = [0.95, 0.87, 0.76, 1.0];
@@ -317,46 +318,135 @@ function renderAllShapes() {
 
   // ABS LEFT
   var ab1L = new Cube();
-  ab1L.color =  [0.95, 0.87, 0.76, 1.0];
+  ab1L.color = [0.95, 0.87, 0.76, 1.0];
   ab1L.matrix.set(torsoCoordMatrix);
   ab1L.matrix.translate(0.04, 0.18, -0.025);
   ab1L.matrix.scale(0.2, 0.2, 0.15);
   ab1L.render();
   var ab2L = new Cube();
-  ab2L.color =  [0.95, 0.87, 0.76, 1.0];
+  ab2L.color = [0.95, 0.87, 0.76, 1.0];
   ab2L.matrix.set(torsoCoordMatrix);
   ab2L.matrix.translate(0.04, 0.12, -0.025);
   ab2L.matrix.scale(0.2, 0.2, 0.15);
   ab2L.render();
   var ab3L = new Cube();
-  ab3L.color =  [0.95, 0.87, 0.76, 1.0];
+  ab3L.color = [0.95, 0.87, 0.76, 1.0];
   ab3L.matrix.set(torsoCoordMatrix);
   ab3L.matrix.translate(0.04, 0.06, -0.025);
   ab3L.matrix.scale(0.2, 0.2, 0.15);
   ab3L.render();
   // ABS RIGHT
   var ab1R = new Cube();
-  ab1R.color =  [0.95, 0.87, 0.76, 1.0];
+  ab1R.color = [0.95, 0.87, 0.76, 1.0];
   ab1R.matrix.set(torsoCoordMatrix);
   ab1R.matrix.translate(0.1, 0.18, -0.025);
   ab1R.matrix.scale(0.2, 0.2, 0.15);
   ab1R.render();
   var ab2R = new Cube();
-  ab2R.color =  [0.95, 0.87, 0.76, 1.0];
+  ab2R.color = [0.95, 0.87, 0.76, 1.0];
   ab2R.matrix.set(torsoCoordMatrix);
   ab2R.matrix.translate(0.1, 0.12, -0.025);
   ab2R.matrix.scale(0.2, 0.2, 0.15);
   ab2R.render();
   var ab3R = new Cube();
-  ab3R.color =  [0.95, 0.87, 0.76, 1.0];
+  ab3R.color = [0.95, 0.87, 0.76, 1.0];
   ab3R.matrix.set(torsoCoordMatrix);
   ab3R.matrix.translate(0.1, 0.06, -0.025);
   ab3R.matrix.scale(0.2, 0.18, 0.15);
   ab3R.render();
 
+  // FISH LEFT SIDES
+  var fishAbL1 = new Cube();
+  fishAbL1.color = [0.67, 0.49, 0.31, 1.0]; 
+  fishAbL1.matrix.set(torsoCoordMatrix);
+  fishAbL1.matrix.translate(-0.012, 0.16, 0);
+  fishAbL1.matrix.scale(0.05, 0.15, 0.2);
+  fishAbL1.render();
+  var fishAbL1A = new Cube();
+  fishAbL1A.color = [0.92, 0.8, 0.6, 1.0];
+  fishAbL1A.colorSplit = [0.67, 0.49, 0.31, 1.0];
+  fishAbL1A.matrix.set(torsoCoordMatrix);
+  fishAbL1A.matrix.rotate(90, 0,0,1);
+  fishAbL1A.matrix.translate(0.16, -0.025, -0.001);
+  fishAbL1A.matrix.scale(0.15, 0.1, 0.2);
+  fishAbL1A.renderSplitRect2();
+
+  var fishAbL2 = new Cube();
+  fishAbL2.color = [0.67, 0.49, 0.31, 1.0]; 
+  fishAbL2.matrix.set(torsoCoordMatrix);
+  fishAbL2.matrix.translate(-0.012, 0.1, 0);
+  fishAbL2.matrix.scale(0.05, 0.15, 0.2);
+  fishAbL2.render();
+  var fishAbL2A = new Cube();
+  fishAbL2A.color = [0.92, 0.8, 0.6, 1.0];
+  fishAbL2A.colorSplit = [0.67, 0.49, 0.31, 1.0];
+  fishAbL2A.matrix.set(torsoCoordMatrix);
+  fishAbL2A.matrix.rotate(90, 0,0,1);
+  fishAbL2A.matrix.translate(0.1, -0.025, -0.001);
+  fishAbL2A.matrix.scale(0.15, 0.1, 0.2);
+  fishAbL2A.renderSplitRect2();
+
+  var fishAbL3 = new Cube();
+  fishAbL3.color = [0.67, 0.49, 0.31, 1.0]; 
+  fishAbL3.matrix.set(torsoCoordMatrix);
+  fishAbL3.matrix.translate(-0.012, 0.04, 0);
+  fishAbL3.matrix.scale(0.05, 0.15, 0.2);
+  fishAbL3.render();
+  var fishAbL3A = new Cube();
+  fishAbL3A.color = [0.92, 0.8, 0.6, 1.0];
+  fishAbL3A.colorSplit = [0.67, 0.49, 0.31, 1.0];
+  fishAbL3A.matrix.set(torsoCoordMatrix);
+  fishAbL3A.matrix.rotate(90, 0,0,1);
+  fishAbL3A.matrix.translate(0.04, -0.025, -0.001);
+  fishAbL3A.matrix.scale(0.15, 0.1, 0.2);
+  fishAbL3A.renderSplitRect2();
+  
+  // FISH RIGHT SIDES
+  var fishAbR1 = new Cube();
+  fishAbR1.color = [0.67, 0.49, 0.31, 1.0]; 
+  fishAbR1.matrix.set(torsoCoordMatrix);
+  fishAbR1.matrix.translate(0.188, 0.16, 0);
+  fishAbR1.matrix.scale(0.05, 0.15, 0.2);
+  fishAbR1.render();
+  var fishAbR1A = new Cube();
+  fishAbR1A.color = [0.67, 0.49, 0.31, 1.0]; 
+  fishAbR1A.colorSplit = [0.92, 0.8, 0.6, 1.0];
+  fishAbR1A.matrix.set(torsoCoordMatrix);
+  fishAbR1A.matrix.translate(0.165, 0.16, -0.01);
+  fishAbR1A.matrix.scale(0.1, 0.15, 0.2);
+  fishAbR1A.renderSplitRect2();
+
+  var fishAbR2 = new Cube();
+  fishAbR2.color = [0.67, 0.49, 0.31, 1.0]; 
+  fishAbR2.matrix.set(torsoCoordMatrix);
+  fishAbR2.matrix.translate(0.188, 0.1, 0);
+  fishAbR2.matrix.scale(0.05, 0.15, 0.2);
+  fishAbR2.render();
+  var fishAbR2A = new Cube();
+  fishAbR2A.color = [0.67, 0.49, 0.31, 1.0]; 
+  fishAbR2A.colorSplit = [0.92, 0.8, 0.6, 1.0];
+  fishAbR2A.matrix.set(torsoCoordMatrix);
+  fishAbR2A.matrix.translate(0.165, 0.1, -0.01);
+  fishAbR2A.matrix.scale(0.1, 0.15, 0.2);
+  fishAbR2A.renderSplitRect2();
+
+  var fishAbR3 = new Cube();
+  fishAbR3.color = [0.67, 0.49, 0.31, 1.0]; 
+  fishAbR3.matrix.set(torsoCoordMatrix);
+  fishAbR3.matrix.translate(0.188, 0.04, 0);
+  fishAbR3.matrix.scale(0.05, 0.15, 0.2);
+  fishAbR3.render();
+  var fishAbR3A = new Cube();
+  fishAbR3A.color = [0.67, 0.49, 0.31, 1.0]; 
+  fishAbR3A.colorSplit = [0.92, 0.8, 0.6, 1.0];
+  fishAbR3A.matrix.set(torsoCoordMatrix);
+  fishAbR3A.matrix.translate(0.165, 0.04, -0.01);
+  fishAbR3A.matrix.scale(0.1, 0.15, 0.2);
+  fishAbR3A.renderSplitRect2();
+
   // COLLARBONE cube
   var collar = new Cube();
-  collar.color =  [0.92, 0.8, 0.6, 1.0];
+  collar.color = [0.92, 0.8, 0.6, 1.0];
   collar.colorSplit = [0.37, 0.63, 0.5, 1]
   collar.matrix.set(torsoCoordMatrix);
   collar.matrix.translate(-0.09, 0.34, 0.0);
@@ -365,38 +455,38 @@ function renderAllShapes() {
   collar.renderSplitRect2();
   // NECK
   var neck = new Cube();
-  neck.color =  [0.92, 0.8, 0.6, 1.0];
+  neck.color = [0.92, 0.8, 0.6, 1.0];
   neck.matrix.set(collarCoordMatrix);
   neck.matrix.translate(0.15, 0.1, 0, 0);
   var neckCoordMatrix = new Matrix4(neck.matrix);
-  neck.matrix.scale(0.3,0.4,0.25);
+  neck.matrix.scale(0.3, 0.4, 0.25);
   neck.render();
   // HEAD
   var head = new Cube();
-  head.color =   [0.92, 0.8, 0.6, 1.0];
+  head.color = [0.92, 0.8, 0.6, 1.0];
   head.matrix.set(neckCoordMatrix);
   head.matrix.translate(-0.06, 0.05, 0);
-  head.matrix.scale(0.8,0.8,0.5);
+  head.matrix.scale(0.8, 0.8, 0.5);
   var headCoordMatrix = new Matrix4(head.matrix);
   head.render();
   // HAIR left
   var hairL = new Cube();
-  hairL.color =  [0.24, 0.33, 0.4, 1.0];
+  hairL.color = [0.24, 0.33, 0.4, 1.0];
   hairL.matrix.set(headCoordMatrix);
   hairL.matrix.translate(-0.075, 0.0, 0);
   hairL.matrix.scale(0.3, 1, 1);
   hairL.render();
   // HAIR right
   var hairR = new Cube();
-  hairR.color =  [0.24, 0.33, 0.4, 1.0];
+  hairR.color = [0.24, 0.33, 0.4, 1.0];
   hairR.matrix.set(headCoordMatrix);
   hairR.matrix.translate(0.25, 0.0, 0);
   hairR.matrix.scale(0.3, 1, 1);
   hairR.render();
   // HAIR top left
   var hairTL = new Cube();
-  hairTL.color =  [0.24, 0.33, 0.4, 1.0];
-  hairTL.colorSplit = [0.4, 0.52, 0.55, 1.0]; 
+  hairTL.color = [0.24, 0.33, 0.4, 1.0];
+  hairTL.colorSplit = [0.4, 0.52, 0.55, 1.0];
   hairTL.matrix.set(headCoordMatrix);
   hairTL.matrix.translate(0, 0.25, 0);
   hairTL.matrix.scale(0.5, 0.3, 1);
@@ -404,7 +494,7 @@ function renderAllShapes() {
   // HAIR top right
   var hairTR = new Cube();
   hairTR.color = [0.24, 0.33, 0.4, 1.0];
-  hairTR.colorSplit =   [0.4, 0.52, 0.55, 1.0]; 
+  hairTR.colorSplit = [0.4, 0.52, 0.55, 1.0];
   hairTR.matrix.set(headCoordMatrix);
   hairTR.matrix.translate(0.125, 0.25, 0);
   hairTR.matrix.scale(0.5, 0.3, 1);
@@ -419,17 +509,17 @@ function renderAllShapes() {
   headB.render();
   // HAIR back bottom
   var headBB = new Cube();
-  headBB.color =   [0.4, 0.52, 0.55, 1.0];
-  headBB.colorSplit =  [0.24, 0.33, 0.4, 1.0];
+  headBB.color = [0.4, 0.52, 0.55, 1.0];
+  headBB.colorSplit = [0.24, 0.33, 0.4, 1.0];
   headBB.matrix.set(headBackCoordMatrix);
   headBB.matrix.translate(0, 0, 0.3);
   headBB.matrix.scale(1, 0.3, 1.4);
   headBB.renderSplitRect3();
 
-  
+
   // right arm, top section cube
   var armRT = new Cube();
-  armRT.color =  [0.92, 0.8, 0.6, 1.0];
+  armRT.color = [0.92, 0.8, 0.6, 1.0];
   armRT.matrix.set(torsoCoordMatrix);
   armRT.matrix.translate(0.236, 0.34, 0.001);
   armRT.matrix.rotate(g_rightTopAngle, 0, 0, 1);
@@ -467,8 +557,6 @@ function renderAllShapes() {
   armLB.render();
 
 
-  
-
   // BELT
   var belt = new Cube();
   belt.color = [0.84, 0.77, 0.38, 1.0];
@@ -481,7 +569,7 @@ function renderAllShapes() {
   // BUTT ALL
   var buttWhole = new Cube();
   buttWhole.colorSplit = [0.75, 0.19, 0.16, 1.0];
-  buttWhole.color =  [0.92, 0.8, 0.6, 1.0];
+  buttWhole.color = [0.92, 0.8, 0.6, 1.0];
   buttWhole.matrix.set(beltCoordMatrix);
   buttWhole.matrix.translate(0.0, -0.2, 0.025);
   buttWhole.matrix.scale(1, 0.8, 0.4);
@@ -497,7 +585,7 @@ function renderAllShapes() {
 
   // left leg thigh
   var thighL = new Cube();
-  thighL.color =  [0.92, 0.8, 0.6, 1.0];
+  thighL.color = [0.92, 0.8, 0.6, 1.0];
   thighL.matrix.set(beltCoordMatrix);
   thighL.matrix.translate(0.1, -0.2, 0.0251);
   thighL.matrix.rotate(g_leftThighAngle, 0, 0, 1);
@@ -506,7 +594,7 @@ function renderAllShapes() {
   thighL.render();
   // left leg
   var legL = new Cube();
-  legL.color =  [0.92, 0.8, 0.6, 1.0];
+  legL.color = [0.92, 0.8, 0.6, 1.0];
   legL.matrix.set(thighLCoordMatrix);
   legL.matrix.translate(0, 0.25, -0.0001);
   legL.matrix.rotate(g_leftCalfAngle, 0, 0, 1);
@@ -515,7 +603,7 @@ function renderAllShapes() {
 
   // right leg thigh
   var thighR = new Cube();
-  thighR.color =  [0.92, 0.8, 0.6, 1.0];
+  thighR.color = [0.92, 0.8, 0.6, 1.0];
   thighR.matrix.set(beltCoordMatrix);
   thighR.matrix.translate(0.15, -0.2, 0.0251);
   thighR.matrix.rotate(g_rightThighAngle, 0, 0, 1);
