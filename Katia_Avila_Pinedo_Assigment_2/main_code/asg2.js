@@ -172,7 +172,42 @@ function addActionsForHTMLUI() {
 
   };
 
-  document.getElementById('thrustStop').onclick = function () { g_thrustAnimation = false; };
+  document.getElementById('thrustStop').onclick = function () { 
+    g_thrustAnimation = false; 
+    // right arm
+    g_rightTopAngle = 25; 
+    document.getElementById('rightTopSlide').value = 25;
+    g_rightBottomAngle = 0;
+    document.getElementById('rightBottomSlide').value = 0;
+    // right leg
+    g_rightThighAngle = -90;
+    document.getElementById('rightThighSlide').value = -90;
+    g_rightCalfAngle = 0;
+    document.getElementById('rightCalfSlide').value = 0;
+
+    // left arm
+    g_leftTopAngle = -25; 
+    document.getElementById('leftTopSlide').value = -25;
+    g_leftBottomAngle = 0;
+    document.getElementById('leftBottomSlide').value = 0;
+    // left leg
+    g_leftThighAngle = 160;
+    document.getElementById('leftThighSlide').value = 160;
+    g_leftCalfAngle = 0;
+    document.getElementById('rightBottomSlide').value = 0;
+
+    // z- axis
+    g_rightArmZAngle = 45;
+    document.getElementById("rightArmZSlide").value = 45;
+    g_leftArmZAngle = 45;
+    document.getElementById("leftArmZSlide").value = 45;
+
+    // animations
+    g_thrustAngle = 0; // thrust angle
+    document.getElementById("thrustSlide").value = 0;
+
+  
+  };
 
 }
 
