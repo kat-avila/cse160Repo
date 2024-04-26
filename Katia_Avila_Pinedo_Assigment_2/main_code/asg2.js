@@ -272,6 +272,7 @@ function renderAllShapes() {
   // underpands  [0.71, 0.21, 0.16, 1.0];
   // aqua light [0.4, 0.68, 0.49, 1.0]
   // aqua dark [0.24, 0.33, 0.29, 1.0];
+  // light green    [0.88, 0.94, 0.61]
   // hair light [0.4, 0.52, 0.55]
   // hair dark  [0.24, 0.33, 0.4, 1.0];
 
@@ -461,14 +462,23 @@ function renderAllShapes() {
   var neckCoordMatrix = new Matrix4(neck.matrix);
   neck.matrix.scale(0.3, 0.4, 0.25);
   neck.render();
+
   // HEAD
   var head = new Cube();
   head.color = [0.92, 0.8, 0.6, 1.0];
   head.matrix.set(neckCoordMatrix);
   head.matrix.translate(-0.06, 0.05, 0);
-  head.matrix.scale(0.8, 0.8, 0.5);
+  head.matrix.scale(0.8, 1.2, 0.5);
   var headCoordMatrix = new Matrix4(head.matrix);
   head.render();
+  // MOUTH
+  var mouth = new Cube();
+  mouth.color = [0.4, 0.52, 0.55, 1.0];
+  mouth.matrix.set(headCoordMatrix);
+  mouth.matrix.translate(0.08, 0.05, -0.25);
+  mouth.matrix.scale(0.4, 0.15, 0.2);
+  mouth.render();
+
   // HAIR left
   var hairL = new Cube();
   hairL.color = [0.24, 0.33, 0.4, 1.0];
@@ -515,6 +525,74 @@ function renderAllShapes() {
   headBB.matrix.translate(0, 0, 0.3);
   headBB.matrix.scale(1, 0.3, 1.4);
   headBB.renderSplitRect3();
+
+  // EYE LEFT
+  var eyeGL = new Cube();
+  eyeGL.color = [0.37, 0.63, 0.5, 1];
+  eyeGL.matrix.set(headCoordMatrix);
+  eyeGL.matrix.translate(0.04, 0.15, -0.25);
+  eyeGL.matrix.scale(0.25, 0.2, 0.1);
+  var eyeGLCoordMatrix = new Matrix4(eyeGL.matrix);
+  eyeGL.render();
+  var eyeYL = new Cube();
+  eyeYL.color = [0.88, 0.94, 0.61, 1.0]
+  eyeYL.matrix.set(eyeGLCoordMatrix);
+  eyeYL.matrix.translate(0.125, 0, -0.01);
+  eyeYL.matrix.rotate(45, 0,0, 1);
+  eyeYL.matrix.scale(0.7, 0.7, 1);
+  var eyeYLCoordMatrix = new Matrix4(eyeYL.matrix);
+  eyeYL.render();
+  var eyeRL = new Cube();
+  eyeRL.color =  [0.67, 0.49, 0.31, 1.0]; 
+  eyeRL.matrix.set(eyeYLCoordMatrix);
+  eyeRL.matrix.rotate(45, 0,0, 1);
+  eyeRL.matrix.translate(0.14, -0.03, -0.01)
+  eyeRL.matrix.scale(0.3, 0.3, 1);
+  eyeRL.render();
+  // EYEBROW LEFT
+  var browL = new Cube();
+  browL.color =  [0.92, 0.8, 0.6, 1.0];
+  browL.colorSplit = [0.24, 0.33, 0.4, 1.0];
+  browL.matrix.set(eyeGLCoordMatrix);
+  browL.matrix.scale(1.2, 0.4, 1);
+  browL.matrix.translate(0.25, 0.9, 0);
+  browL.matrix.rotate(180,0,0, 1);
+  browL.renderSplitRect3();
+
+  // EYE RIGHT
+  var eyeGR = new Cube();
+  eyeGR.color = [0.37, 0.63, 0.5, 1];
+  eyeGR.matrix.set(headCoordMatrix);
+  eyeGR.matrix.translate(0.15, 0.15, -0.25);
+  eyeGR.matrix.scale(0.25, 0.2, 0.1);
+  var eyeGRCoordMatrix = new Matrix4(eyeGR.matrix);
+  eyeGR.render();
+  var eyeYR = new Cube();
+  eyeYR.color = [0.88, 0.94, 0.61, 1.0]
+  eyeYR.matrix.set(eyeGRCoordMatrix);
+  eyeYR.matrix.translate(0.125, 0, -0.01);
+  eyeYR.matrix.rotate(45, 0,0, 1);
+  eyeYR.matrix.scale(0.7, 0.7, 1);
+  var eyeYRCoordMatrix = new Matrix4(eyeYR.matrix);
+  eyeYR.render();
+  var eyeRR = new Cube();
+  eyeRR.color =  [0.67, 0.49, 0.31, 1.0]; 
+  eyeRR.matrix.set(eyeYRCoordMatrix);
+  eyeRR.matrix.rotate(45, 0,0, 1);
+  eyeRR.matrix.translate(0.14, -0.03, -0.01)
+  eyeRR.matrix.scale(0.3, 0.3, 1);
+  eyeRR.render();
+  // EYEBROW RIGHT
+  var browR = new Cube();
+  browR.color =  [0.92, 0.8, 0.6, 1.0];
+  browR.colorSplit = [0.24, 0.33, 0.4, 1.0];
+  browR.matrix.set(eyeGRCoordMatrix);
+  browR.matrix.scale(1.2, 0.4, 1);
+  browR.matrix.translate(0.25, 0.9, 0);
+  browR.matrix.rotate(180,0,0, 1);
+  browR.renderSplitRect3();
+
+
 
 
   // right arm, top section cube
