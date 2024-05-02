@@ -231,10 +231,12 @@ function keydown(ev) {
     g_eye[0] += 0.2;
   } else if (ev.keyCode == 37) { // left arrow
     g_eye[0] -= 0.2;
+  } else if (ev.keyCode == 38) { // up arrow
+    g_at[0] += 1;
+  } else if (ev.keyCode == 40) { // down arrow 
+    g_at[0] -= 1;
   }
-
    renderAllShapes();
-   console.log(ev.keyCode);
 }
 
 var g_startTime = performance.now() / 1000.0;
