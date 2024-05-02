@@ -19,9 +19,21 @@ var FSHADER_SOURCE = `
   precision mediump float;
   varying vec2 v_UV;
   uniform vec4 u_FragColor;  // uniform
+  uniform sampler2D u_Sampler0;
+  uniform int u_whichTexture;
   void main() {
-    gl_FragColor = u_FragColor;
-    gl_FragColor = vec4(v_UV, 1.0,1.0);
+    if (u_whichTexture == -2) { // color
+      gl_FragColor = u_FragColor;
+
+    } else if (u_whichTexture == -1) { //uv
+      gl_FragColor = vec4(v_UV, 1.0,1.0);
+
+    } else if (u_whichTexture == 0){ //use texture 0
+      gl_FragColor = texture2D(u_Sampler0, v_UV);
+
+    } else {
+      gl_FragColor = vec4(1, .2, .2, 1);
+    }
   }`
 
 // Define global variablesm, UI elements or shader variables
@@ -34,6 +46,8 @@ let u_ModelMatrix;
 let u_XRotateMatrix;
 let u_YRotateMatrix;
 let u_ZRotateMatrix;
+let u_Sampler0;
+let u_whichTexture;
 
 
 // Setup WebGL
@@ -63,7 +77,7 @@ function connectVariablesToGLSL() {
     console.log('Failed to get the storage location of a_Position');
     return;
   }
-  
+
   // Get the storage location of a_UV
   a_UV = gl.getAttribLocation(gl.program, 'a_UV');
   if (a_UV < 0) {
@@ -103,6 +117,20 @@ function connectVariablesToGLSL() {
     console.log('Failed to get the storage location of u_ZRotateMatrix');
     return;
   }
+  // Get the storage location of u_Sampler
+  u_Sampler0 = gl.getUniformLocation(gl.program, 'u_Sampler0');
+  if (!u_Sampler0) {
+    console.log('Failed to get the storage location of u_Sampler0');
+    return false;
+  }
+
+  // Get the storage location of u_Sampler
+  u_whichTexture = gl.getUniformLocation(gl.program, 'u_whichTexture');
+  if (!u_whichTexture) {
+    console.log('Failed to get the storage location of u_whichTexture');
+    return false;
+  }
+
 
   //set an initial value for this matrix indentity
   var indentityM = new Matrix4();
@@ -113,14 +141,49 @@ function connectVariablesToGLSL() {
 let g_angleX = 25; // camera angle
 let g_angleY = 0; // camera angle
 let g_angleZ = 0; // camera angle
-
-
 function addActionsForHTMLUI() {
   // Perspective Slider Events
   document.getElementById('angleXslide').addEventListener('mousemove', function () { g_angleX = this.value; renderAllShapes(); })
   document.getElementById('angleYslide').addEventListener('mousemove', function () { g_angleY = this.value; renderAllShapes(); })
   document.getElementById('angleZslide').addEventListener('mousemove', function () { g_angleZ = this.value; renderAllShapes(); })
+}
 
+function initTextures() {
+  var image = new Image();  // Create the image object
+  if (!image) {
+    console.log('Failed to create the image object');
+    return false;
+  }
+  // Register the event handler to be called on loading an image
+  image.onload = function () { sendTextureToGLSL(image); };
+  // Tell the browser to load an image
+  image.src = '../lib/floopytree1.jpg';
+
+  return true;
+}
+
+function sendTextureToGLSL(image) {
+  var texture = gl.createTexture();   // Create a texture object
+  if (!texture) {
+    console.log('Failed to create the texture object');
+    return false;
+  }
+
+  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1); // Flip the image's y axis
+  // Enable texture unit0
+  gl.activeTexture(gl.TEXTURE0);
+  // Bind the texture object to the target
+  gl.bindTexture(gl.TEXTURE_2D, texture);
+  // Set the texture parameters
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  // Set the texture image
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
+  // Set the texture unit 0 to the sampler
+  gl.uniform1i(u_Sampler0, 0);
+
+  // gl.clear(gl.COLOR_BUFFER_BIT);   // Clear <canvas>
+
+  // gl.drawArrays(gl.TRIANGLE_STRIP, 0, n); // Draw the rectangle
 }
 
 
@@ -132,12 +195,14 @@ function main() {
   // Set up actions for the HTML UI elements
   addActionsForHTMLUI();
 
+  // initialize textures
+  initTextures();
   // Specify the color for clearing <canvas>
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
   // Clear <canvas>
   // gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
   // renderAllShapes();
-  // console.log("HERE");
+
   requestAnimationFrame(tick);
 }
 
@@ -157,8 +222,9 @@ function tick() {
 }
 
 function updateAnimationAngles() {
- 
+
 }
+
 
 // Draw every shape that is supposed to be in the canvas
 function renderAllShapes() {
@@ -176,11 +242,20 @@ function renderAllShapes() {
 
   // TORSO
   var torso = new Cube();
+  torso.textureNum = 0;
   torso.color = [0.92, 0.8, 0.6, 1.0];
   torso.matrix.translate(-0.1, 0.0, 0);
   var torsoCoordMatrix = new Matrix4(torso.matrix);
   torso.matrix.scale(0.75, 0.36, .2);
   torso.render();
 
+  //
+  var block1 = new Cube();
+  block1.matrix.set(torsoCoordMatrix);
+  block1.textureNum = -1;
+  block1.matrix.translate(0, 0.5, 0);
+  block1.render();
+
 
 }
+
