@@ -10,8 +10,10 @@ var VSHADER_SOURCE = `
   uniform mat4 u_XRotateMatrix;
   uniform mat4 u_YRotateMatrix;
   uniform mat4 u_ZRotateMatrix;
+  uniform mat4 u_ViewMatrix;
+  uniform mat4 u_ProjectionMatrix;
   void main() { 
-    gl_Position = u_XRotateMatrix * u_YRotateMatrix * u_ZRotateMatrix * u_ModelMatrix * a_Position;
+    gl_Position = u_ProjectionMatrix * u_ViewMatrix * u_XRotateMatrix * u_YRotateMatrix * u_ZRotateMatrix * u_ModelMatrix * a_Position;
     v_UV = a_UV;
   }`
 // Fragment shader program
@@ -48,6 +50,8 @@ let u_YRotateMatrix;
 let u_ZRotateMatrix;
 let u_Sampler0;
 let u_whichTexture;
+let u_ProjectionMatrix;
+let u_ViewMatrix;
 
 
 // Setup WebGL
@@ -131,6 +135,19 @@ function connectVariablesToGLSL() {
     return false;
   }
 
+  // Get the storage location of u_ProjectionMatrix
+  u_ProjectionMatrix = gl.getUniformLocation(gl.program, 'u_ProjectionMatrix');
+  if (!u_ProjectionMatrix) {
+    console.log('Failed to get the storage location of u_ProjectionMatrix');
+    return false;
+  }
+
+  // Get the storage location of u_ViewMatrix
+  u_ViewMatrix = gl.getUniformLocation(gl.program, 'u_ViewMatrix');
+  if (!u_ViewMatrix) {
+    console.log('Failed to get the storage location of u_ViewMatrix');
+    return false;
+  }
 
   //set an initial value for this matrix indentity
   var indentityM = new Matrix4();
@@ -197,6 +214,9 @@ function main() {
 
   // initialize textures
   initTextures();
+
+  document.onkeydown = keydown;
+
   // Specify the color for clearing <canvas>
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
   // Clear <canvas>
@@ -204,6 +224,17 @@ function main() {
   // renderAllShapes();
 
   requestAnimationFrame(tick);
+}
+
+function keydown(ev) {
+  if (ev.keyCode == 39) { // right arrow
+    g_eye[0] += 0.2;
+  } else if (ev.keyCode == 37) { // left arrow
+    g_eye[0] -= 0.2;
+  }
+
+   renderAllShapes();
+   console.log(ev.keyCode);
 }
 
 var g_startTime = performance.now() / 1000.0;
@@ -227,6 +258,9 @@ function updateAnimationAngles() {
 
 
 // Draw every shape that is supposed to be in the canvas
+var g_eye = [0, 0, 3];
+var g_at = [0, 0, -100];
+var g_up = [0, 1, 0];
 function renderAllShapes() {
   // Clear <canvas>
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -238,6 +272,16 @@ function renderAllShapes() {
   gl.uniformMatrix4fv(u_YRotateMatrix, false, yAngMat.elements);
   var zAngMat = new Matrix4().rotate(g_angleZ, 0, 0, 1);
   gl.uniformMatrix4fv(u_ZRotateMatrix, false, zAngMat.elements);
+
+  // Pass the view matrix
+  var viewMat = new Matrix4();
+  viewMat.setLookAt(g_eye[0], g_eye[1], g_eye[2], g_at[0], g_at[1], g_at[2], g_up[0], g_up[1], g_up[2]); // eye, at, up
+  gl.uniformMatrix4fv(u_ViewMatrix, false, viewMat.elements);
+
+  // Pass the projection matrix
+  var projMat = new Matrix4();
+  projMat.setPerspective(90, canvas.width / canvas.height, .1, 100);
+  gl.uniformMatrix4fv(u_ProjectionMatrix, false, projMat.elements);
 
 
   // TORSO
