@@ -1,5 +1,6 @@
 // modifed for asg2.html Katia Avila Pinedo 4-2024
 
+
 // Vertex shader program
 var VSHADER_SOURCE = `
   attribute vec4 a_Position;
@@ -112,116 +113,13 @@ function connectVariablesToGLSL() {
 let g_angleX = 25; // camera angle
 let g_angleY = 0; // camera angle
 let g_angleZ = 0; // camera angle
-// right arm
-let g_rightTopAngle = 25;
-let g_rightBottomAngle = 0;
-// right leg
-let g_rightThighAngle = -90;
-let g_rightCalfAngle = 0;
-// left arm
-let g_leftTopAngle = -25;
-let g_leftBottomAngle = 0;
-// left leg
-let g_leftThighAngle = 160;
-let g_leftCalfAngle = 0;
-// z- axis
-let g_rightArmZAngle = 45;
-let g_leftArmZAngle = 45;
-// animations
-let g_thrustAngle = 0; // thrust angle
-let g_thrustAnimation = false;
+
 
 function addActionsForHTMLUI() {
   // Perspective Slider Events
   document.getElementById('angleXslide').addEventListener('mousemove', function () { g_angleX = this.value; renderAllShapes(); })
   document.getElementById('angleYslide').addEventListener('mousemove', function () { g_angleY = this.value; renderAllShapes(); })
   document.getElementById('angleZslide').addEventListener('mousemove', function () { g_angleZ = this.value; renderAllShapes(); })
-
-  // Right Arm Slider Events
-  document.getElementById('rightArmZSlide').addEventListener('mousemove', function () { g_rightArmZAngle = this.value; renderAllShapes(); })
-  document.getElementById('rightTopSlide').addEventListener('mousemove', function () { g_rightTopAngle = this.value; renderAllShapes(); })
-  document.getElementById('rightBottomSlide').addEventListener('mousemove', function () { g_rightBottomAngle = this.value; renderAllShapes(); })
-  // Left Arm Slider Events
-  document.getElementById('leftArmZSlide').addEventListener('mousemove', function () { g_leftArmZAngle = this.value; renderAllShapes(); })
-  document.getElementById('leftTopSlide').addEventListener('mousemove', function () { g_leftTopAngle = this.value; renderAllShapes(); })
-  document.getElementById('leftBottomSlide').addEventListener('mousemove', function () { g_leftBottomAngle = this.value; renderAllShapes(); })
-
-  // Left Leg Slider Events
-  document.getElementById('leftThighSlide').addEventListener('mousemove', function () { g_leftThighAngle = this.value; renderAllShapes(); })
-  document.getElementById('leftCalfSlide').addEventListener('mousemove', function () { g_leftCalfAngle = this.value; renderAllShapes(); })
-  // Right Leg Slider Events
-  document.getElementById('rightThighSlide').addEventListener('mousemove', function () { g_rightThighAngle = this.value; renderAllShapes(); })
-  document.getElementById('rightCalfSlide').addEventListener('mousemove', function () { g_rightCalfAngle = this.value; renderAllShapes(); })
-
-  // Thrust animation
-  document.getElementById('thrustSlide').addEventListener('mousemove', function () { g_thrustAngle = this.value; renderAllShapes(); })
-
-  // Thrust buttons
-  document.getElementById('thrustStart').onclick = function () {
-    g_thrustAnimation = true;
-    // set arms down
-    g_leftTopAngle = 90;
-    document.getElementById('leftTopSlide').value = 90;
-    g_leftBottomAngle = 90;
-    document.getElementById('leftBottomSlide').value = 90;
-    g_rightTopAngle = -90;
-    document.getElementById('rightTopSlide').value = -90;
-    g_rightBottomAngle = 90;
-    document.getElementById('rightBottomSlide').value = 90;
-    // spread legs
-    g_leftThighAngle = 90;
-    document.getElementById("leftThighSlide").value = 90;
-    g_leftCalfAngle = 90;
-    document.getElementById("leftCalfSlide").value = 90;
-    g_rightThighAngle = 0;
-    document.getElementById("rightThighSlide").value = 0;
-    g_rightCalfAngle = -90;
-    document.getElementById("rightCalfSlide").value = -90;
-
-    // z axis 
-    g_leftArmZAngle = -45;
-    document.getElementById("leftArmZSlide").value = -45;
-    g_rightArmZAngle = -45;
-    document.getElementById("rightArmZSlide").value = -45;
-
-  };
-
-  document.getElementById('thrustStop').onclick = function () {
-    g_thrustAnimation = false;
-    // right arm
-    g_rightTopAngle = 25;
-    document.getElementById('rightTopSlide').value = 25;
-    g_rightBottomAngle = 0;
-    document.getElementById('rightBottomSlide').value = 0;
-    // right leg
-    g_rightThighAngle = -90;
-    document.getElementById('rightThighSlide').value = -90;
-    g_rightCalfAngle = 0;
-    document.getElementById('rightCalfSlide').value = 0;
-
-    // left arm
-    g_leftTopAngle = -25;
-    document.getElementById('leftTopSlide').value = -25;
-    g_leftBottomAngle = 0;
-    document.getElementById('leftBottomSlide').value = 0;
-    // left leg
-    g_leftThighAngle = 160;
-    document.getElementById('leftThighSlide').value = 160;
-    g_leftCalfAngle = 0;
-    document.getElementById('rightBottomSlide').value = 0;
-
-    // z- axis
-    g_rightArmZAngle = 45;
-    document.getElementById("rightArmZSlide").value = 45;
-    g_leftArmZAngle = 45;
-    document.getElementById("leftArmZSlide").value = 45;
-
-    // animations
-    g_thrustAngle = 0; // thrust angle
-    document.getElementById("thrustSlide").value = 0;
-
-
-  };
 
 }
 
@@ -259,10 +157,7 @@ function tick() {
 }
 
 function updateAnimationAngles() {
-  if (g_thrustAnimation) {
-    g_thrustAngle = 35 * Math.sin(g_seconds * 2.5); // start animation thrust
-
-  }
+ 
 }
 
 // Draw every shape that is supposed to be in the canvas
@@ -278,17 +173,6 @@ function renderAllShapes() {
   var zAngMat = new Matrix4().rotate(g_angleZ, 0, 0, 1);
   gl.uniformMatrix4fv(u_ZRotateMatrix, false, zAngMat.elements);
 
-  // main body    torso.color = [0.92, 0.8, 0.6, 1.0];
-  // tan body    pecR.color = [0.83, 0.71, 0.59, 1.0];
-  // light body  [0.95, 0.87, 0.76, 1.0];
-  // dark skin    [0.66, 0.52, 0.37, 1.0]
-  // fish         [0.67, 0.49, 0.31];
-  // underpands  [0.71, 0.21, 0.16, 1.0];
-  // aqua light [0.4, 0.68, 0.49, 1.0]
-  // aqua dark [0.24, 0.33, 0.29, 1.0];
-  // light green    [0.88, 0.94, 0.61]
-  // hair light [0.4, 0.52, 0.55]
-  // hair dark  [0.24, 0.33, 0.4, 1.0];
 
   // TORSO
   var torso = new Cube();
