@@ -97,12 +97,13 @@ class Camera {
         let f = new Vector3();
         f.set(this.at);
         f.sub(this.eye);
-          f.normalize();  // FIXME
+        f.normalize();  // FIXME
 
         // rotate vector f by alpha degrees around the up vec
-        let alpha = 5;
+        let alpha = 15;
         let rotationMatrix = new Matrix4();
-        rotationMatrix.setRotate(alpha, this.up.x, this.up.y, this.up.z);
+        // rotationMatrix.setRotate(-alpha, this.up.x, this.up.y, this.up.z);
+        rotationMatrix.setRotate(alpha, this.up.elements[0], this.up.elements[1], this.up.elements[2]);
 
         // compute f_prime = rotationMatrix.multiplyVector3(f);
         let f_prime = rotationMatrix.multiplyVector3(f);
@@ -124,9 +125,9 @@ class Camera {
           f.normalize();  // FIXME
 
         // rotate vector f by alpha degrees around the up vec
-        let alpha = 5;
+        let alpha = 15;
         let rotationMatrix = new Matrix4();
-        rotationMatrix.setRotate(-alpha, this.up.x, this.up.y, this.up.z);
+        rotationMatrix.setRotate(-alpha, this.up.elements[0], this.up.elements[1], this.up.elements[2]);
 
         // compute f_prime = rotationMatrix.multiplyVector3(f);
         let f_prime = rotationMatrix.multiplyVector3(f);

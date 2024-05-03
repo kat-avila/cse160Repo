@@ -20,7 +20,7 @@ var FSHADER_SOURCE = `
   precision mediump float;
   varying vec2 v_UV;
   uniform vec4 u_FragColor;  // uniform
-  uniform sampler2D u_Sampler0;
+  uniform sampler2D u_gndTexture;
   uniform int u_whichTexture;
   void main() {
     if (u_whichTexture == -2) { // color
@@ -29,8 +29,8 @@ var FSHADER_SOURCE = `
     } else if (u_whichTexture == -1) { //uv
       gl_FragColor = vec4(v_UV, 1.0,1.0);
 
-    } else if (u_whichTexture == 0){ //use texture 0
-      gl_FragColor = texture2D(u_Sampler0, v_UV);
+    } else if (u_whichTexture == 0){ //use Ground Texture
+      gl_FragColor = texture2D(u_gndTexture, v_UV);
 
     } else {
       gl_FragColor = vec4(1, .2, .2, 1);
@@ -41,13 +41,17 @@ var FSHADER_SOURCE = `
 let canvas;
 let gl;
 let a_Position;
+// textures
+let COLOR = -2;
+let UV = -1;
+let GND = 0;
 let a_UV;
 let u_FragColor;
 let u_ModelMatrix;
 let u_XRotateMatrix;
 let u_YRotateMatrix;
 let u_ZRotateMatrix;
-let u_Sampler0;
+let u_gndTexture;
 let u_whichTexture;
 let u_ProjectionMatrix;
 let u_ViewMatrix;
@@ -134,9 +138,9 @@ function connectVariablesToGLSL() {
     return;
   }
   // Get the storage location of u_Sampler
-  u_Sampler0 = gl.getUniformLocation(gl.program, 'u_Sampler0');
-  if (!u_Sampler0) {
-    console.log('Failed to get the storage location of u_Sampler0');
+  u_gndTexture = gl.getUniformLocation(gl.program, 'u_gndTexture');
+  if (!u_gndTexture) {
+    console.log('Failed to get the storage location of u_gndTexture');
     return false;
   }
 
@@ -180,11 +184,12 @@ function initTextures() {
     console.log('Failed to create the image object');
     return false;
   }
+  // Tell the browser to load an image
+  image.src = '../lib/textures/froppyGND.jpg';
+
   // Register the event handler to be called on loading an image
   image.onload = function () { sendTextureToGLSL(image); };
-  // Tell the browser to load an image
-  image.src = '../lib/floopytree1.jpg';
-
+  
   return true;
 }
 
@@ -205,11 +210,8 @@ function sendTextureToGLSL(image) {
   // Set the texture image
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
   // Set the texture unit 0 to the sampler
-  gl.uniform1i(u_Sampler0, 0);
+  gl.uniform1i(u_gndTexture, 0);
 
-  // gl.clear(gl.COLOR_BUFFER_BIT);   // Clear <canvas>
-
-  // gl.drawArrays(gl.TRIANGLE_STRIP, 0, n); // Draw the rectangle
 }
 
 function main() {
@@ -229,9 +231,6 @@ function main() {
 
   // Specify the color for clearing <canvas>
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
-  // Clear <canvas>
-  // gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-  // renderAllShapes();
 
   requestAnimationFrame(tick);
 }
@@ -256,17 +255,6 @@ function keydown(ev) {
   } else if (ev.keyCode == 69) { // E pan right
     console.log("e pressed");
     camera.panRight();
-  }
-
-
-  if (ev.keyCode == 39) { // right arrow
-    g_eye[0] += 0.2;
-  } else if (ev.keyCode == 37) { // left arrow
-    g_eye[0] -= 0.2;
-  } else if (ev.keyCode == 38) { // up arrow
-    g_at[0] += 1;
-  } else if (ev.keyCode == 40) { // down arrow 
-    g_at[0] -= 1;
   }
 
   renderAllShapes();
@@ -305,9 +293,11 @@ function renderAllShapes() {
 
   // Pass the view matrix
   var viewMat = new Matrix4();
-  viewMat.setLookAt(camera.eye.elements[0],camera.eye.elements[1], camera.eye.elements[2], g_at[0], g_at[1], g_at[2], g_up[0], g_up[1], g_up[2]); // eye, at, up
-
-  // viewMat.setLookAt(camera.eye[0], camera.eye[1], camera.eye[2], camera.at[0], camera.at[1], camera.at[2], camera.up[0], camera.up[1], camera.up[2],); // eye, at, up
+  viewMat.setLookAt(
+    camera.eye.elements[0],camera.eye.elements[1], camera.eye.elements[2], 
+    camera.at.elements[0],   camera.at.elements[1],   camera.at.elements[2], 
+    camera.up.elements[0],  camera.up.elements[1],   camera.up.elements[2]
+  ); // eye, at, up
   gl.uniformMatrix4fv(u_ViewMatrix, false, viewMat.elements);
 
   // Pass the projection matrix
@@ -316,21 +306,23 @@ function renderAllShapes() {
   gl.uniformMatrix4fv(u_ProjectionMatrix, false, projMat.elements);
 
 
-  // TORSO
-  var torso = new Cube();
-  torso.textureNum = 0;
-  torso.color = [0.92, 0.8, 0.6, 1.0];
-  torso.matrix.translate(-0.1, 0.0, 0);
-  var torsoCoordMatrix = new Matrix4(torso.matrix);
-  torso.matrix.scale(0.75, 0.36, .2);
-  torso.render();
+  // GROUND
+  var ground = new Cube();
+  ground.textureNum = GND;
+  // ground.color = [0.92, 0.8, 0.6, 1.0];
+  ground.matrix.rotate(-15, 0, 1, 0);
+  ground.matrix.translate(0, -0.75, 0);
+  ground.matrix.scale(10, 0, 10);
+  ground.matrix.translate(-0.3, 0.0, -0.5);
+  var gndCoordMatrix = new Matrix4(ground.matrix);
+  ground.render();
 
   //
-  var block1 = new Cube();
-  block1.matrix.set(torsoCoordMatrix);
-  block1.textureNum = -1;
-  block1.matrix.translate(0, 0.5, 0);
-  block1.render();
+  // var block1 = new Cube();
+  // // block1.matrix.set(torsoCoordMatrix);
+  // block1.textureNum = -1;
+  // block1.matrix.translate(0, 0.5, 0);
+  // block1.render();
 
 
 }
