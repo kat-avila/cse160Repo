@@ -1,6 +1,5 @@
 // modifed for asg2.html Katia Avila Pinedo 4-2024
 
-
 // Vertex shader program
 var VSHADER_SOURCE = `
   attribute vec4 a_Position;
@@ -52,6 +51,19 @@ let u_Sampler0;
 let u_whichTexture;
 let u_ProjectionMatrix;
 let u_ViewMatrix;
+// Globals related to UI elments
+let g_angleX = 25; // camera angle
+let g_angleY = 0; // camera angle
+let g_angleZ = 0; // camera angle
+// tick time
+var g_startTime = performance.now() / 1000.0;
+var g_seconds = (performance.now() / 1000.0) - g_startTime;
+// camera
+let camera;
+
+var g_eye = [0, 0, 3];
+var g_at = [0, 0, -100];
+var g_up = [0, 1, 0];
 
 
 // Setup WebGL
@@ -154,10 +166,7 @@ function connectVariablesToGLSL() {
   gl.uniformMatrix4fv(u_ModelMatrix, false, indentityM.elements);
 }
 
-// Globals related to UI elments
-let g_angleX = 25; // camera angle
-let g_angleY = 0; // camera angle
-let g_angleZ = 0; // camera angle
+
 function addActionsForHTMLUI() {
   // Perspective Slider Events
   document.getElementById('angleXslide').addEventListener('mousemove', function () { g_angleX = this.value; renderAllShapes(); })
@@ -203,8 +212,9 @@ function sendTextureToGLSL(image) {
   // gl.drawArrays(gl.TRIANGLE_STRIP, 0, n); // Draw the rectangle
 }
 
-
 function main() {
+  // instantaniate camera
+  camera = new Camera();
   // Set up canvas and gl variables
   setupWebGL();
   // Set up GLSL shade programs and connect glsl variables
@@ -227,6 +237,28 @@ function main() {
 }
 
 function keydown(ev) {
+  // WSAQE
+  if (ev.keyCode == 87) { // W moveForward
+    // console.log("w pressed");
+    camera.moveForward();
+  } else if (ev.keyCode == 83) { // S move backwrds
+    // console.log("s pressed");
+    camera.moveBackwards();
+  } else if (ev.keyCode == 65) { // A move left
+    // console.log("a pressed");
+    camera.moveLeft();
+  } else if (ev.keyCode == 68) { // D move right
+    // console.log("dq pressed");
+    camera.moveRight();
+  } else if (ev.keyCode == 81) { // Q pan left
+    console.log("q pressed");
+    camera.panLeft();
+  } else if (ev.keyCode == 69) { // E pan right
+    console.log("e pressed");
+    camera.panRight();
+  }
+
+
   if (ev.keyCode == 39) { // right arrow
     g_eye[0] += 0.2;
   } else if (ev.keyCode == 37) { // left arrow
@@ -236,11 +268,10 @@ function keydown(ev) {
   } else if (ev.keyCode == 40) { // down arrow 
     g_at[0] -= 1;
   }
-   renderAllShapes();
+
+  renderAllShapes();
 }
 
-var g_startTime = performance.now() / 1000.0;
-var g_seconds = (performance.now() / 1000.0) - g_startTime;
 function tick() {
   // Save the current time
   g_seconds = (performance.now() / 1000.0) - g_startTime;
@@ -260,9 +291,6 @@ function updateAnimationAngles() {
 
 
 // Draw every shape that is supposed to be in the canvas
-var g_eye = [0, 0, 3];
-var g_at = [0, 0, -100];
-var g_up = [0, 1, 0];
 function renderAllShapes() {
   // Clear <canvas>
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -277,7 +305,9 @@ function renderAllShapes() {
 
   // Pass the view matrix
   var viewMat = new Matrix4();
-  viewMat.setLookAt(g_eye[0], g_eye[1], g_eye[2], g_at[0], g_at[1], g_at[2], g_up[0], g_up[1], g_up[2]); // eye, at, up
+  viewMat.setLookAt(camera.eye.elements[0],camera.eye.elements[1], camera.eye.elements[2], g_at[0], g_at[1], g_at[2], g_up[0], g_up[1], g_up[2]); // eye, at, up
+
+  // viewMat.setLookAt(camera.eye[0], camera.eye[1], camera.eye[2], camera.at[0], camera.at[1], camera.at[2], camera.up[0], camera.up[1], camera.up[2],); // eye, at, up
   gl.uniformMatrix4fv(u_ViewMatrix, false, viewMat.elements);
 
   // Pass the projection matrix
