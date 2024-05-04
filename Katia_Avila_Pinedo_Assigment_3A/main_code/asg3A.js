@@ -230,7 +230,7 @@ function initTextures() {
      return false;
    }
    // Tell the browser to load an imageWALLMUSH
-   imageWALLMUSH.src = '../lib/textures/wallflowers.png';
+   imageWALLMUSH.src = '../lib/textures/wallFlowers.png';
    // Register the event handler to be called on loading an imageSKY
    imageWALLMUSH.onload = function () { sendTextureToGLSL(imageWALLMUSH, WALLMUSH); };
  
