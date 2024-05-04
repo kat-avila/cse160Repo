@@ -62,33 +62,45 @@ class Cube {
         gl.uniformMatrix4fv(u_ModelMatrix, false, this.matrix.elements);
 
         let allVerts=[];
+        let allUV=[];
+
         // Front of cube
         allVerts = allVerts.concat([0.0,0.0,0.0, 1,1,0.0, 1,0,0.0]);
         allVerts = allVerts.concat([0,0,0.0, 0,1,0.0, 1,1,0.0]);
+        allUV = allUV.concat([0,0, 1,1, 1,0]);
+        allUV = allUV.concat([0,0, 1,0, 1,1]);
        // back of cube
        allVerts=allVerts.concat([0.0,0.0,-1, 1,1,-1, 1,0,-1]);
         allVerts=allVerts.concat([0,0,-1, 0,1,-1, 1,1,-1]);
-       
+        allUV = allUV.concat([0,0, 1,1, 1,0]);
+        allUV = allUV.concat([0,0, 1,0, 1,1]);
         // right side of cube
         allVerts=allVerts.concat([1,0.0,0.0, 1,1,-1, 1,0,-1]);
         allVerts=allVerts.concat([1,0,0.0, 1,1,0, 1,1,-1]);
+        allUV = allUV.concat([0,0, 1,1, 1,0]);
+        allUV = allUV.concat([0,0, 1,0, 1,1]);
         // gl.uniform4f(u_FragColor, rgba[0] * 0.7, rgba[1] * 0.7, rgba[2] * 0.7, rgba[3]);
         // left side of cube
         allVerts=allVerts.concat([0.0,0.0,0.0, 0.0,1,-1 , 0,0,-1]);
         allVerts=allVerts.concat([0.0,0.0,0.0, 0.0,1,0, 0,1,-1]);
+        allUV = allUV.concat([0,0, 1,1, 1,0]);
+        allUV = allUV.concat([0,0, 1,0, 1,1]);
         // gl.uniform4f(u_FragColor, rgba[0] * 0.7, rgba[1] * 0.7, rgba[2] * 0.7, rgba[3]);
         
         // top side of cube
         allVerts=allVerts.concat([0,1,0, 1,1,-1, 1,1,0]);
         allVerts=allVerts.concat([0,1,0, 0,1,-1, 1, 1, -1]);
+        allUV = allUV.concat([0,0, 1,1, 1,0]);
+        allUV = allUV.concat([0,0, 1,0, 1,1]);
         // gl.uniform4f(u_FragColor, rgba[0] * 0.8, rgba[1] * 0.8, rgba[2] * 0.8, rgba[3]);
         // bottom side of cube
         allVerts=allVerts.concat([0.0,0.0,0.0, 1,0.0,-1, 1,0.0,0.0]);
         allVerts=allVerts.concat([0,0.0,0.0, 0,0.0,-1, 1,0,-1]);
+        allUV = allUV.concat([0,0, 1,1, 1,0]);
+        allUV = allUV.concat([0,0, 1,0, 1,1]);
         // gl.uniform4f(u_FragColor, rgba[0] * 0.8, rgba[1] * 0.8, rgba[2] * 0.8, rgba[3]);
    
-        drawTriangle3D(allVerts);
-        // console.log(allVerts)
+        drawTriangle3DUV(allVerts, allUV);
     }
 
     renderSplitRect2() {
