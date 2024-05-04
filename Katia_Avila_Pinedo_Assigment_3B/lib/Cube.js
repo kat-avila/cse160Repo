@@ -101,6 +101,8 @@ class Cube {
         // gl.uniform4f(u_FragColor, rgba[0] * 0.8, rgba[1] * 0.8, rgba[2] * 0.8, rgba[3]);
    
         drawTriangle3DUV(allVerts, allUV);
+        // drawTriangle3D(allVerts);
+
     }
 
     renderSplitRect2() {
