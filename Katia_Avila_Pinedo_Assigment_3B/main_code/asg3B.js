@@ -21,6 +21,7 @@ var FSHADER_SOURCE = `
   varying vec2 v_UV;
   uniform vec4 u_FragColor;  // uniform
   uniform sampler2D u_gndTexture;
+  uniform sampler2D u_skyTexture;
   uniform int u_whichTexture;
   void main() {
     if (u_whichTexture == -2) { // color
@@ -31,6 +32,9 @@ var FSHADER_SOURCE = `
 
     } else if (u_whichTexture == 0){ //use Ground Texture
       gl_FragColor = texture2D(u_gndTexture, v_UV);
+
+    }  else if (u_whichTexture == 1){ //use Sky Texture
+      gl_FragColor = texture2D(u_skyTexture, v_UV);
 
     } else {
       gl_FragColor = vec4(1, .2, .2, 1);
@@ -45,6 +49,7 @@ let a_Position;
 let COLOR = -2;
 let UV = -1;
 let GND = 0;
+let SKY = 1;
 let a_UV;
 let u_FragColor;
 let u_ModelMatrix;
@@ -52,6 +57,7 @@ let u_XRotateMatrix;
 let u_YRotateMatrix;
 let u_ZRotateMatrix;
 let u_gndTexture;
+let u_skyTexture;
 let u_whichTexture;
 let u_ProjectionMatrix;
 let u_ViewMatrix;
@@ -143,6 +149,12 @@ function connectVariablesToGLSL() {
     console.log('Failed to get the storage location of u_gndTexture');
     return false;
   }
+  // Get the storage location of u_skyTexture
+  u_skyTexture = gl.getUniformLocation(gl.program, 'u_skyTexture');
+  if (!u_skyTexture) {
+    console.log('Failed to get the storage location of u_skyTexture');
+    return false;
+  }
 
   // Get the storage location of u_Sampler
   u_whichTexture = gl.getUniformLocation(gl.program, 'u_whichTexture');
@@ -179,38 +191,67 @@ function addActionsForHTMLUI() {
 }
 
 function initTextures() {
-  var image = new Image();  // Create the image object
-  if (!image) {
-    console.log('Failed to create the image object');
+  // Create the GND object
+  var imageGND = new Image();
+  if (!imageGND) {
+    console.log('Failed to create the imageGND object');
     return false;
   }
-  // Tell the browser to load an image
-  image.src = '../lib/textures/froppyGND.jpg';
+  // Tell the browser to load an imageGND
+  imageGND.src = '../lib/textures/froppyGND.jpg';
+  // Register the event handler to be called on loading an imageGND
+  imageGND.onload = function () { sendTextureToGLSL(imageGND, GND); };
 
-  // Register the event handler to be called on loading an image
-  image.onload = function () { sendTextureToGLSL(image); };
-  
+  // Create the SKY object
+  var imageSKY = new Image();
+  if (!imageSKY) {
+    console.log('Failed to create the imageSKY object');
+    return false;
+  }
+  // Tell the browser to load an imageSKY
+  imageSKY.src = '../lib/textures/froppySky.png';
+  // Register the event handler to be called on loading an imageSKY
+  imageSKY.onload = function () { sendTextureToGLSL(imageSKY, SKY); };
+
   return true;
 }
 
-function sendTextureToGLSL(image) {
+function sendTextureToGLSL(image, txtCode) {
   var texture = gl.createTexture();   // Create a texture object
   if (!texture) {
     console.log('Failed to create the texture object');
     return false;
   }
 
-  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1); // Flip the image's y axis
-  // Enable texture unit0
-  gl.activeTexture(gl.TEXTURE0);
-  // Bind the texture object to the target
-  gl.bindTexture(gl.TEXTURE_2D, texture);
-  // Set the texture parameters
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-  // Set the texture image
-  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
+
   // Set the texture unit 0 to the sampler
-  gl.uniform1i(u_gndTexture, 0);
+  if (txtCode == GND) {
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1); // Flip the image's y axis
+    // Enable texture unit0
+    gl.activeTexture(gl.TEXTURE0);
+    // Bind the texture object to the target
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    // Set the texture parameters
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    // Set the texture image
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
+
+    gl.uniform1i(u_gndTexture, 0);
+  } else if (txtCode == SKY) {
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1); // Flip the image's y axis
+    // Enable texture unit1
+    gl.activeTexture(gl.TEXTURE1);
+    // Bind the texture object to the target
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    // Set the texture parameters
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    // Set the texture image
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
+
+    gl.uniform1i(u_skyTexture, 1);
+  }
+
+
 
 }
 
@@ -250,12 +291,27 @@ function keydown(ev) {
     // console.log("dq pressed");
     camera.moveRight();
   } else if (ev.keyCode == 81) { // Q pan left
-    console.log("q pressed");
+    // console.log("q pressed");
     camera.panLeft();
   } else if (ev.keyCode == 69) { // E pan right
-    console.log("e pressed");
+    // console.log("e pressed");
     camera.panRight();
   }
+
+  // set x and y and z camera view to arrowkey press
+  if (ev.keyCode == 39) { // right arrow
+    // console.log("w pressed");
+    g_angleX += 1;
+  } else if (ev.keyCode == 37) { // left arrow
+    // console.log("w pressed");
+    g_angleX -= 1;
+  } else if (ev.keyCode == 38) { // up arrow
+    // console.log("w pressed");
+    g_angleY += 1;
+  } else if (ev.keyCode == 40) { // down arrow
+    // console.log("w pressed");
+    g_angleY -= 1;
+  } 
 
   renderAllShapes();
 }
@@ -294,9 +350,9 @@ function renderAllShapes() {
   // Pass the view matrix
   var viewMat = new Matrix4();
   viewMat.setLookAt(
-    camera.eye.elements[0],camera.eye.elements[1], camera.eye.elements[2], 
-    camera.at.elements[0],   camera.at.elements[1],   camera.at.elements[2], 
-    camera.up.elements[0],  camera.up.elements[1],   camera.up.elements[2]
+    camera.eye.elements[0], camera.eye.elements[1], camera.eye.elements[2],
+    camera.at.elements[0], camera.at.elements[1], camera.at.elements[2],
+    camera.up.elements[0], camera.up.elements[1], camera.up.elements[2]
   ); // eye, at, up
   gl.uniformMatrix4fv(u_ViewMatrix, false, viewMat.elements);
 
@@ -310,19 +366,20 @@ function renderAllShapes() {
   var ground = new Cube();
   ground.textureNum = GND;
   // ground.color = [0.92, 0.8, 0.6, 1.0];
-  ground.matrix.rotate(-15, 0, 1, 0);
-  ground.matrix.translate(0, -0.75, 0);
-  ground.matrix.scale(10, 0, 10);
-  ground.matrix.translate(-0.3, 0.0, -0.5);
-  var gndCoordMatrix = new Matrix4(ground.matrix);
+  ground.matrix.rotate(-20, 0, 1, 0);
+  ground.matrix.translate(0, -14, 0);
+  ground.matrix.scale(50, 0, 50);
+  ground.matrix.translate(-0.45, 0, -0 );
+  // var gndCoordMatrix = new Matrix4(ground.matrix);
   ground.render();
 
-  //
-  // var block1 = new Cube();
-  // // block1.matrix.set(torsoCoordMatrix);
-  // block1.textureNum = -1;
-  // block1.matrix.translate(0, 0.5, 0);
-  // block1.render();
+  // SKY
+  var sky = new Cube();
+  sky.textureNum = SKY;
+  sky.matrix.rotate(-20, 0, 1, 0);
+  sky.matrix.scale(50, 50, 50);
+  sky.matrix.translate(-0.45, -0.3, 0);
+  sky.render();
 
 
 }
