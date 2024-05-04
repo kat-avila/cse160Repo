@@ -22,6 +22,7 @@ var FSHADER_SOURCE = `
   uniform vec4 u_FragColor;  // uniform
   uniform sampler2D u_gndTexture;
   uniform sampler2D u_skyTexture;
+  uniform sampler2D u_wallmushTexture;
   uniform int u_whichTexture;
   void main() {
     if (u_whichTexture == -2) { // color
@@ -35,6 +36,9 @@ var FSHADER_SOURCE = `
 
     }  else if (u_whichTexture == 1){ //use Sky Texture
       gl_FragColor = texture2D(u_skyTexture, v_UV);
+
+    } else if (u_whichTexture == 2){ //use Wall Forest Mushroom Texture
+      gl_FragColor = texture2D(u_wallmushTexture, v_UV);
 
     } else {
       gl_FragColor = vec4(1, .2, .2, 1);
@@ -50,6 +54,7 @@ let COLOR = -2;
 let UV = -1;
 let GND = 0;
 let SKY = 1;
+let WALLMUSH = 2;
 let a_UV;
 let u_FragColor;
 let u_ModelMatrix;
@@ -155,7 +160,12 @@ function connectVariablesToGLSL() {
     console.log('Failed to get the storage location of u_skyTexture');
     return false;
   }
-
+ // Get the storage location of   u_wallmushTexture
+ u_wallmushTexture = gl.getUniformLocation(gl.program, 'u_wallmushTexture');
+ if (!u_wallmushTexture) {
+   console.log('Failed to get the storage location of u_wallmushTexture');
+   return false;
+ }
   // Get the storage location of u_Sampler
   u_whichTexture = gl.getUniformLocation(gl.program, 'u_whichTexture');
   if (!u_whichTexture) {
@@ -213,6 +223,17 @@ function initTextures() {
   // Register the event handler to be called on loading an imageSKY
   imageSKY.onload = function () { sendTextureToGLSL(imageSKY, SKY); };
 
+   // Create the Wall forest Mushroom object
+   var imageWALLMUSH = new Image();
+   if (!imageWALLMUSH) {
+     console.log('Failed to create the imageWALLMUSH object');
+     return false;
+   }
+   // Tell the browser to load an imageWALLMUSH
+   imageWALLMUSH.src = '../lib/textures/wallflowers.png';
+   // Register the event handler to be called on loading an imageSKY
+   imageWALLMUSH.onload = function () { sendTextureToGLSL(imageWALLMUSH, WALLMUSH); };
+ 
   return true;
 }
 
@@ -249,7 +270,20 @@ function sendTextureToGLSL(image, txtCode) {
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
 
     gl.uniform1i(u_skyTexture, 1);
+  } else if (txtCode == WALLMUSH) {
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1); // Flip the image's y axis
+    // Enable texture unit2
+    gl.activeTexture(gl.TEXTURE2);
+    // Bind the texture object to the target
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    // Set the texture parameters
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    // Set the texture image
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
+
+    gl.uniform1i(u_wallmushTexture, 2);
   }
+
 
 
 
@@ -307,10 +341,10 @@ function keydown(ev) {
     g_angleX -= 1;
   } else if (ev.keyCode == 38) { // up arrow
     // console.log("w pressed");
-    g_angleY += 1;
+    g_angleY -= 1;
   } else if (ev.keyCode == 40) { // down arrow
     // console.log("w pressed");
-    g_angleY -= 1;
+    g_angleY += 1;
   } 
 
   // console.log("eye", camera.eye.elements, "at", camera.at.elements, "up", camera.up.elements);
@@ -336,15 +370,13 @@ function updateAnimationAngles() {
 }
 
 var g_map = [
-  [1, 1, 1, 1, 1, 1, 1, 1, 1], // left-most column
-  [1, 0, 0 ,1, 0, 1, 0, 0, 0],
-  [1, 0, 0 ,1, 0, 1, 0, 0, 0],
-  [1, 0, 0 ,1, 0, 1, 1, 1, 0],
-  [1, 0, 0 ,0, 0, 1, 0, 1, 0],
-  [1, 0, 0 ,1, 0, 1, 0, 1, 0],
-  [1, 0, 0 ,1, 0, 1, 0, 0, 0],
-  [1, 0, 0 ,1, 0, 0, 0, 0, 0],
-  [1, 1, 1, 1, 1, 1, 1, 1, 1], // righ-most column
+  [1, 1, 1, 1, 1, 1, 1, 1], // left-most column
+  [1, 0, 0 ,1, 0, 1, 0, 0],
+  [1, 0, 0 ,1, 0, 1, 0, 0],
+  [1, 0, 0 ,1, 0, 1, 1, 1],
+  [1, 0, 0 ,0, 0, 1, 0, 0],
+  [1, 0, 0 ,1, 0, 1, 0, 0],
+  [1, 1, 1, 1, 1, 1, 1, 1], // righ-most column
 ]
 
 // Draw every shape that is supposed to be in the canvas
@@ -380,7 +412,7 @@ function renderAllShapes() {
   ground.textureNum = GND;
   // ground.color = [0.92, 0.8, 0.6, 1.0];
   ground.matrix.rotate(-20, 0, 1, 0);
-  ground.matrix.translate(0, -14, 0);
+  ground.matrix.translate(0, -0.8, 25);
   var gndCoordMatrix = new Matrix4(ground.matrix);
   ground.matrix.scale(50, 0, 50);
   ground.matrix.translate(-0.45, 0, -0 );
@@ -390,21 +422,23 @@ function renderAllShapes() {
   var sky = new Cube();
   sky.textureNum = SKY;
   sky.matrix.rotate(-20, 0, 1, 0);
-  sky.matrix.scale(50, 50, 50);
-  sky.matrix.translate(-0.45, -0.3, 0);
-  // sky.render();
+  sky.matrix.scale(100, 100, 100);
+  sky.matrix.translate(-0.45, -0.3, 0.5);
+  sky.render();
 
   // MAP
-  for (x=0; x<9; x++) {
-    for (y=0; y<9; y++) {
+  for (x=0; x<7; x++) {
+    for (y=0; y<7; y++) {
       if (g_map[x][y] == 1) {
         var body = new Cube();
-        body.color = [1, 1, 1, 1];
+        body.textureNum = WALLMUSH;
         body.matrix.set(gndCoordMatrix);
-        body.matrix.scale(5, 5, 5);
+        // body.matrix.scale(5, 5, 5);
 
         body.matrix.translate(x-4, 0, y-8);
         body.render();
+        // body.renderfast();
+
       }
     }
   }
