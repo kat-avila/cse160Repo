@@ -406,7 +406,7 @@ function renderAllShapes() {
 
   // GROUND
   var ground = new Cube();
-  ground.textureNum = GND;
+  ground.textureNum = UV;
   // ground.color = [0.92, 0.8, 0.6, 1.0];
   ground.matrix.rotate(-20, 0, 1, 0);
   ground.matrix.translate(0, -0.8, 25);
