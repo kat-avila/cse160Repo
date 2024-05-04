@@ -313,6 +313,8 @@ function keydown(ev) {
     g_angleY -= 1;
   } 
 
+  // console.log("eye", camera.eye.elements, "at", camera.at.elements, "up", camera.up.elements);
+
   renderAllShapes();
 }
 
@@ -333,6 +335,17 @@ function updateAnimationAngles() {
 
 }
 
+var g_map = [
+  [1, 1, 1, 1, 1, 1, 1, 1, 1], // left-most column
+  [1, 0, 0 ,1, 0, 1, 0, 0, 0],
+  [1, 0, 0 ,1, 0, 1, 0, 0, 0],
+  [1, 0, 0 ,1, 0, 1, 1, 1, 0],
+  [1, 0, 0 ,0, 0, 1, 0, 1, 0],
+  [1, 0, 0 ,1, 0, 1, 0, 1, 0],
+  [1, 0, 0 ,1, 0, 1, 0, 0, 0],
+  [1, 0, 0 ,1, 0, 0, 0, 0, 0],
+  [1, 1, 1, 1, 1, 1, 1, 1, 1], // righ-most column
+]
 
 // Draw every shape that is supposed to be in the canvas
 function renderAllShapes() {
@@ -368,9 +381,9 @@ function renderAllShapes() {
   // ground.color = [0.92, 0.8, 0.6, 1.0];
   ground.matrix.rotate(-20, 0, 1, 0);
   ground.matrix.translate(0, -14, 0);
+  var gndCoordMatrix = new Matrix4(ground.matrix);
   ground.matrix.scale(50, 0, 50);
   ground.matrix.translate(-0.45, 0, -0 );
-  // var gndCoordMatrix = new Matrix4(ground.matrix);
   ground.render();
 
   // SKY
@@ -379,7 +392,22 @@ function renderAllShapes() {
   sky.matrix.rotate(-20, 0, 1, 0);
   sky.matrix.scale(50, 50, 50);
   sky.matrix.translate(-0.45, -0.3, 0);
-  sky.render();
+  // sky.render();
+
+  // MAP
+  for (x=0; x<9; x++) {
+    for (y=0; y<9; y++) {
+      if (g_map[x][y] == 1) {
+        var body = new Cube();
+        body.color = [1, 1, 1, 1];
+        body.matrix.set(gndCoordMatrix);
+        body.matrix.scale(5, 5, 5);
+
+        body.matrix.translate(x-4, 0, y-8);
+        body.render();
+      }
+    }
+  }
 
 
 }
