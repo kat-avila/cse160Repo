@@ -41,7 +41,7 @@ var FSHADER_SOURCE = `
       gl_FragColor = texture2D(u_wallmushTexture, v_UV);
 
     } else {
-      gl_FragColor = vec4(1, .2, .2, 1);
+      gl_FragColor = vec4(1, 1, 1, 1);
     }
   }`
 
@@ -243,8 +243,6 @@ function sendTextureToGLSL(image, txtCode) {
     console.log('Failed to create the texture object');
     return false;
   }
-
-
   // Set the texture unit 0 to the sampler
   if (txtCode == GND) {
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1); // Flip the image's y axis
@@ -256,8 +254,8 @@ function sendTextureToGLSL(image, txtCode) {
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
     // Set the texture image
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
-
     gl.uniform1i(u_gndTexture, 0);
+
   } else if (txtCode == SKY) {
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1); // Flip the image's y axis
     // Enable texture unit1
@@ -268,8 +266,8 @@ function sendTextureToGLSL(image, txtCode) {
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
     // Set the texture image
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
-
     gl.uniform1i(u_skyTexture, 1);
+
   } else if (txtCode == WALLMUSH) {
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1); // Flip the image's y axis
     // Enable texture unit2
@@ -280,7 +278,6 @@ function sendTextureToGLSL(image, txtCode) {
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
     // Set the texture image
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
-
     gl.uniform1i(u_wallmushTexture, 2);
   }
 
@@ -433,11 +430,11 @@ function renderAllShapes() {
         var body = new Cube();
         body.textureNum = WALLMUSH;
         body.matrix.set(gndCoordMatrix);
-        // body.matrix.scale(5, 5, 5);
+        body.matrix.scale(5, 5, 5);
 
         body.matrix.translate(x-4, 0, y-8);
-        body.render();
-        // body.renderfast();
+        // body.render();
+        body.renderfast();
 
       }
     }
