@@ -45,6 +45,19 @@ function drawTriangle3D(vertices) {
   return n;
 }
 
+function drawTriangle3DFast(vertices) {
+  var n = vertices.length/3; // The number of vertices
+
+  initTriangles3D();
+  // Write date into the buffer object
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.DYNAMIC_DRAW);
+
+  // Draw triangles
+  gl.drawArrays(gl.TRIANGLES, 0, n);
+
+  return n;
+}
+
 let g_vertexBuffer = null;
 function initTriangles3D() {
  // Create a buffer object

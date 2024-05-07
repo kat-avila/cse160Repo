@@ -383,17 +383,6 @@ function tick() {
 // function updateAnimationAngles() {
 // }
 
-var g_map = [
-  [1, 1, 1, 1, 1, 1, 1, 1], // left-most column
-  [1, 0, 0 ,1, 0, 1, 0, 0],
-  [1, 0, 0 ,2, 0, 3, 0, 0],
-  [1, 0, 0 ,2, 0, 1, 3, 1],
-  [1, 0, 0 ,0, 0, 3, 0, 0],
-  [1, 0, 0 ,2, 0, 1, 0, 0],
-  [1, 1, 1, 1, 1, 1, 1, 1], // righ-most column
-];
-
-var g_mapLayout = [];
 
 // Draw every shape that is supposed to be in the canvas
 function renderAllShapes() {
@@ -443,23 +432,67 @@ function renderAllShapes() {
   sky.render();
 
   // MAP
-  let len = g_mapLayout.length;
-  if (len == 0) { // first time, empty mapLayout
+  createWorld(gndCoordMatrix);
+  // }
+
+
+}
+
+var g_map = [
+  [1, 1, 1, 1, 1, 1, 1, 1], // left-most column
+  [1, 0, 0 ,1, 0, 1, 0, 0],
+  [1, 0, 0 ,2, 0, 3, 0, 0],
+  [1, 0, 0 ,2, 0, 1, 3, 1],
+  [1, 0, 0 ,0, 0, 3, 0, 0],
+  [1, 0, 0 ,2, 0, 1, 0, 0],
+  [1, 1, 1, 1, 1, 1, 1, 1], // righ-most column
+];
+
+let g_mapLayout = [
+  [1, 1, 1, 1, 1, 1, 1, 1], // left-most column
+  [1, 0, 0 ,1, 0, 1, 0, 0],
+  [1, 0, 0 ,2, 0, 3, 0, 0],
+  [1, 0, 0 ,2, 0, 1, 3, 1],
+  [1, 0, 0 ,0, 0, 3, 0, 0],
+  [1, 0, 0 ,2, 0, 1, 0, 0],
+  [1, 1, 1, 1, 1, 1, 1, 1], // righ-most column
+];
+let initWorldMap = false;
+
+function createWorld(gndCoordMatrix) {
+  // let len = g_mapLayout.length;
+  // var body = new Cube();
+  // var initCube = new Matrix4();
+  if (!initWorldMap) { // first time, empty mapLayout
     for (x=0; x<7; x++) {
       for (y=0; y<7; y++) {
         for (let c =0; c <g_map[x][y]; c++) {
-          var body = new Cube();
-          body.textureNum = WALLMUSH;
-          body.matrix.set(gndCoordMatrix);
-          body.matrix.scale(5, 5, 5);
-          body.matrix.translate(x-4, c, y-8);
-          body.renderfast();  
-          // g_mapLayout.push(body);
+            var body = new Cube();
+            body.textureNum = WALLMUSH;
+            body.matrix.set(gndCoordMatrix);
+            body.matrix.scale(5, 5, 5);
+            body.matrix.translate(x-4, c, y-8);
+            body.renderfast();  
+            // initCube = body.matrix;
+            g_mapLayout[x][y] = body.matrix;
         }
       }
     }
+  } else {
+    var body = new Cube();
+    body.textureNum = WALLMUSH;
+    // body.matrix.scale(5, 5, 5);
+    for (x=0; x<7; x++) {
+      for (y=0; y<7; y++) {
+        // for (let c =0; c <g_map[x][y]; c++) {
+          body.matrix.set(g_mapLayout[x][y]);
+          body.matrix.translate(x-4, c, y-8);
+          body.renderfast();  
+            // initCube = body.matrix;
+            // g_mapLayout[x][y] = body.matrix;
+        // }
+      }
+    }
   }
-
-
 }
 
