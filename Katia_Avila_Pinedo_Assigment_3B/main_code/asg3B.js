@@ -200,6 +200,12 @@ function addActionsForHTMLUI() {
 }
 
 function initTextures() {
+  var texture = gl.createTexture();   // Create a texture object
+  if (!texture) {
+    console.log('Failed to create the texture object');
+    return false;
+  }
+
   // Create the GND object
   var imageGND = new Image();
   if (!imageGND) {
@@ -209,7 +215,7 @@ function initTextures() {
   // Tell the browser to load an imageGND
   imageGND.src = '../lib/textures/froppyGND.jpg';
   // Register the event handler to be called on loading an imageGND
-  imageGND.onload = function () { sendTextureToGLSL(imageGND, GND); };
+  imageGND.onload = function () { sendTextureToGLSL(texture, imageGND, GND); };
 
   // Create the SKY object
   var imageSKY = new Image();
@@ -220,7 +226,7 @@ function initTextures() {
   // Tell the browser to load an imageSKY
   imageSKY.src = '../lib/textures/froppySky.png';
   // Register the event handler to be called on loading an imageSKY
-  imageSKY.onload = function () { sendTextureToGLSL(imageSKY, SKY); };
+  imageSKY.onload = function () { sendTextureToGLSL(texture, imageSKY, SKY); };
 
   // Create the Wall forest Mushroom object
   var imageWALLMUSH = new Image();
@@ -231,20 +237,18 @@ function initTextures() {
   // Tell the browser to load an imageWALLMUSH
   imageWALLMUSH.src = '../lib/textures/wallFlowers.png';
   // Register the event handler to be called on loading an imageSKY
-  imageWALLMUSH.onload = function () { sendTextureToGLSL(imageWALLMUSH, WALLMUSH); };
+  imageWALLMUSH.onload = function () { sendTextureToGLSL(texture, imageWALLMUSH, WALLMUSH); };
 
+  
   return true;
 }
 
-function sendTextureToGLSL(image, txtCode) {
-  var texture = gl.createTexture();   // Create a texture object
-  if (!texture) {
-    console.log('Failed to create the texture object');
-    return false;
-  }
-  // Set the texture unit 0 to the sampler
+function sendTextureToGLSL(texture, image, txtCode) {
+  
+
+  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1); // Flip the image's y axis
+
   if (txtCode == GND) {
-    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1); // Flip the image's y axis
     // Enable texture unit0
     gl.activeTexture(gl.TEXTURE0);
     // Bind the texture object to the target
@@ -256,7 +260,7 @@ function sendTextureToGLSL(image, txtCode) {
     gl.uniform1i(u_gndTexture, 0);
 
   } else if (txtCode == SKY) {
-    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1); // Flip the image's y axis
+    // gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1); // Flip the image's y axis
     // Enable texture unit1
     gl.activeTexture(gl.TEXTURE1);
     // Bind the texture object to the target
@@ -268,7 +272,7 @@ function sendTextureToGLSL(image, txtCode) {
     gl.uniform1i(u_skyTexture, 1);
 
   } else if (txtCode == WALLMUSH) {
-    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1); // Flip the image's y axis
+    // gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1); // Flip the image's y axis
     // Enable texture unit2
     gl.activeTexture(gl.TEXTURE2);
     // Bind the texture object to the target
