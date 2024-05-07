@@ -195,11 +195,31 @@ function connectVariablesToGLSL() {
 }
 
 function addActionsForHTMLUI() {
+  document.getElementById('resetCam').onclick =function () {g_angleX = 25; g_angleY = 0; g_angleZ = 0;};
   // Perspective Slider Events
   document.getElementById('angleXslide').addEventListener('mousemove', function () { g_angleX = this.value; renderAllShapes(); })
   document.getElementById('angleYslide').addEventListener('mousemove', function () { g_angleY = this.value; renderAllShapes(); })
   document.getElementById('angleZslide').addEventListener('mousemove', function () { g_angleZ = this.value; renderAllShapes(); })
 
+  document.onkeydown = keydown;
+  document.onmousedown = function (evt) {
+    isMouseDown = true,
+    evt = evt || window;
+    startX = evt.pageX;
+    startY = evt.pageY;
+    // console.log("start", startX, startY);  
+  };
+  document.onmouseup = function () { isMouseDown = false };
+  document.onmousemove = function (evt) {
+    if (isMouseDown) {
+      evt = evt || window;
+      endX = evt.pageX;
+      endY = evt.pageY;
+      // console.log("end", startX, startY);
+      g_angleX += 0.025 * (startX - endX);
+      g_angleY += 0.02 * (startY - endY);
+    }
+  };
 }
 
 function initTextures() {
@@ -298,25 +318,6 @@ function main() {
   // initialize textures
   initTextures();
 
-  document.onkeydown = keydown;
-  document.onmousedown = function(evt) { isMouseDown = true, 
-    evt = evt || window;
-    startX = evt.pageX;
-    startY = evt.pageY;
-    // console.log("start", startX, startY);  
-  };
-  document.onmouseup   = function() { isMouseDown = false };
-  document.onmousemove = function(evt) { if(isMouseDown) { 
-    evt = evt || window;
-    endX = evt.pageX;
-    endY = evt.pageY;
-    // console.log("end", startX, startY);
-    g_angleX += 0.025*(startX - endX);
-    g_angleY += 0.02*(startY - endY);
-
-
-} };
-
   // Specify the color for clearing <canvas>
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
@@ -368,7 +369,7 @@ function keydown(ev) {
 
 
 
-let prevTime = Date.now(),frames = 0;
+let prevTime = Date.now(), frames = 0;
 function tick() {
   const time = Date.now();
   frames++;
