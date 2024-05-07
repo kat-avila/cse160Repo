@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Assigment 2 : Blocky Animal (Medium) </title>
+  <style>
+    .column {
+      float: left;
+      padding: 20px;
+    }
+
+    /* Clear floats after the columns */
+    .row:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+  </style>
+</head>
+
+<body onload="main()">
+  <div class="row">
+    <div class="column">
+      <canvas id="webgl" width="1200" height="1000">
+        Please use a browser that supports "canvas"
+      </canvas>
+    </div>
+ 
+    <div class="column" width="400">
+      <u>
+        <h2> Camera Perspective </h2>
+      </u>
+      <h4>
+        X-angle:
+        <input type="range" min="-180" max="180" value="25" class="slider" id="angleXslide">
+        Y-angle:
+        <input type="range" min="-180" max="180" value="0" class="slider" id="angleYslide">
+        Z-angle:
+        <input type="range" min="-180" max="180" value="0" class="slider" id="angleZslide">
+      </h4>
+    </div>
+  </div>
+  <p>
+    
+
+  <script src="../lib/webgl-utils.js"></script>
+  <script src="../lib/webgl-debug.js"></script>
+  <script src="../lib/cuon-utils.js"></script>
+  <script src="../lib/cuon-matrix-cse160.js"></script>
+  <script src="../lib/Point.js"></script>
+  <script src="../lib/Triangle.js"></script>
+  <script src="../lib/Circle.js"></script>
+  <script src="../lib/Cube.js"></script>
+  <script src="../lib/Camera.js"></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/stats.js/17/Stats.js"></script> -->
+  <script src="asg3B.js"></script>
+</body>
+
+</html>
