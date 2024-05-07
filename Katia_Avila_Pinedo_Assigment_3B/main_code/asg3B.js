@@ -283,7 +283,7 @@ function sendTextureToGLSL(image, txtCode) {
 }
 
 function main() {
- fpsMeter();
+ 
   // instantaniate camera
   camera = new Camera();
   // Set up canvas and gl variables
@@ -346,15 +346,7 @@ function keydown(ev) {
   renderAllShapes();
   // requestAnimationFrame(tick);
 }
-function  fpsMeter() {
-  let prevTime = Date.now(),
-      frames = 0;
 
-  requestAnimationFrame(function loop() {
- 
-    requestAnimationFrame(loop);
-  });
-}
 
 let prevTime = Date.now(),
 frames = 0;
@@ -433,7 +425,6 @@ function renderAllShapes() {
 
   // MAP
   createWorld(gndCoordMatrix);
-  // }
 
 
 }
@@ -472,27 +463,13 @@ function createWorld(gndCoordMatrix) {
             body.matrix.set(gndCoordMatrix);
             body.matrix.scale(5, 5, 5);
             body.matrix.translate(x-4, c, y-8);
-            body.renderfast();  
+            body.render();  
             // initCube = body.matrix;
-            g_mapLayout[x][y] = body.matrix;
+            // g_mapLayout[x][y] = body.matrix;
         }
       }
     }
-  } else {
-    var body = new Cube();
-    body.textureNum = WALLMUSH;
-    // body.matrix.scale(5, 5, 5);
-    for (x=0; x<7; x++) {
-      for (y=0; y<7; y++) {
-        // for (let c =0; c <g_map[x][y]; c++) {
-          body.matrix.set(g_mapLayout[x][y]);
-          body.matrix.translate(x-4, c, y-8);
-          body.renderfast();  
-            // initCube = body.matrix;
-            // g_mapLayout[x][y] = body.matrix;
-        // }
-      }
-    }
-  }
+  } 
+
 }
 
