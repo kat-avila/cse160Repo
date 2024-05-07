@@ -34,7 +34,7 @@ function initTriangles3D() {
  // Enable the assignment to a_Position variable
  gl.enableVertexAttribArray(a_Position);
 
- console.log("initTri");
+//  console.log("initTri");
 }
 
 var g_uvBuffer = null;
@@ -91,6 +91,7 @@ function drawTriangle3DUV(vertices, uv) {
 
   // Draw triangles
   gl.drawArrays(gl.TRIANGLES, 0, n);
+
 
   return n;
 }

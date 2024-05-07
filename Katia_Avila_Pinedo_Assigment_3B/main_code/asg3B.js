@@ -78,6 +78,9 @@ let camera;
 var g_eye = [0, 0, 3];
 var g_at = [0, 0, -100];
 var g_up = [0, 1, 0];
+// mouse drag
+let isMouseDown;
+
 
 
 // Setup WebGL
@@ -191,12 +194,12 @@ function connectVariablesToGLSL() {
   gl.uniformMatrix4fv(u_ModelMatrix, false, indentityM.elements);
 }
 
-
 function addActionsForHTMLUI() {
   // Perspective Slider Events
   document.getElementById('angleXslide').addEventListener('mousemove', function () { g_angleX = this.value; renderAllShapes(); })
   document.getElementById('angleYslide').addEventListener('mousemove', function () { g_angleY = this.value; renderAllShapes(); })
   document.getElementById('angleZslide').addEventListener('mousemove', function () { g_angleZ = this.value; renderAllShapes(); })
+
 }
 
 function initTextures() {
@@ -257,7 +260,6 @@ function sendTextureToGLSL(image, txtCode) {
     gl.uniform1i(u_gndTexture, 0);
 
   } else if (txtCode == SKY) {
-    // gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1); // Flip the image's y axis
     // Enable texture unit1
     gl.activeTexture(gl.TEXTURE1);
     // Bind the texture object to the target
@@ -269,7 +271,6 @@ function sendTextureToGLSL(image, txtCode) {
     gl.uniform1i(u_skyTexture, 1);
 
   } else if (txtCode == WALLMUSH) {
-    // gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1); // Flip the image's y axis
     // Enable texture unit2
     gl.activeTexture(gl.TEXTURE2);
     // Bind the texture object to the target
@@ -283,8 +284,8 @@ function sendTextureToGLSL(image, txtCode) {
 
 }
 
+let startX, startY, endX, endY;
 function main() {
-
   // instantaniate camera
   camera = new Camera();
   // Set up canvas and gl variables
@@ -298,6 +299,23 @@ function main() {
   initTextures();
 
   document.onkeydown = keydown;
+  document.onmousedown = function(evt) { isMouseDown = true, 
+    evt = evt || window;
+    startX = evt.pageX;
+    startY = evt.pageY;
+    // console.log("start", startX, startY);  
+  };
+  document.onmouseup   = function() { isMouseDown = false };
+  document.onmousemove = function(evt) { if(isMouseDown) { 
+    evt = evt || window;
+    endX = evt.pageX;
+    endY = evt.pageY;
+    // console.log("end", startX, startY);
+    g_angleX += 0.025*(startX - endX);
+    g_angleY += 0.02*(startY - endY);
+
+
+} };
 
   // Specify the color for clearing <canvas>
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
@@ -349,8 +367,8 @@ function keydown(ev) {
 }
 
 
-let prevTime = Date.now(),
-  frames = 0;
+
+let prevTime = Date.now(),frames = 0;
 function tick() {
   const time = Date.now();
   frames++;
@@ -358,11 +376,10 @@ function tick() {
     let fps = Math.round((frames * 1000) / (time - prevTime));
     prevTime = time;
     frames = 0;
-    console.info('FPS: ', fps);
+    // console.info('FPS: ', fps);
   }
 
-  // Save the current time
-  // g_seconds = (performance.now() / 1000.0) - g_startTime;
+
   // Update animation angles
   // updateAnimationAngles();
 
@@ -448,7 +465,6 @@ let g_mapLayout = [
   [1, 0, 0, 2, 0, 1, 0, 0],
   [1, 1, 1, 1, 1, 1, 1, 1], // righ-most column
 ];
-let initWorldMap = false;
 
 function createWorld(gndCoordMatrix) {
   var body = new Cube();
