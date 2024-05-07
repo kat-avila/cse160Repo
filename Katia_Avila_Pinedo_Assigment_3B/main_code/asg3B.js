@@ -386,12 +386,14 @@ function tick() {
 var g_map = [
   [1, 1, 1, 1, 1, 1, 1, 1], // left-most column
   [1, 0, 0 ,1, 0, 1, 0, 0],
-  [1, 0, 0 ,1, 0, 1, 0, 0],
-  [1, 0, 0 ,1, 0, 1, 1, 1],
-  [1, 0, 0 ,0, 0, 1, 0, 0],
-  [1, 0, 0 ,1, 0, 1, 0, 0],
+  [1, 0, 0 ,2, 0, 3, 0, 0],
+  [1, 0, 0 ,2, 0, 1, 3, 1],
+  [1, 0, 0 ,0, 0, 3, 0, 0],
+  [1, 0, 0 ,2, 0, 1, 0, 0],
   [1, 1, 1, 1, 1, 1, 1, 1], // righ-most column
-]
+];
+
+var g_mapLayout = [];
 
 // Draw every shape that is supposed to be in the canvas
 function renderAllShapes() {
@@ -426,7 +428,7 @@ function renderAllShapes() {
   ground.textureNum = UV;
   // ground.color = [0.92, 0.8, 0.6, 1.0];
   ground.matrix.rotate(-20, 0, 1, 0);
-  ground.matrix.translate(0, -0.8, 25);
+  ground.matrix.translate(0, -4, 25);
   var gndCoordMatrix = new Matrix4(ground.matrix);
   ground.matrix.scale(50, 0, 50);
   ground.matrix.translate(-0.45, 0, -0 );
@@ -441,18 +443,19 @@ function renderAllShapes() {
   sky.render();
 
   // MAP
-  for (x=0; x<7; x++) {
-    for (y=0; y<7; y++) {
-      if (g_map[x][y] == 1) {
-        var body = new Cube();
-        body.textureNum = WALLMUSH;
-        body.matrix.set(gndCoordMatrix);
-        body.matrix.scale(5, 5, 5);
-
-        body.matrix.translate(x-4, 0, y-8);
-        // body.render();
-        body.renderfast();
-
+  let len = g_mapLayout.length;
+  if (len == 0) { // first time, empty mapLayout
+    for (x=0; x<7; x++) {
+      for (y=0; y<7; y++) {
+        for (let c =0; c <g_map[x][y]; c++) {
+          var body = new Cube();
+          body.textureNum = WALLMUSH;
+          body.matrix.set(gndCoordMatrix);
+          body.matrix.scale(5, 5, 5);
+          body.matrix.translate(x-4, c, y-8);
+          body.renderfast();  
+          // g_mapLayout.push(body);
+        }
       }
     }
   }
