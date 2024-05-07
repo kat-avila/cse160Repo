@@ -159,12 +159,12 @@ function connectVariablesToGLSL() {
     console.log('Failed to get the storage location of u_skyTexture');
     return false;
   }
- // Get the storage location of   u_wallmushTexture
- u_wallmushTexture = gl.getUniformLocation(gl.program, 'u_wallmushTexture');
- if (!u_wallmushTexture) {
-   console.log('Failed to get the storage location of u_wallmushTexture');
-   return false;
- }
+  // Get the storage location of   u_wallmushTexture
+  u_wallmushTexture = gl.getUniformLocation(gl.program, 'u_wallmushTexture');
+  if (!u_wallmushTexture) {
+    console.log('Failed to get the storage location of u_wallmushTexture');
+    return false;
+  }
   // Get the storage location of u_Sampler
   u_whichTexture = gl.getUniformLocation(gl.program, 'u_whichTexture');
   if (!u_whichTexture) {
@@ -222,17 +222,17 @@ function initTextures() {
   // Register the event handler to be called on loading an imageSKY
   imageSKY.onload = function () { sendTextureToGLSL(imageSKY, SKY); };
 
-   // Create the Wall forest Mushroom object
-   var imageWALLMUSH = new Image();
-   if (!imageWALLMUSH) {
-     console.log('Failed to create the imageWALLMUSH object');
-     return false;
-   }
-   // Tell the browser to load an imageWALLMUSH
-   imageWALLMUSH.src = '../lib/textures/wallFlowers.png';
-   // Register the event handler to be called on loading an imageSKY
-   imageWALLMUSH.onload = function () { sendTextureToGLSL(imageWALLMUSH, WALLMUSH); };
- 
+  // Create the Wall forest Mushroom object
+  var imageWALLMUSH = new Image();
+  if (!imageWALLMUSH) {
+    console.log('Failed to create the imageWALLMUSH object');
+    return false;
+  }
+  // Tell the browser to load an imageWALLMUSH
+  imageWALLMUSH.src = '../lib/textures/wallFlowers.png';
+  // Register the event handler to be called on loading an imageSKY
+  imageWALLMUSH.onload = function () { sendTextureToGLSL(imageWALLMUSH, WALLMUSH); };
+
   return true;
 }
 
@@ -283,7 +283,7 @@ function sendTextureToGLSL(image, txtCode) {
 }
 
 function main() {
- 
+
   // instantaniate camera
   camera = new Camera();
   // Set up canvas and gl variables
@@ -339,7 +339,7 @@ function keydown(ev) {
   } else if (ev.keyCode == 40) { // down arrow
     // console.log("w pressed");
     g_angleY += 1;
-  } 
+  }
 
   // console.log("eye", camera.eye.elements, "at", camera.at.elements, "up", camera.up.elements);
 
@@ -349,12 +349,12 @@ function keydown(ev) {
 
 
 let prevTime = Date.now(),
-frames = 0;
+  frames = 0;
 function tick() {
   const time = Date.now();
   frames++;
   if (time > prevTime + 1000) {
-    let fps = Math.round( ( frames * 1000 ) / ( time - prevTime ) );
+    let fps = Math.round((frames * 1000) / (time - prevTime));
     prevTime = time;
     frames = 0;
     console.info('FPS: ', fps);
@@ -412,7 +412,7 @@ function renderAllShapes() {
   ground.matrix.translate(0, -4, 25);
   var gndCoordMatrix = new Matrix4(ground.matrix);
   ground.matrix.scale(50, 0, 50);
-  ground.matrix.translate(-0.45, 0, -0 );
+  ground.matrix.translate(-0.45, 0, -0);
   ground.render();
 
   // SKY
@@ -426,50 +426,42 @@ function renderAllShapes() {
   // MAP
   createWorld(gndCoordMatrix);
 
-
 }
 
 var g_map = [
   [1, 1, 1, 1, 1, 1, 1, 1], // left-most column
-  [1, 0, 0 ,1, 0, 1, 0, 0],
-  [1, 0, 0 ,2, 0, 3, 0, 0],
-  [1, 0, 0 ,2, 0, 1, 3, 1],
-  [1, 0, 0 ,0, 0, 3, 0, 0],
-  [1, 0, 0 ,2, 0, 1, 0, 0],
+  [1, 0, 0, 1, 0, 1, 0, 0],
+  [1, 0, 0, 2, 0, 3, 0, 0],
+  [1, 0, 0, 2, 0, 1, 3, 1],
+  [1, 0, 0, 0, 0, 3, 0, 0],
+  [1, 0, 0, 2, 0, 1, 0, 0],
   [1, 1, 1, 1, 1, 1, 1, 1], // righ-most column
 ];
 
 let g_mapLayout = [
   [1, 1, 1, 1, 1, 1, 1, 1], // left-most column
-  [1, 0, 0 ,1, 0, 1, 0, 0],
-  [1, 0, 0 ,2, 0, 3, 0, 0],
-  [1, 0, 0 ,2, 0, 1, 3, 1],
-  [1, 0, 0 ,0, 0, 3, 0, 0],
-  [1, 0, 0 ,2, 0, 1, 0, 0],
+  [1, 0, 0, 1, 0, 1, 0, 0],
+  [1, 0, 0, 2, 0, 3, 0, 0],
+  [1, 0, 0, 2, 0, 1, 3, 1],
+  [1, 0, 0, 0, 0, 3, 0, 0],
+  [1, 0, 0, 2, 0, 1, 0, 0],
   [1, 1, 1, 1, 1, 1, 1, 1], // righ-most column
 ];
 let initWorldMap = false;
 
 function createWorld(gndCoordMatrix) {
-  // let len = g_mapLayout.length;
-  // var body = new Cube();
-  // var initCube = new Matrix4();
-  if (!initWorldMap) { // first time, empty mapLayout
-    for (x=0; x<7; x++) {
-      for (y=0; y<7; y++) {
-        for (let c =0; c <g_map[x][y]; c++) {
-            var body = new Cube();
-            body.textureNum = WALLMUSH;
-            body.matrix.set(gndCoordMatrix);
-            body.matrix.scale(5, 5, 5);
-            body.matrix.translate(x-4, c, y-8);
-            body.render();  
-            // initCube = body.matrix;
-            // g_mapLayout[x][y] = body.matrix;
-        }
+  var body = new Cube();
+  for (x = 0; x < 7; x++) {
+    for (y = 0; y < 7; y++) {
+      for (let c = 0; c < g_map[x][y]; c++) {
+        body.textureNum = WALLMUSH;
+        body.matrix.set(gndCoordMatrix);
+        body.matrix.scale(5, 5, 5);
+        body.matrix.translate(x - 4, c, y - 8);
+        body.render();
       }
     }
-  } 
+  }
 
 }
 
