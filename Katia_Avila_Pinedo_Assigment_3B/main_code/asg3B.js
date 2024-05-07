@@ -200,12 +200,6 @@ function addActionsForHTMLUI() {
 }
 
 function initTextures() {
-  var texture = gl.createTexture();   // Create a texture object
-  if (!texture) {
-    console.log('Failed to create the texture object');
-    return false;
-  }
-
   // Create the GND object
   var imageGND = new Image();
   if (!imageGND) {
@@ -215,7 +209,7 @@ function initTextures() {
   // Tell the browser to load an imageGND
   imageGND.src = '../lib/textures/froppyGND.jpg';
   // Register the event handler to be called on loading an imageGND
-  imageGND.onload = function () { sendTextureToGLSL(texture, imageGND, GND); };
+  imageGND.onload = function () { sendTextureToGLSL(imageGND, GND); };
 
   // Create the SKY object
   var imageSKY = new Image();
@@ -226,7 +220,7 @@ function initTextures() {
   // Tell the browser to load an imageSKY
   imageSKY.src = '../lib/textures/froppySky.png';
   // Register the event handler to be called on loading an imageSKY
-  imageSKY.onload = function () { sendTextureToGLSL(texture, imageSKY, SKY); };
+  imageSKY.onload = function () { sendTextureToGLSL(imageSKY, SKY); };
 
   // Create the Wall forest Mushroom object
   var imageWALLMUSH = new Image();
@@ -237,14 +231,17 @@ function initTextures() {
   // Tell the browser to load an imageWALLMUSH
   imageWALLMUSH.src = '../lib/textures/wallFlowers.png';
   // Register the event handler to be called on loading an imageSKY
-  imageWALLMUSH.onload = function () { sendTextureToGLSL(texture, imageWALLMUSH, WALLMUSH); };
+  imageWALLMUSH.onload = function () { sendTextureToGLSL(imageWALLMUSH, WALLMUSH); };
 
-  
   return true;
 }
 
-function sendTextureToGLSL(texture, image, txtCode) {
-  
+function sendTextureToGLSL(image, txtCode) {
+  var texture = gl.createTexture();   // Create a texture object
+  if (!texture) {
+    console.log('Failed to create the texture object');
+    return false;
+  }
 
   gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1); // Flip the image's y axis
 
