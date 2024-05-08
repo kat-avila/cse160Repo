@@ -1,7 +1,7 @@
 
 class Camera {
     constructor() {
-        this.fov = 60.0; //float
+        this.fov = 90.0; //float
         this.eye = new Vector3([0, 0, 0]); // vec3
         this.at = new Vector3([0, 0, -1]);
         this.up = new Vector3([0, 1, 0]);
@@ -23,7 +23,7 @@ class Camera {
 
         f.normalize();
         // determine speed
-        let speed = 0.25;
+        let speed = 0.5;
         f.mul(speed);
 
         // add forward vector to eye and center
@@ -40,7 +40,7 @@ class Camera {
         b.sub(this.at);
         b.normalize();
         // determine speed
-        let speed = 0.25;
+        let speed = 0.5;
         b.mul(speed);
 
         // add forward vector to eye and center
@@ -62,7 +62,7 @@ class Camera {
         s.set(Vector3.cross(this.up,f));
         s.normalize();
         // determine speed
-        let speed = 0.25;
+        let speed = 0.5;
         s.mul(speed);
         // add forward vector to eye and center
         this.eye.add(s);
@@ -82,7 +82,7 @@ class Camera {
         s.set(Vector3.cross(f, this.up));
         s.normalize();
         // determine speed
-        let speed = 0.25;
+        let speed = 0.5;
         s.mul(speed);
         // add forward vector to eye and center
         this.eye.add(s);
@@ -99,7 +99,7 @@ class Camera {
         f.normalize(); 
 
         // rotate vector f by alpha degrees around the up vec
-        let alpha = 5;
+        let alpha = 1;
         let rotationMatrix = new Matrix4();
         rotationMatrix.setRotate(alpha, this.up.elements[0], this.up.elements[1], this.up.elements[2]);
 
@@ -120,7 +120,7 @@ class Camera {
           f.normalize();  
 
         // rotate vector f by alpha degrees around the up vec
-        let alpha = 5;
+        let alpha = 1;
         let rotationMatrix = new Matrix4();
         rotationMatrix.setRotate(-alpha, this.up.elements[0], this.up.elements[1], this.up.elements[2]);
 
