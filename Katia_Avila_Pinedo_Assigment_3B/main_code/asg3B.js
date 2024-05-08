@@ -19,7 +19,8 @@ var FSHADER_SOURCE = `
   uniform vec4 u_FragColor;  // uniform
   uniform sampler2D u_gndTexture;
   uniform sampler2D u_skyTexture;
-  uniform sampler2D u_wallmushTexture;
+  uniform sampler2D u_wallGrassTexture;
+  uniform sampler2D u_wallTreeTexture;
   uniform int u_whichTexture;
   void main() {
     if (u_whichTexture == -2) { // color
@@ -34,8 +35,11 @@ var FSHADER_SOURCE = `
     }  else if (u_whichTexture == 1){ //use Sky Texture
       gl_FragColor = texture2D(u_skyTexture, v_UV);
 
-    } else if (u_whichTexture == 2){ //use Wall Forest Mushroom Texture
-      gl_FragColor = texture2D(u_wallmushTexture, v_UV);
+    } else if (u_whichTexture == 2){ //use Wall Grass Texture
+      gl_FragColor = texture2D(u_wallGrassTexture, v_UV);
+
+    }  else if (u_whichTexture == 3) {
+      gl_FragColor = texture2D(u_wallTreeTexture, v_UV);
 
     } else {
       gl_FragColor = vec4(1, 1, 1, 1);
@@ -51,9 +55,12 @@ let COLOR = -2;
 let UV = -1;
 let GND = 0;
 let SKY = 1;
-let WALLMUSH = 2;
+let WALLGRASS = 2;
+let WALLTREE = 3;
 let u_gndTexture;
 let u_skyTexture;
+let u_wallGrassTexture;
+let u_wallTreeTexture;
 let u_whichTexture;
 // skin
 let a_UV;
@@ -136,12 +143,19 @@ function connectVariablesToGLSL() {
     console.log('Failed to get the storage location of u_skyTexture');
     return false;
   }
-  // Get the storage location of   u_wallmushTexture
-  u_wallmushTexture = gl.getUniformLocation(gl.program, 'u_wallmushTexture');
-  if (!u_wallmushTexture) {
-    console.log('Failed to get the storage location of u_wallmushTexture');
+  // Get the storage location of   u_wallGrassTexture
+  u_wallGrassTexture = gl.getUniformLocation(gl.program, 'u_wallGrassTexture');
+  if (!u_wallGrassTexture) {
+    console.log('Failed to get the storage location of u_wallGrassTexture');
     return false;
   }
+   // Get the storage location of   u_wallTreeTexture
+   u_wallTreeTexture = gl.getUniformLocation(gl.program, 'u_wallTreeTexture');
+   if (!u_wallTreeTexture) {
+     console.log('Failed to get the storage location of u_wallTreeTexture');
+     return false;
+   }
+
   // Get the storage location of u_Sampler
   u_whichTexture = gl.getUniformLocation(gl.program, 'u_whichTexture');
   if (!u_whichTexture) {
@@ -187,21 +201,35 @@ function initTextures() {
     return false;
   }
   // Tell the browser to load an imageSKY
-  imageSKY.src = '../lib/textures/froppySky.png';
+  // imageSKY.src = '../lib/textures/froppySky.png';
+  imageSKY.src = '../lib/textures/uvCoords.png';
+
   // Register the event handler to be called on loading an imageSKY
   imageSKY.onload = function () { sendTextureToGLSL(imageSKY, SKY); };
 
-  // Create the Wall forest Mushroom object
-  var imageWALLMUSH = new Image();
-  if (!imageWALLMUSH) {
-    console.log('Failed to create the imageWALLMUSH object');
+  // Create the Wall Grass object
+  var imageWallGrass = new Image();
+  if (!imageWallGrass) {
+    console.log('Failed to create the imagewallGrass object');
     return false;
   }
-  // Tell the browser to load an imageWALLMUSH
-  imageWALLMUSH.src = '../lib/textures/wallFlowers.png';
+  // Tell the browser to load an imagewallGrass
+  imageWallGrass.src = '../lib/textures/froppyGrass.png';
   // Register the event handler to be called on loading an imageSKY
-  imageWALLMUSH.onload = function () { sendTextureToGLSL(imageWALLMUSH, WALLMUSH); };
+  imageWallGrass.onload = function () { sendTextureToGLSL(imageWallGrass, WALLGRASS); };
 
+
+   // Create the Wall Tree object
+   var imageWallTree = new Image();
+   if (!imageWallTree) {
+     console.log('Failed to create the imagewallTree object');
+     return false;
+   }
+   // Tell the browser to load an imagewallTree
+   imageWallTree.src = '../lib/textures/froppyTrees.png';
+   // Register the event handler to be called on loading an imageSKY
+   imageWallTree.onload = function () { sendTextureToGLSL(imageWallTree, WALLTREE); };
+ 
   return true;
 }
 
@@ -236,7 +264,7 @@ function sendTextureToGLSL(image, txtCode) {
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
     gl.uniform1i(u_skyTexture, 1);
 
-  } else if (txtCode == WALLMUSH) {
+  } else if (txtCode == WALLGRASS) {
     // Enable texture unit2
     gl.activeTexture(gl.TEXTURE2);
     // Bind the texture object to the target
@@ -245,7 +273,18 @@ function sendTextureToGLSL(image, txtCode) {
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
     // Set the texture image
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
-    gl.uniform1i(u_wallmushTexture, 2);
+    gl.uniform1i(u_wallGrassTexture, 2);
+
+  } else if (txtCode == WALLTREE) {
+    // Enable texture unit3
+    gl.activeTexture(gl.TEXTURE3);
+    // Bind the texture object to the target
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    // Set the texture parameters
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    // Set the texture image
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
+    gl.uniform1i(u_wallTreeTexture, 3);
   }
 
 }
@@ -426,7 +465,16 @@ function createWorld() {
   for (x = 0; x < 31; x++) {
     for (y = 0; y < 31; y++) {
       for (let c = 0; c < g_map[x][y]; c++) {
-        body.textureNum = WALLMUSH;
+        if (g_map[x][y] == 1) { // forest floor
+          body.textureNum = WALLGRASS;
+        } else if ( g_map[x][y] == 2) { // trees on second row
+          if (c == 0) {
+            body.textureNum = WALLGRASS;
+          } else {
+            body.textureNum = WALLTREE;
+          }
+        } 
+        // body.textureNum = WALLTREE;
         body.matrix.set(gndCoordMatrix);
         body.matrix.scale(3, 3, 3);
         body.matrix.translate(-18 + x , c, -32 + y);
