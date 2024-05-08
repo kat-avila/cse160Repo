@@ -314,9 +314,6 @@ function keydown(ev) {
     camera.panRight();
   }
 
-
-  renderAllShapes();
-  // requestAnimationFrame(tick);
 }
 
 
@@ -356,7 +353,6 @@ var gndCoordMatrix = new Matrix4();
 function initWorldFunc() {
     // GROUND
     ground.textureNum = UV;
-    // ground.color = [0.92, 0.8, 0.6, 1.0];
     ground.matrix.rotate(-20, 0, 1, 0);
     ground.matrix.translate(0, -4, 25);
     gndCoordMatrix.set(ground.matrix);
@@ -371,12 +367,13 @@ function initWorldFunc() {
     sky.render();
 }
 
+var viewMat = new Matrix4();
+var projMat = new Matrix4();
 function renderAllShapes() {
   // Clear <canvas>
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
   // Pass the view matrix
-  var viewMat = new Matrix4();
   viewMat.setLookAt(
     camera.eye.elements[0], camera.eye.elements[1], camera.eye.elements[2],
     camera.at.elements[0], camera.at.elements[1], camera.at.elements[2],
@@ -385,7 +382,6 @@ function renderAllShapes() {
   gl.uniformMatrix4fv(u_ViewMatrix, false, viewMat.elements);
 
   // Pass the projection matrix
-  var projMat = new Matrix4();
   projMat.setPerspective(90, canvas.width / canvas.height, .1, 100);
   gl.uniformMatrix4fv(u_ProjectionMatrix, false, projMat.elements);
 
