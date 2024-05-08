@@ -320,7 +320,26 @@ function sendTextureToGLSL(image, txtCode) {
 
 }
 
+var startTimeVal = null;
+var endTimeVal;
+
 function addActionsForHTMLUI() {
+  document.getElementById("endTime").onclick = function () {
+    endTimeVal =  Date.now();
+    if (startTimeVal) {
+      document.getElementById("userTime").textContent = "Maze Run Time: " + (endTimeVal - startTimeVal)/1000;
+    } else {
+      document.getElementById("userTime").textContent = "UNABLE TO DETERMINE START TIME";
+
+    }
+  };
+  document.getElementById("resetTime").onclick = function () {
+    endTimeVal = 0
+    startTimeVal = null;
+    document.getElementById("userTime").textContent = "TIMER RESET";
+
+  };
+
   document.onkeydown = keydown;
   document.onmousedown = function (evt) {
     isMouseDown = true,
@@ -361,25 +380,30 @@ function main() {
   requestAnimationFrame(tick);
 }
 
+function timerBegin() {
+  if (!startTimeVal) {
+    startTimeVal =  Date.now();
+    document.getElementById("userTime").textContent = "Running Timer.... ";
+  }
+}
+
 function keydown(ev) {
   // WSAQE
   if (ev.keyCode == 87) { // W moveForward
-    // console.log("w pressed");
+    timerBegin();
     camera.moveForward();
   } else if (ev.keyCode == 83) { // S move backwrds
-    // console.log("s pressed");
+    timerBegin();
     camera.moveBackwards();
   } else if (ev.keyCode == 65) { // A move left
-    // console.log("a pressed");
+    timerBegin();
     camera.moveLeft();
   } else if (ev.keyCode == 68) { // D move right
-    // console.log("dq pressed");
+    timerBegin();
     camera.moveRight();
   } else if (ev.keyCode == 81) { // Q pan left
-    // console.log("q pressed");
     camera.panLeft();
   } else if (ev.keyCode == 69) { // E pan right
-    // console.log("e pressed");
     camera.panRight();
   }
 
