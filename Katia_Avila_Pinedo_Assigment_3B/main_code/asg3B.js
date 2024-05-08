@@ -21,6 +21,7 @@ var FSHADER_SOURCE = `
   uniform sampler2D u_skyTexture;
   uniform sampler2D u_wallGrassTexture;
   uniform sampler2D u_wallTreeTexture;
+  uniform sampler2D u_wallCharTexture;
   uniform int u_whichTexture;
   void main() {
     if (u_whichTexture == -2) { // color
@@ -38,9 +39,10 @@ var FSHADER_SOURCE = `
     } else if (u_whichTexture == 2){ //use Wall Grass Texture
       gl_FragColor = texture2D(u_wallGrassTexture, v_UV);
 
-    }  else if (u_whichTexture == 3) {
+    }  else if (u_whichTexture == 3) { // wall tree
       gl_FragColor = texture2D(u_wallTreeTexture, v_UV);
-
+    } else if (u_whichTexture == 4) { // wall char
+      gl_FragColor = texture2D(u_wallCharTexture, v_UV);
     } 
   }`
 
@@ -55,10 +57,12 @@ let GND = 0;
 let SKY = 1;
 let WALLGRASS = 2;
 let WALLTREE = 3;
+let WALLCHAR = 4;
 let u_gndTexture;
 let u_skyTexture;
 let u_wallGrassTexture;
 let u_wallTreeTexture;
+let u_wallCharTexture;
 let u_whichTexture;
 // skin
 let a_UV;
@@ -147,12 +151,19 @@ function connectVariablesToGLSL() {
     console.log('Failed to get the storage location of u_wallGrassTexture');
     return false;
   }
-   // Get the storage location of   u_wallTreeTexture
-   u_wallTreeTexture = gl.getUniformLocation(gl.program, 'u_wallTreeTexture');
-   if (!u_wallTreeTexture) {
-     console.log('Failed to get the storage location of u_wallTreeTexture');
-     return false;
-   }
+  // Get the storage location of   u_wallTreeTexture
+  u_wallTreeTexture = gl.getUniformLocation(gl.program, 'u_wallTreeTexture');
+  if (!u_wallTreeTexture) {
+    console.log('Failed to get the storage location of u_wallTreeTexture');
+    return false;
+  }
+
+  // Get the storage location of   u_wallCharTexture
+  u_wallCharTexture = gl.getUniformLocation(gl.program, 'u_wallCharTexture');
+  if (!u_wallCharTexture) {
+    console.log('Failed to get the storage location of u_wallCharTexture');
+    return false;
+  }
 
   // Get the storage location of u_Sampler
   u_whichTexture = gl.getUniformLocation(gl.program, 'u_whichTexture');
@@ -216,17 +227,29 @@ function initTextures() {
   imageWallGrass.onload = function () { sendTextureToGLSL(imageWallGrass, WALLGRASS); };
 
 
-   // Create the Wall Tree object
-   var imageWallTree = new Image();
-   if (!imageWallTree) {
-     console.log('Failed to create the imagewallTree object');
-     return false;
-   }
-   // Tell the browser to load an imagewallTree
-   imageWallTree.src = '../lib/textures/froppyTrees.png';
-   // Register the event handler to be called on loading an imageSKY
-   imageWallTree.onload = function () { sendTextureToGLSL(imageWallTree, WALLTREE); };
- 
+  // Create the Wall Tree object
+  var imageWallTree = new Image();
+  if (!imageWallTree) {
+    console.log('Failed to create the imagewallTree object');
+    return false;
+  }
+  // Tell the browser to load an imagewallTree
+  imageWallTree.src = '../lib/textures/froppyTrees.png';
+  // Register the event handler to be called on loading an imageSKY
+  imageWallTree.onload = function () { sendTextureToGLSL(imageWallTree, WALLTREE); };
+
+
+  // Create the Wall Grass object
+  var imageWallChar = new Image();
+  if (!imageWallChar) {
+    console.log('Failed to create the imageWallChar object');
+    return false;
+  }
+  // Tell the browser to load an imageWallChar
+  imageWallChar.src = '../lib/textures/froppyChar.png';
+  // Register the event handler to be called on loading an imageSKY
+  imageWallChar.onload = function () { sendTextureToGLSL(imageWallChar, WALLCHAR); };
+
   return true;
 }
 
@@ -282,6 +305,17 @@ function sendTextureToGLSL(image, txtCode) {
     // Set the texture image
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
     gl.uniform1i(u_wallTreeTexture, 3);
+
+  } else if (txtCode == WALLCHAR) {
+    // Enable texture unit4
+    gl.activeTexture(gl.TEXTURE4);
+    // Bind the texture object to the target
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    // Set the texture parameters
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    // Set the texture image
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
+    gl.uniform1i(u_wallCharTexture, 4);
   }
 
 }
@@ -375,19 +409,19 @@ var sky = new Cube();
 var gndCoordMatrix = new Matrix4();
 
 function initWorldFunc() {
-    // GROUND
-    ground.textureNum = COLOR;
-    ground.color = [0.86, 0.58, 0.47, 1];
-    ground.matrix.translate(0, -4, 25);
-    gndCoordMatrix.set(ground.matrix);
-    ground.matrix.scale(-100, 0, 100);
-    ground.matrix.translate(-0.45, 0, -0);
-  
-    // SKY
-    sky.textureNum = SKY;
-    sky.matrix.scale(-125, 80, 125);
-    sky.matrix.translate(-0.4, 0.25, 0.25);
-    sky.render();
+  // GROUND
+  ground.textureNum = COLOR;
+  ground.color = [0.86, 0.58, 0.47, 1];
+  ground.matrix.translate(0, -4, 25);
+  gndCoordMatrix.set(ground.matrix);
+  ground.matrix.scale(-100, 0, 100);
+  ground.matrix.translate(-0.45, 0, -0);
+
+  // SKY
+  sky.textureNum = SKY;
+  sky.matrix.scale(-125, 80, 125);
+  sky.matrix.translate(-0.4, 0.25, 0.25);
+  sky.render();
 }
 
 var viewMat = new Matrix4();
@@ -423,61 +457,64 @@ function renderAllShapes() {
 }
 
 var g_map = [
-  [1, 1, 1, 1,  1, 1, 1, 1,  1, 1, 1, 1,  1, 1, 1, 1,  1, 1, 1, 1,  1, 1, 1, 1,  1, 1, 1, 1,  1, 1, 1, 1], // left-most column
-  [2, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0],
-  [2, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0],
-  [2, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0],
-  [2, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0],
-  [2, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0],
-  [2, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0],
-  [2, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0],
-  [2, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0],
-  [2, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0],
-  [2, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0],
-  [2, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0],
-  [2, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0],
-  [2, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0],
-  [2, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0],
-  [2, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0],
-  [2, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0],
-  [2, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0],
-  [2, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0],
-  [2, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0],
-  [2, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0],
-  [2, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0],
-  [2, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0],
-  [2, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0],
-  [2, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0],
-  [2, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0],
-  [2, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0],
-  [2, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0],
-  [2, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0],
-  [2, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0],
-  [1, 1, 1, 1,  1, 1, 1, 1,  1, 1, 1, 1,  1, 1, 1, 1,  1, 1, 1, 1,  1, 1, 1, 1,  1, 1, 1, 1,  1, 1, 1, 1, ], // right-most column
+  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], // left-most column
+  [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+  [3, 0, 0, 0, 0, 0, 0, 0, 2, 1, 2, 1, 0, 0, 0, 0, 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+  [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 2, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0],
+  [2, 2, 2, 2, 2, 0, 0, 2, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 1, 2, 0, 1, 0, 0, 1, 0, 0, 0, 0],
+  [2, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+  [2, 1, 0, 0, 1, 0, 0, 1, 2, 1, 2, 1, 2, 0, 2, 0, 0, 0, 0, 0, 0, 2, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+  [2, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0],
+
+  [2, 0, 0, 0, 2, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 2, 0, 0, 2],
+  [2, 1, 0, 0, 0, 0, 0, 1, 0, 1, 2, 2, 0, 0, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 2],
+  [2, 0, 0, 0, 0, 0, 0, 1, 0, 2, 0, 0, 0, 0, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 2],
+  [2, 1, 0, 0, 2, 0, 0, 1, 0, 2, 0, 0, 0, 0, 0, 2, 1, 0, 0, 0, 0, 2, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1],
+  [2, 0, 0, 0, 1, 1, 1, 1, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+  [2, 1, 0, 0, 2, 2, 2, 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+  [2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+  [2, 1, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 0, 0, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+
+  [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [2, 2, 2, 2, 2, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [2, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [2, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [2, 0, 2, 0, 1, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [2, 1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+
+  [2, 0, 2, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 2, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0],
+  [2, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0],
+  [2, 2, 2, 2, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0],
+  [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 1, 0, 0, 0],
+  [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 0],
+  [2, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 1, 1, 1, 1, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+  [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,], // right-most column
 ];
 
 var body = new Cube();
 function createWorld() {
   for (x = 0; x < 31; x++) {
     for (y = 0; y < 31; y++) {
-      for (let c = 0; c < g_map[x][y]; c++) {
-        if (g_map[x][y] == 1) { // forest floor
+      for (let c = 1; c <= g_map[x][y]; c++) {
+        if (c == 1) {
           body.textureNum = WALLGRASS;
-        } else if ( g_map[x][y] == 2) { // trees on second row
-          if (c == 0) {
-            body.textureNum = WALLGRASS;
-          } else {
-            body.textureNum = WALLTREE;
-          }
-        } 
-        // body.textureNum = WALLTREE;
+        } else if (c == 2) {
+          body.textureNum = WALLTREE;
+        } else if (c == 3) {
+          body.textureNum = WALLCHAR;
+        }
         body.matrix.set(gndCoordMatrix);
         body.matrix.scale(3, 3, 3);
-        body.matrix.translate(-1 + x , c + 0.5, -15 + y);
+        body.matrix.translate(-1 + x, (c - 1) + 0.5, -15 + y);
         body.render();
       }
+     
     }
   }
-
 }
+
+
 
