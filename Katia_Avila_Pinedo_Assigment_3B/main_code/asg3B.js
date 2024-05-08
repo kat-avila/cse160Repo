@@ -329,7 +329,7 @@ function tick() {
     let fps = Math.round((frames * 1000) / (time - prevTime));
     prevTime = time;
     frames = 0;
-    // console.info('FPS: ', fps);
+    console.info('FPS: ', fps);
   }
 
 
@@ -348,6 +348,29 @@ function tick() {
 
 
 // Draw every shape that is supposed to be in the canvas
+var initWorld = false;
+var ground = new Cube();
+var sky = new Cube();
+var gndCoordMatrix = new Matrix4();
+
+function initWorldFunc() {
+    // GROUND
+    ground.textureNum = UV;
+    // ground.color = [0.92, 0.8, 0.6, 1.0];
+    ground.matrix.rotate(-20, 0, 1, 0);
+    ground.matrix.translate(0, -4, 25);
+    gndCoordMatrix.set(ground.matrix);
+    ground.matrix.scale(50, 0, 50);
+    ground.matrix.translate(-0.45, 0, -0);
+  
+    // SKY
+    sky.textureNum = SKY;
+    sky.matrix.rotate(-20, 0, 1, 0);
+    sky.matrix.scale(100, 100, 100);
+    sky.matrix.translate(-0.45, -0.3, 0.5);
+    sky.render();
+}
+
 function renderAllShapes() {
   // Clear <canvas>
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -366,28 +389,17 @@ function renderAllShapes() {
   projMat.setPerspective(90, canvas.width / canvas.height, .1, 100);
   gl.uniformMatrix4fv(u_ProjectionMatrix, false, projMat.elements);
 
-
+  if (!initWorld) { // first time rendering world
+    initWorldFunc();
+    initWorld = true;
+  }
   // GROUND
-  var ground = new Cube();
-  ground.textureNum = UV;
-  // ground.color = [0.92, 0.8, 0.6, 1.0];
-  ground.matrix.rotate(-20, 0, 1, 0);
-  ground.matrix.translate(0, -4, 25);
-  var gndCoordMatrix = new Matrix4(ground.matrix);
-  ground.matrix.scale(50, 0, 50);
-  ground.matrix.translate(-0.45, 0, -0);
   ground.render();
-
   // SKY
-  var sky = new Cube();
-  sky.textureNum = SKY;
-  sky.matrix.rotate(-20, 0, 1, 0);
-  sky.matrix.scale(100, 100, 100);
-  sky.matrix.translate(-0.45, -0.3, 0.5);
   sky.render();
 
   // MAP
-  createWorld(gndCoordMatrix);
+  createWorld();
 
 }
 
@@ -411,8 +423,8 @@ let g_mapLayout = [
   [1, 1, 1, 1, 1, 1, 1, 1], // righ-most column
 ];
 
-function createWorld(gndCoordMatrix) {
-  var body = new Cube();
+var body = new Cube();
+function createWorld() {
   for (x = 0; x < 7; x++) {
     for (y = 0; y < 7; y++) {
       for (let c = 0; c < g_map[x][y]; c++) {

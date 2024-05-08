@@ -100,7 +100,7 @@ class Camera {
         f.normalize(); 
 
         // rotate vector f by alpha degrees around the up vec
-        let alpha = 15;
+        let alpha = 5;
         let rotationMatrix = new Matrix4();
         rotationMatrix.setRotate(alpha, this.up.elements[0], this.up.elements[1], this.up.elements[2]);
 
@@ -121,7 +121,7 @@ class Camera {
           f.normalize();  
 
         // rotate vector f by alpha degrees around the up vec
-        let alpha = 15;
+        let alpha = 5;
         let rotationMatrix = new Matrix4();
         rotationMatrix.setRotate(-alpha, this.up.elements[0], this.up.elements[1], this.up.elements[2]);
 
