@@ -71,8 +71,7 @@ let camera = new Camera();
 let startX, startY, endX, endY;
 // mouse drag
 let isMouseDown = false;
-// minecraft
-let minecraft;
+
 
 
 
@@ -260,7 +259,7 @@ function addActionsForHTMLUI() {
     startY = evt.pageY;
     // console.log("start", startX, startY);  
   };
-  document.onmouseup = function () { isMouseDown = false; minecraft = true; };
+  document.onmouseup = function () { isMouseDown = false; };
   document.onmousemove = function (evt) {
     if (isMouseDown) {
       evt = evt || window;
@@ -293,8 +292,6 @@ function main() {
 }
 
 function keydown(ev) {
-  // ADD block with SHIFT click
-
   // WSAQE
   if (ev.keyCode == 87) { // W moveForward
     // console.log("w pressed");
