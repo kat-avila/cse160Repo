@@ -63,12 +63,16 @@ let u_ProjectionMatrix;
 let u_ViewMatrix;
 // Globals related to UI elments
 // tick time
+let prevTime = Date.now(), frames = 0;
 // var g_startTime = performance.now() / 1000.0;
 // var g_seconds = (performance.now() / 1000.0) - g_startTime;
 // camera
-let camera;
+let camera = new Camera();
+let startX, startY, endX, endY;
 // mouse drag
-let isMouseDown;
+let isMouseDown = false;
+// minecraft
+let minecraft;
 
 
 
@@ -165,31 +169,6 @@ function connectVariablesToGLSL() {
   gl.uniformMatrix4fv(u_ModelMatrix, false, indentityM.elements);
 }
 
-function addActionsForHTMLUI() {
-
-  document.onkeydown = keydown;
-  document.onmousedown = function (evt) {
-    isMouseDown = true,
-      evt = evt || window;
-    startX = evt.pageX;
-    startY = evt.pageY;
-    // console.log("start", startX, startY);  
-  };
-  document.onmouseup = function () { isMouseDown = false };
-  document.onmousemove = function (evt) {
-    if (isMouseDown) {
-      evt = evt || window;
-      endX = evt.pageX;
-      endY = evt.pageY;
-      if (endX > startX) { // pan right
-        camera.panLeft();
-      } else if (endX < startX) { // pan left
-        camera.panRight();
-      }
-    }
-  };
-}
-
 function initTextures() {
   // Create the GND object
   var imageGND = new Image();
@@ -272,10 +251,31 @@ function sendTextureToGLSL(image, txtCode) {
 
 }
 
-let startX, startY, endX, endY;
+function addActionsForHTMLUI() {
+  document.onkeydown = keydown;
+  document.onmousedown = function (evt) {
+    isMouseDown = true,
+      evt = evt || window;
+    startX = evt.pageX;
+    startY = evt.pageY;
+    // console.log("start", startX, startY);  
+  };
+  document.onmouseup = function () { isMouseDown = false; minecraft = true; };
+  document.onmousemove = function (evt) {
+    if (isMouseDown) {
+      evt = evt || window;
+      endX = evt.pageX;
+      endY = evt.pageY;
+      if (endX > startX) { // pan right
+        camera.panLeft();
+      } else if (endX < startX) { // pan left
+        camera.panRight();
+      }
+    }
+  };
+}
+
 function main() {
-  // instantaniate camera
-  camera = new Camera();
   // Set up canvas and gl variables
   setupWebGL();
   // Set up GLSL shade programs and connect glsl variables
@@ -293,6 +293,8 @@ function main() {
 }
 
 function keydown(ev) {
+  // ADD block with SHIFT click
+
   // WSAQE
   if (ev.keyCode == 87) { // W moveForward
     // console.log("w pressed");
@@ -316,9 +318,6 @@ function keydown(ev) {
 
 }
 
-
-
-let prevTime = Date.now(), frames = 0;
 function tick() {
   const time = Date.now();
   frames++;
@@ -329,20 +328,12 @@ function tick() {
     console.info('FPS: ', fps);
   }
 
-
-  // Update animation angles
-  // updateAnimationAngles();
-
   // Draw everthing
   renderAllShapes();
 
   // tell the browser to update again when it has time
   requestAnimationFrame(tick);
 }
-
-// function updateAnimationAngles() {
-// }
-
 
 // Draw every shape that is supposed to be in the canvas
 var initWorld = false;
