@@ -6,13 +6,10 @@ var VSHADER_SOURCE = `
   attribute vec2 a_UV;
   varying vec2 v_UV;
   uniform mat4 u_ModelMatrix;
-  uniform mat4 u_XRotateMatrix;
-  uniform mat4 u_YRotateMatrix;
-  uniform mat4 u_ZRotateMatrix;
   uniform mat4 u_ViewMatrix;
   uniform mat4 u_ProjectionMatrix;
   void main() { 
-    gl_Position = u_ProjectionMatrix * u_ViewMatrix * u_XRotateMatrix * u_YRotateMatrix * u_ZRotateMatrix * u_ModelMatrix * a_Position;
+    gl_Position = u_ProjectionMatrix * u_ViewMatrix * u_ModelMatrix * a_Position;
     v_UV = a_UV;
   }`
 // Fragment shader program
@@ -55,29 +52,21 @@ let UV = -1;
 let GND = 0;
 let SKY = 1;
 let WALLMUSH = 2;
-let a_UV;
-let u_FragColor;
-let u_ModelMatrix;
-let u_XRotateMatrix;
-let u_YRotateMatrix;
-let u_ZRotateMatrix;
 let u_gndTexture;
 let u_skyTexture;
 let u_whichTexture;
+// skin
+let a_UV;
+let u_FragColor;
+let u_ModelMatrix;
 let u_ProjectionMatrix;
 let u_ViewMatrix;
 // Globals related to UI elments
-let g_angleX = 25; // camera angle
-let g_angleY = 0; // camera angle
-let g_angleZ = 0; // camera angle
 // tick time
 // var g_startTime = performance.now() / 1000.0;
 // var g_seconds = (performance.now() / 1000.0) - g_startTime;
 // camera
 let camera;
-var g_eye = [0, 0, 3];
-var g_at = [0, 0, -100];
-var g_up = [0, 1, 0];
 // mouse drag
 let isMouseDown;
 
@@ -132,25 +121,7 @@ function connectVariablesToGLSL() {
     return;
   }
 
-  // Get the storage location of u_XRotateMatrix
-  u_XRotateMatrix = gl.getUniformLocation(gl.program, 'u_XRotateMatrix');
-  if (!u_XRotateMatrix) {
-    console.log('Failed to get the storage location of u_XRotateMatrix');
-    return;
-  }
-  // Get the storage location of u_YRotateMatrix
-  u_YRotateMatrix = gl.getUniformLocation(gl.program, 'u_YRotateMatrix');
-  if (!u_YRotateMatrix) {
-    console.log('Failed to get the storage location of u_YRotateMatrix');
-    return;
-  }
-  // Get the storage location of u_ZRotateMatrix
-  u_ZRotateMatrix = gl.getUniformLocation(gl.program, 'u_ZRotateMatrix');
-  if (!u_ZRotateMatrix) {
-    console.log('Failed to get the storage location of u_ZRotateMatrix');
-    return;
-  }
-  // Get the storage location of u_Sampler
+  // Get the storage location of u_gndTexture
   u_gndTexture = gl.getUniformLocation(gl.program, 'u_gndTexture');
   if (!u_gndTexture) {
     console.log('Failed to get the storage location of u_gndTexture');
@@ -195,16 +166,11 @@ function connectVariablesToGLSL() {
 }
 
 function addActionsForHTMLUI() {
-  document.getElementById('resetCam').onclick =function () {g_angleX = 25; g_angleY = 0; g_angleZ = 0;};
-  // Perspective Slider Events
-  document.getElementById('angleXslide').addEventListener('mousemove', function () { g_angleX = this.value; renderAllShapes(); })
-  document.getElementById('angleYslide').addEventListener('mousemove', function () { g_angleY = this.value; renderAllShapes(); })
-  document.getElementById('angleZslide').addEventListener('mousemove', function () { g_angleZ = this.value; renderAllShapes(); })
 
   document.onkeydown = keydown;
   document.onmousedown = function (evt) {
     isMouseDown = true,
-    evt = evt || window;
+      evt = evt || window;
     startX = evt.pageX;
     startY = evt.pageY;
     // console.log("start", startX, startY);  
@@ -215,9 +181,11 @@ function addActionsForHTMLUI() {
       evt = evt || window;
       endX = evt.pageX;
       endY = evt.pageY;
-      // console.log("end", startX, startY);
-      g_angleX += 0.025 * (startX - endX);
-      g_angleY += 0.02 * (startY - endY);
+      if (endX > startX) { // pan right
+        camera.panLeft();
+      } else if (endX < startX) { // pan left
+        camera.panRight();
+      }
     }
   };
 }
@@ -346,22 +314,6 @@ function keydown(ev) {
     camera.panRight();
   }
 
-  // set x and y and z camera view to arrowkey press
-  if (ev.keyCode == 39) { // right arrow
-    // console.log("w pressed");
-    g_angleX += 1;
-  } else if (ev.keyCode == 37) { // left arrow
-    // console.log("w pressed");
-    g_angleX -= 1;
-  } else if (ev.keyCode == 38) { // up arrow
-    // console.log("w pressed");
-    g_angleY -= 1;
-  } else if (ev.keyCode == 40) { // down arrow
-    // console.log("w pressed");
-    g_angleY += 1;
-  }
-
-  // console.log("eye", camera.eye.elements, "at", camera.at.elements, "up", camera.up.elements);
 
   renderAllShapes();
   // requestAnimationFrame(tick);
@@ -399,14 +351,6 @@ function tick() {
 function renderAllShapes() {
   // Clear <canvas>
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-  // Pass matrix to u_ModelMatrix attribute
-  var xAngMat = new Matrix4().rotate(g_angleX, 0, 1, 0);
-  gl.uniformMatrix4fv(u_XRotateMatrix, false, xAngMat.elements);
-  var yAngMat = new Matrix4().rotate(g_angleY, 1, 0, 0);
-  gl.uniformMatrix4fv(u_YRotateMatrix, false, yAngMat.elements);
-  var zAngMat = new Matrix4().rotate(g_angleZ, 0, 0, 1);
-  gl.uniformMatrix4fv(u_ZRotateMatrix, false, zAngMat.elements);
 
   // Pass the view matrix
   var viewMat = new Matrix4();
