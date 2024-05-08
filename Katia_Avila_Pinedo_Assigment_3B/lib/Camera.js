@@ -1,7 +1,7 @@
 
 class Camera {
     constructor() {
-        this.fov = 90.0; //float
+        this.fov = 30.0; //float
         this.eye = new Vector3([0, 0, 0]); // vec3
         this.at = new Vector3([0, 0, -1]);
         this.up = new Vector3([0, 1, 0]);

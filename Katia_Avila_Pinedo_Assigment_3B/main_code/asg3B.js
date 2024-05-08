@@ -27,7 +27,7 @@ var FSHADER_SOURCE = `
       gl_FragColor = u_FragColor;
 
     } else if (u_whichTexture == -1) { //uv
-      gl_FragColor = vec4(v_UV, 1.0,1.0);
+      gl_FragColor = vec4(v_UV, 0,0.5);
 
     } else if (u_whichTexture == 0){ //use Ground Texture
       gl_FragColor = texture2D(u_gndTexture, v_UV);
@@ -41,9 +41,7 @@ var FSHADER_SOURCE = `
     }  else if (u_whichTexture == 3) {
       gl_FragColor = texture2D(u_wallTreeTexture, v_UV);
 
-    } else {
-      gl_FragColor = vec4(1, 1, 1, 1);
-    }
+    } 
   }`
 
 // Define global variablesm, UI elements or shader variables
@@ -201,8 +199,7 @@ function initTextures() {
     return false;
   }
   // Tell the browser to load an imageSKY
-  // imageSKY.src = '../lib/textures/froppySky.png';
-  imageSKY.src = '../lib/textures/uvCoords.png';
+  imageSKY.src = '../lib/textures/froppySky.png';
 
   // Register the event handler to be called on loading an imageSKY
   imageSKY.onload = function () { sendTextureToGLSL(imageSKY, SKY); };
@@ -379,8 +376,8 @@ var gndCoordMatrix = new Matrix4();
 
 function initWorldFunc() {
     // GROUND
-    ground.textureNum = UV;
-    ground.matrix.rotate(-20, 0, 1, 0);
+    ground.textureNum = COLOR;
+    ground.color = [0.86, 0.58, 0.47, 1];
     ground.matrix.translate(0, -4, 25);
     gndCoordMatrix.set(ground.matrix);
     ground.matrix.scale(-100, 0, 100);
@@ -388,9 +385,8 @@ function initWorldFunc() {
   
     // SKY
     sky.textureNum = SKY;
-    sky.matrix.rotate(-20, 0, 1, 0);
-    sky.matrix.scale(-125, 80, 105);
-    sky.matrix.translate(-0.5, -0.3, 0.25);
+    sky.matrix.scale(-125, 80, 125);
+    sky.matrix.translate(-0.4, 0.25, 0.25);
     sky.render();
 }
 
@@ -477,7 +473,7 @@ function createWorld() {
         // body.textureNum = WALLTREE;
         body.matrix.set(gndCoordMatrix);
         body.matrix.scale(3, 3, 3);
-        body.matrix.translate(-18 + x , c, -32 + y);
+        body.matrix.translate(-1 + x , c + 0.5, -15 + y);
         body.render();
       }
     }
