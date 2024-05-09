@@ -333,11 +333,16 @@ function addActionsForHTMLUI() {
 
     }
   };
-  document.getElementById("resetTime").onclick = function () {
+  document.getElementById("resetGame").onclick = function () {
     endTimeVal = 0
     startTimeVal = null;
+    g_moveRotate = 0;
+    g_moveSides = 0;
+    g_moveUps = 0;
+    camera.eye.elements.set([0, 0, 0]); // vec3
+    camera.at.elements.set([0, 0, -1]);
+    camera.up.elements.set([0, 1, 0]);
     document.getElementById("userTime").textContent = "TIMER RESET";
-
   };
 
   document.onkeydown = keydown;
@@ -354,10 +359,13 @@ function addActionsForHTMLUI() {
       evt = evt || window;
       endX = evt.pageX;
       endY = evt.pageY;
-      if (endX > startX) { // pan right
+      if (endX > startX) { // pan left
         camera.panLeft();
-      } else if (endX < startX) { // pan left
+        g_moveRotate = g_moveRotate + 5;
+      } else if (endX < startX) { // pan right
         camera.panRight();
+        g_moveRotate = g_moveRotate - 5;
+
       }
     }
   };
@@ -387,6 +395,9 @@ function timerBegin() {
   }
 }
 
+let g_moveSides = 0;
+let g_moveUps = 0;
+let g_moveRotate = 0;
 function keydown(ev) {
   // WSAQE
   if (ev.keyCode == 87) { // W moveForward
@@ -403,8 +414,18 @@ function keydown(ev) {
     camera.moveRight();
   } else if (ev.keyCode == 81) { // Q pan left
     camera.panLeft();
+    g_moveRotate = g_moveRotate + 5;
+
   } else if (ev.keyCode == 69) { // E pan right
     camera.panRight();
+    g_moveRotate = g_moveRotate - 5;
+
+  }
+
+  if (ev.keycode == 37) {
+    g_moveSides = g_moveSides - 0.1;
+    console.log(g_moveSides);
+    requestAnimationFrame(tick);
   }
 
 }
@@ -416,7 +437,7 @@ function tick() {
     let fps = Math.round((frames * 1000) / (time - prevTime));
     prevTime = time;
     frames = 0;
-    console.info('FPS: ', fps);
+    // console.info('FPS: ', fps);
   }
 
   // Draw everthing
@@ -445,7 +466,6 @@ function initWorldFunc() {
   sky.textureNum = SKY;
   sky.matrix.scale(-125, 80, 125);
   sky.matrix.translate(-0.4, 0.25, 0.25);
-  sky.render();
 }
 
 var viewMat = new Matrix4();
@@ -477,6 +497,24 @@ function renderAllShapes() {
 
   // MAP
   createWorld();
+
+  // TORSO
+  var torso = new Cube();
+  torso.color = [0.92, 0.8, 0.6, 1.0];
+  torso.matrix.translate(camera.at.elements[0], camera.at.elements[1] , camera.at.elements[2]);
+  torso.matrix.rotate(g_moveRotate, 0, 1, 0);
+  var torsoCoordMatrix = new Matrix4(torso.matrix);
+  torso.matrix.scale(0.5, 0.8, -0.1);
+  torso.render();
+
+  // left pec
+  var pecL = new Cube();
+  pecL.color = [0.95, 0.87, 0.76, 1.0];
+  pecL.matrix.set(torsoCoordMatrix);
+  pecL.matrix.translate(0.0, 0.3, -0.05);
+  pecL.matrix.scale(0.38, 0.3, 0.15);
+  var leftPecMatrix = new Matrix4(pecL.matrix);
+  pecL.render();
 
 }
 
@@ -541,9 +579,6 @@ function createWorld() {
           body.textureNum = WALLTREE;
         } 
 
-        
-        
-        
         body.matrix.set(gndCoordMatrix);
         body.matrix.scale(3, 3, 3);
         body.matrix.translate(-1 + x, (c - 1) + 0.5, -15 + y);

@@ -6,8 +6,11 @@ class Camera {
         this.at = new Vector3([0, 0, -1]);
         this.up = new Vector3([0, 1, 0]);
         this.viewMat = new Matrix4();
-        this.viewMat.setLookAt(this.eye.elements[0], this.eye.elements[1], this.eye.elements[2], this.at.elements[0], this.at.elements[1], this.at.elements[2], this.up.elements[0], this.up.elements[1], this.up.elements[2])
-
+        this.viewMat.setLookAt(
+            this.eye.elements[0], this.eye.elements[1], this.eye.elements[2], 
+            this.at.elements[0], this.at.elements[1], this.at.elements[2], 
+            this.up.elements[0], this.up.elements[1], this.up.elements[2]
+        );
         this.projectionMat = new Matrix4();
         this.projectionMat.setPerspective(this.fov, webgl.width / webgl.height, 0.1, 1000);
 
