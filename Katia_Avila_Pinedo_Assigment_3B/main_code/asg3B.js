@@ -17,7 +17,6 @@ var FSHADER_SOURCE = `
   precision mediump float;
   varying vec2 v_UV;
   uniform vec4 u_FragColor;  // uniform
-  uniform sampler2D u_gndTexture;
   uniform sampler2D u_skyTexture;
   uniform sampler2D u_wallGrassTexture;
   uniform sampler2D u_wallTreeTexture;
@@ -32,10 +31,7 @@ var FSHADER_SOURCE = `
     } else if (u_whichTexture == -1) { //uv
       gl_FragColor = vec4(v_UV, 0,0.5);
 
-    } else if (u_whichTexture == 0){ //use Ground Texture
-      gl_FragColor = texture2D(u_gndTexture, v_UV);
-
-    }  else if (u_whichTexture == 1){ //use Sky Texture
+    } else if (u_whichTexture == 1){ //use Sky Texture
       gl_FragColor = texture2D(u_skyTexture, v_UV);
 
     } else if (u_whichTexture == 2){ //use Wall Grass Texture
@@ -62,14 +58,12 @@ let a_Position;
 // textures
 let COLOR = -2;
 let UV = -1;
-let GND = 0;
 let SKY = 1;
 let WALLGRASS = 2;
 let WALLTREE = 3;
 let WALLCHAR = 4;
 let KING = 5;
 let RICK = 6;
-let u_gndTexture;
 let u_skyTexture;
 let u_wallGrassTexture;
 let u_wallTreeTexture;
@@ -146,12 +140,6 @@ function connectVariablesToGLSL() {
     return;
   }
 
-  // Get the storage location of u_gndTexture
-  u_gndTexture = gl.getUniformLocation(gl.program, 'u_gndTexture');
-  if (!u_gndTexture) {
-    console.log('Failed to get the storage location of u_gndTexture');
-    return false;
-  }
   // Get the storage location of u_skyTexture
   u_skyTexture = gl.getUniformLocation(gl.program, 'u_skyTexture');
   if (!u_skyTexture) {
@@ -219,16 +207,6 @@ function connectVariablesToGLSL() {
 }
 
 function initTextures() {
-  // Create the GND object
-  var imageGND = new Image();
-  if (!imageGND) {
-    console.log('Failed to create the imageGND object');
-    return false;
-  }
-  // Tell the browser to load an imageGND
-  imageGND.src = '../lib/textures/froppyGND.jpg';
-  // Register the event handler to be called on loading an imageGND
-  imageGND.onload = function () { sendTextureToGLSL(imageGND, GND); };
 
   // Create the SKY object
   var imageSKY = new Image();
@@ -310,18 +288,7 @@ function sendTextureToGLSL(image, txtCode) {
 
   gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1); // Flip the image's y axis
 
-  if (txtCode == GND) {
-    // Enable texture unit0
-    gl.activeTexture(gl.TEXTURE0);
-    // Bind the texture object to the target
-    gl.bindTexture(gl.TEXTURE_2D, texture);
-    // Set the texture parameters
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-    // Set the texture image
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
-    gl.uniform1i(u_gndTexture, 0);
-
-  } else if (txtCode == SKY) {
+ if (txtCode == SKY) {
     // Enable texture unit1
     gl.activeTexture(gl.TEXTURE1);
     // Bind the texture object to the target
@@ -403,7 +370,7 @@ function addActionsForHTMLUI() {
       charSelect = KING;
       document.getElementById("charName").textContent = "You are playing as KING TOMMY";
     }
-    console.log(charSelect);
+    // console.log(charSelect);
   };
 
   document.getElementById("endTime").onclick = function () {
@@ -519,7 +486,7 @@ function tick() {
     let fps = Math.round((frames * 1000) / (time - prevTime));
     prevTime = time;
     frames = 0;
-    // console.info('FPS: ', fps);
+    console.info('FPS: ', fps);
   }
 
   // Draw everthing
