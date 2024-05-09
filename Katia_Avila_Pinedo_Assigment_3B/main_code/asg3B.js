@@ -23,6 +23,7 @@ var FSHADER_SOURCE = `
   uniform sampler2D u_wallTreeTexture;
   uniform sampler2D u_wallCharTexture;
   uniform sampler2D u_kingTexture;
+  uniform sampler2D u_rickTexture;
   uniform int u_whichTexture;
   void main() {
     if (u_whichTexture == -2) { // color
@@ -48,6 +49,9 @@ var FSHADER_SOURCE = `
 
     } else if (u_whichTexture == 5) {
       gl_FragColor = texture2D(u_kingTexture, v_UV);
+
+    } else if (u_whichTexture == 6) {
+      gl_FragColor = texture2D(u_rickTexture, v_UV);
     }
   }`
 
@@ -64,12 +68,14 @@ let WALLGRASS = 2;
 let WALLTREE = 3;
 let WALLCHAR = 4;
 let KING = 5;
+let RICK =6;
 let u_gndTexture;
 let u_skyTexture;
 let u_wallGrassTexture;
 let u_wallTreeTexture;
 let u_wallCharTexture;
 let u_kingTexture;
+let u_rickTexture;
 let u_whichTexture;
 // skin
 let a_UV;
@@ -179,6 +185,13 @@ function connectVariablesToGLSL() {
     return false;
   }
 
+    // Get the storage location of   u_rickTexture
+    u_rickTexture = gl.getUniformLocation(gl.program, 'u_rickTexture');
+    if (!u_rickTexture) {
+      console.log('Failed to get the storage location of u_rickTexture');
+      return false;
+    }
+
   // Get the storage location of u_Sampler
   u_whichTexture = gl.getUniformLocation(gl.program, 'u_whichTexture');
   if (!u_whichTexture) {
@@ -274,6 +287,17 @@ function initTextures() {
     // Register the event handler to be called on loading an imageKing
     imageKing.onload = function () { sendTextureToGLSL(imageKing, KING); };
   
+       // Create the Rick object
+       var imageRick = new Image();
+       if (!imageRick) {
+         console.log('Failed to create the imageRick object');
+         return false;
+       }
+       // Tell the browser to load an imageRick
+       imageRick.src = '../lib/textures/acid2.png';
+       // Register the event handler to be called on loading an imageRick
+       imageRick.onload = function () { sendTextureToGLSL(imageRick, RICK); };
+     
   return true;
 }
 
@@ -350,14 +374,36 @@ function sendTextureToGLSL(image, txtCode) {
     // Set the texture image
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
     gl.uniform1i(u_kingTexture, 5);
+  } else if (txtCode == RICK) {
+    // Enable texture unit6
+    gl.activeTexture(gl.TEXTURE6);
+    // Bind the texture object to the target
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    // Set the texture parameters
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    // Set the texture image
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
+    gl.uniform1i(u_rickTexture, 6);
   }
 
 }
 
 var startTimeVal = null;
 var endTimeVal;
+var charSelect = RICK; // default king, 1 rick
 
 function addActionsForHTMLUI() {
+  document.getElementById("changeChar").onclick = function () {
+    if (charSelect == KING) { // at king swtich to rick
+      charSelect = RICK;
+      document.getElementById("charName").textContent = "You are playing as RICK SANCHEZ";
+    } else if (charSelect == RICK) { // at rick switch to king
+      charSelect = KING;
+      document.getElementById("charName").textContent = "You are playing as KING TOMMY";
+    }
+    console.log(charSelect);
+  };
+
   document.getElementById("endTime").onclick = function () {
     endTimeVal =  Date.now();
     if (startTimeVal) {
@@ -534,7 +580,7 @@ function renderAllShapes() {
 
   // TORSO
   var torso = new Cube();
-  torso.textureNum = KING;
+  torso.textureNum = charSelect;
   torso.matrix.translate(camera.at.elements[0], camera.at.elements[1] , camera.at.elements[2]);
   torso.matrix.rotate(g_moveRotate, 0, 1, 0);
   torso.matrix.scale(0.4, 0.4, 0.4);
