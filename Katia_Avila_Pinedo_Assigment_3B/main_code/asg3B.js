@@ -22,6 +22,7 @@ var FSHADER_SOURCE = `
   uniform sampler2D u_wallGrassTexture;
   uniform sampler2D u_wallTreeTexture;
   uniform sampler2D u_wallCharTexture;
+  uniform sampler2D u_kingTexture;
   uniform int u_whichTexture;
   void main() {
     if (u_whichTexture == -2) { // color
@@ -41,9 +42,13 @@ var FSHADER_SOURCE = `
 
     }  else if (u_whichTexture == 3) { // wall tree
       gl_FragColor = texture2D(u_wallTreeTexture, v_UV);
+
     } else if (u_whichTexture == 4) { // wall char
       gl_FragColor = texture2D(u_wallCharTexture, v_UV);
-    } 
+
+    } else if (u_whichTexture == 5) {
+      gl_FragColor = texture2D(u_kingTexture, v_UV);
+    }
   }`
 
 // Define global variablesm, UI elements or shader variables
@@ -58,11 +63,13 @@ let SKY = 1;
 let WALLGRASS = 2;
 let WALLTREE = 3;
 let WALLCHAR = 4;
+let KING = 5;
 let u_gndTexture;
 let u_skyTexture;
 let u_wallGrassTexture;
 let u_wallTreeTexture;
 let u_wallCharTexture;
+let u_kingTexture;
 let u_whichTexture;
 // skin
 let a_UV;
@@ -164,6 +171,13 @@ function connectVariablesToGLSL() {
     console.log('Failed to get the storage location of u_wallCharTexture');
     return false;
   }
+  
+  // Get the storage location of   u_kingTexture
+  u_kingTexture = gl.getUniformLocation(gl.program, 'u_kingTexture');
+  if (!u_kingTexture) {
+    console.log('Failed to get the storage location of u_kingTexture');
+    return false;
+  }
 
   // Get the storage location of u_Sampler
   u_whichTexture = gl.getUniformLocation(gl.program, 'u_whichTexture');
@@ -238,7 +252,6 @@ function initTextures() {
   // Register the event handler to be called on loading an imageSKY
   imageWallTree.onload = function () { sendTextureToGLSL(imageWallTree, WALLTREE); };
 
-
   // Create the Wall Grass object
   var imageWallChar = new Image();
   if (!imageWallChar) {
@@ -250,6 +263,17 @@ function initTextures() {
   // Register the event handler to be called on loading an imageSKY
   imageWallChar.onload = function () { sendTextureToGLSL(imageWallChar, WALLCHAR); };
 
+    // Create the King object
+    var imageKing = new Image();
+    if (!imageKing) {
+      console.log('Failed to create the imageKing object');
+      return false;
+    }
+    // Tell the browser to load an imageKing
+    imageKing.src = '../lib/textures/froppyKing.png';
+    // Register the event handler to be called on loading an imageKing
+    imageKing.onload = function () { sendTextureToGLSL(imageKing, KING); };
+  
   return true;
 }
 
@@ -316,6 +340,16 @@ function sendTextureToGLSL(image, txtCode) {
     // Set the texture image
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
     gl.uniform1i(u_wallCharTexture, 4);
+  }  else if (txtCode == KING) {
+    // Enable texture unit5
+    gl.activeTexture(gl.TEXTURE5);
+    // Bind the texture object to the target
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    // Set the texture parameters
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    // Set the texture image
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
+    gl.uniform1i(u_kingTexture, 5);
   }
 
 }
@@ -361,10 +395,10 @@ function addActionsForHTMLUI() {
       endY = evt.pageY;
       if (endX > startX) { // pan left
         camera.panLeft();
-        g_moveRotate = g_moveRotate + 5;
+        g_moveRotate = g_moveRotate + 8;
       } else if (endX < startX) { // pan right
         camera.panRight();
-        g_moveRotate = g_moveRotate - 5;
+        g_moveRotate = g_moveRotate - 8;
 
       }
     }
@@ -414,11 +448,11 @@ function keydown(ev) {
     camera.moveRight();
   } else if (ev.keyCode == 81) { // Q pan left
     camera.panLeft();
-    g_moveRotate = g_moveRotate + 5;
+    g_moveRotate = g_moveRotate + 8;
 
   } else if (ev.keyCode == 69) { // E pan right
     camera.panRight();
-    g_moveRotate = g_moveRotate - 5;
+    g_moveRotate = g_moveRotate - 8;
 
   }
 
@@ -500,21 +534,13 @@ function renderAllShapes() {
 
   // TORSO
   var torso = new Cube();
-  torso.color = [0.92, 0.8, 0.6, 1.0];
+  torso.textureNum = KING;
   torso.matrix.translate(camera.at.elements[0], camera.at.elements[1] , camera.at.elements[2]);
   torso.matrix.rotate(g_moveRotate, 0, 1, 0);
-  var torsoCoordMatrix = new Matrix4(torso.matrix);
-  torso.matrix.scale(0.5, 0.8, -0.1);
+  torso.matrix.scale(0.4, 0.4, 0.4);
+  torso.matrix.translate(0.2, -0.5, 0);
   torso.render();
 
-  // left pec
-  var pecL = new Cube();
-  pecL.color = [0.95, 0.87, 0.76, 1.0];
-  pecL.matrix.set(torsoCoordMatrix);
-  pecL.matrix.translate(0.0, 0.3, -0.05);
-  pecL.matrix.scale(0.38, 0.3, 0.15);
-  var leftPecMatrix = new Matrix4(pecL.matrix);
-  pecL.render();
 
 }
 
