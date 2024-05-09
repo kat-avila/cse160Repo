@@ -68,7 +68,7 @@ let WALLGRASS = 2;
 let WALLTREE = 3;
 let WALLCHAR = 4;
 let KING = 5;
-let RICK =6;
+let RICK = 6;
 let u_gndTexture;
 let u_skyTexture;
 let u_wallGrassTexture;
@@ -177,7 +177,7 @@ function connectVariablesToGLSL() {
     console.log('Failed to get the storage location of u_wallCharTexture');
     return false;
   }
-  
+
   // Get the storage location of   u_kingTexture
   u_kingTexture = gl.getUniformLocation(gl.program, 'u_kingTexture');
   if (!u_kingTexture) {
@@ -185,12 +185,12 @@ function connectVariablesToGLSL() {
     return false;
   }
 
-    // Get the storage location of   u_rickTexture
-    u_rickTexture = gl.getUniformLocation(gl.program, 'u_rickTexture');
-    if (!u_rickTexture) {
-      console.log('Failed to get the storage location of u_rickTexture');
-      return false;
-    }
+  // Get the storage location of   u_rickTexture
+  u_rickTexture = gl.getUniformLocation(gl.program, 'u_rickTexture');
+  if (!u_rickTexture) {
+    console.log('Failed to get the storage location of u_rickTexture');
+    return false;
+  }
 
   // Get the storage location of u_Sampler
   u_whichTexture = gl.getUniformLocation(gl.program, 'u_whichTexture');
@@ -276,28 +276,28 @@ function initTextures() {
   // Register the event handler to be called on loading an imageSKY
   imageWallChar.onload = function () { sendTextureToGLSL(imageWallChar, WALLCHAR); };
 
-    // Create the King object
-    var imageKing = new Image();
-    if (!imageKing) {
-      console.log('Failed to create the imageKing object');
-      return false;
-    }
-    // Tell the browser to load an imageKing
-    imageKing.src = '../lib/textures/froppyKing.png';
-    // Register the event handler to be called on loading an imageKing
-    imageKing.onload = function () { sendTextureToGLSL(imageKing, KING); };
-  
-       // Create the Rick object
-       var imageRick = new Image();
-       if (!imageRick) {
-         console.log('Failed to create the imageRick object');
-         return false;
-       }
-       // Tell the browser to load an imageRick
-       imageRick.src = '../lib/textures/acid2.png';
-       // Register the event handler to be called on loading an imageRick
-       imageRick.onload = function () { sendTextureToGLSL(imageRick, RICK); };
-     
+  // Create the King object
+  var imageKing = new Image();
+  if (!imageKing) {
+    console.log('Failed to create the imageKing object');
+    return false;
+  }
+  // Tell the browser to load an imageKing
+  imageKing.src = '../lib/textures/froppyKing.png';
+  // Register the event handler to be called on loading an imageKing
+  imageKing.onload = function () { sendTextureToGLSL(imageKing, KING); };
+
+  // Create the Rick object
+  var imageRick = new Image();
+  if (!imageRick) {
+    console.log('Failed to create the imageRick object');
+    return false;
+  }
+  // Tell the browser to load an imageRick
+  imageRick.src = '../lib/textures/rick.png';
+  // Register the event handler to be called on loading an imageRick
+  imageRick.onload = function () { sendTextureToGLSL(imageRick, RICK); };
+
   return true;
 }
 
@@ -364,7 +364,8 @@ function sendTextureToGLSL(image, txtCode) {
     // Set the texture image
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
     gl.uniform1i(u_wallCharTexture, 4);
-  }  else if (txtCode == KING) {
+
+  } else if (txtCode == KING) {
     // Enable texture unit5
     gl.activeTexture(gl.TEXTURE5);
     // Bind the texture object to the target
@@ -374,6 +375,7 @@ function sendTextureToGLSL(image, txtCode) {
     // Set the texture image
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
     gl.uniform1i(u_kingTexture, 5);
+
   } else if (txtCode == RICK) {
     // Enable texture unit6
     gl.activeTexture(gl.TEXTURE6);
@@ -382,7 +384,7 @@ function sendTextureToGLSL(image, txtCode) {
     // Set the texture parameters
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
     // Set the texture image
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
     gl.uniform1i(u_rickTexture, 6);
   }
 
@@ -390,7 +392,7 @@ function sendTextureToGLSL(image, txtCode) {
 
 var startTimeVal = null;
 var endTimeVal;
-var charSelect = RICK; // default king, 1 rick
+var charSelect = KING; // default king, 1 rick
 
 function addActionsForHTMLUI() {
   document.getElementById("changeChar").onclick = function () {
@@ -405,9 +407,9 @@ function addActionsForHTMLUI() {
   };
 
   document.getElementById("endTime").onclick = function () {
-    endTimeVal =  Date.now();
+    endTimeVal = Date.now();
     if (startTimeVal) {
-      document.getElementById("userTime").textContent = "Maze Run Time: " + (endTimeVal - startTimeVal)/1000;
+      document.getElementById("userTime").textContent = "Maze Run Time: " + (endTimeVal - startTimeVal) / 1000;
     } else {
       document.getElementById("userTime").textContent = "UNABLE TO DETERMINE START TIME";
 
@@ -470,7 +472,7 @@ function main() {
 
 function timerBegin() {
   if (!startTimeVal) {
-    startTimeVal =  Date.now();
+    startTimeVal = Date.now();
     document.getElementById("userTime").textContent = "Running Timer.... ";
   }
 }
@@ -581,7 +583,7 @@ function renderAllShapes() {
   // TORSO
   var torso = new Cube();
   torso.textureNum = charSelect;
-  torso.matrix.translate(camera.at.elements[0], camera.at.elements[1] , camera.at.elements[2]);
+  torso.matrix.translate(camera.at.elements[0], camera.at.elements[1], camera.at.elements[2]);
   torso.matrix.rotate(g_moveRotate, 0, 1, 0);
   torso.matrix.scale(0.4, 0.4, 0.4);
   torso.matrix.translate(0.2, -0.5, 0);
@@ -634,29 +636,29 @@ function createWorld() {
     for (y = 0; y < 32; y++) {
       for (let c = 1; c <= g_map[x][y]; c++) {
         if (g_map[x][y] == 4) {
-          if (c==4) {
+          if (c == 4) {
             body.textureNum = WALLCHAR;
-          } else if (c ==1) {
+          } else if (c == 1) {
             body.textureNum = WALLGRASS;
           } else {
             body.textureNum = COLOR;
             body.color = [0.96, 0.84, 0.2, 1];
           }
-         
+
         } else if (g_map[x][y] == 3) {
           body.textureNum = WALLCHAR;
         } else if (c == 1) {
           body.textureNum = WALLGRASS;
         } else if (c == 2) {
           body.textureNum = WALLTREE;
-        } 
+        }
 
         body.matrix.set(gndCoordMatrix);
         body.matrix.scale(3, 3, 3);
         body.matrix.translate(-1 + x, (c - 1) + 0.5, -15 + y);
         body.render();
       }
-     
+
     }
   }
 }
