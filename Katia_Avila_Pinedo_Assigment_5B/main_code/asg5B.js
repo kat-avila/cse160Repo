@@ -34,7 +34,7 @@ function main() {
     // CREATE SCENE
     const scene = new THREE.Scene();
     // add lighting, directional
-    const color = 0x00FF00;
+    const color = 0xFFFFFF;
     const intensity = 0.5;
     const light = new THREE.DirectionalLight(color, intensity);
     scene.add(light);
@@ -43,8 +43,8 @@ function main() {
     const color1 = 0xFFC0CB;
     const intensity1 = 1.5;
     const light1 = new THREE.DirectionalLight(color1, intensity1);
-    light1.position.set(20, 25, 0);
-    light1.target.position.set(-5, 18, -20);
+    light1.position.set(20, 45, 0);
+    light1.target.position.set(-5, 28, -20);
     scene.add(light1);
     scene.add(light1.target);
 
@@ -114,18 +114,18 @@ function main() {
     // MAKE SKYBOX
     const loaderSkybox = new THREE.CubeTextureLoader();
     const textureSkybox = loaderSkybox.load([
-       '../lib/galaxy.jpg',
-       '../lib/galaxy.jpg',
-       '../lib/galaxy.jpg',
-       '../lib/galaxy.jpg',
-       '../lib/galaxy.jpg',
-       '../lib/galaxy.jpg'
+        '../lib/galaxy.jpg',
+        '../lib/galaxy.jpg',
+        '../lib/galaxy.jpg',
+        '../lib/galaxy.jpg',
+        '../lib/galaxy.jpg',
+        '../lib/galaxy.jpg'
     ]);
     scene.background = textureSkybox;
 
 
     // MAKE PLANE
-    const planeSize = 40;
+    const planeSize = 80;
     const loader = new THREE.TextureLoader();
     const texture = loader.load('../lib/fallinginportal.png');
     texture.magFilter = THREE.NearestFilter;
@@ -143,119 +143,125 @@ function main() {
     // LOAD OBJ 3D MODEL
     const objLoader = new OBJLoader();
     objLoader.load('../lib/model/ufo 2.obj', (root) => {
-        root.position.set(0, 10, 0);
+        root.position.set(0, 30, 0);
         scene.add(root);
     });
 
     // CREATE RING 1
-    // var torusGeo1 = new THREE.TorusGeometry(13, 0.5, 25, 100)
-    // const materialTorus1 = new THREE.MeshPhongMaterial({
-    //     color: "#ffff00",
-    //     side: THREE.DoubleSide,
-    // });
-    // var torusMesh1 = new THREE.Mesh(torusGeo1, materialTorus1);
-    // scene.add(torusMesh1);
+    var torusGeo1 = new THREE.TorusGeometry(30, 0.5, 25, 100)
+    const materialTorus1 = new THREE.MeshPhongMaterial({
+        color: "#ffff00",
+        side: THREE.DoubleSide,
+    });
+    var torusMesh1 = new THREE.Mesh(torusGeo1, materialTorus1);
+    torusMesh1.position.set(-20, 16, 10);
+    scene.add(torusMesh1);
 
     // CREATE RING 2
-    // var torusGeo2 = new THREE.TorusGeometry(20, 0.5, 25, 100)
-    // const materialTorus2 = new THREE.MeshPhongMaterial({
-    //     color: "#34ff14",
-    //     side: THREE.DoubleSide,
-    // });
-    // var torusMesh2 = new THREE.Mesh(torusGeo2, materialTorus2);
-    // scene.add(torusMesh2);
+    var torusGeo2 = new THREE.TorusGeometry(30, 0.5, 25, 100)
+    const materialTorus2 = new THREE.MeshPhongMaterial({
+        color: "#34ff14",
+        side: THREE.DoubleSide,
+    });
+    var torusMesh2 = new THREE.Mesh(torusGeo2, materialTorus2);
+    torusMesh2.position.set(20, 0, 5);
+    scene.add(torusMesh2);
 
     // CREATE CYLINDER
-    // // pickle rick
-    // const geometryCyl1 = new THREE.CylinderGeometry(1.5, 4, 10, 32);
-    // const materialCyl1 = new THREE.MeshBasicMaterial({ map: loadColorTexture("../lib/pickleRick.jpg") });
-    // const cylinder1 = new THREE.Mesh(geometryCyl1, materialCyl1);
-    // cylinder1.position.set(-15, 5, 15);
-    // scene.add(cylinder1);
-    // // nimbus
-    // const geometryCyl2 = new THREE.CylinderGeometry(1.5, 4, 15, 32);
-    // const materialCyl2 = new THREE.MeshBasicMaterial({ map: loadColorTexture("../lib/nimbus.jpg") });
-    // const cylinder2 = new THREE.Mesh(geometryCyl2, materialCyl2);;
-    // cylinder2.position.set(12, 7.5, -15);
-    // scene.add(cylinder2);
-    // // bugs
-    // const geometryCyl3 = new THREE.CylinderGeometry(2, 2, 8, 32);
-    // const materialCyl3 = new THREE.MeshBasicMaterial({ map: loadColorTexture("../lib/bugs.jpg") });
-    // const cylinder3 = new THREE.Mesh(geometryCyl3, materialCyl3);;
-    // cylinder3.position.set(-6, 4, 6);
-    // scene.add(cylinder3);
+    // pickle rick
+    const geometryCyl1 = new THREE.CylinderGeometry(1.5, 4, 10, 32);
+    const materialCyl1 = new THREE.MeshBasicMaterial({ map: loadColorTexture("../lib/pickleRick.jpg") });
+    const cylinder1 = new THREE.Mesh(geometryCyl1, materialCyl1);
+    cylinder1.position.set(-20, 5, 15);
+    scene.add(cylinder1);
+    // nimbus
+    const geometryCyl2 = new THREE.CylinderGeometry(1.5, 4, 15, 32);
+    const materialCyl2 = new THREE.MeshBasicMaterial({ map: loadColorTexture("../lib/nimbus.jpg") });
+    const cylinder2 = new THREE.Mesh(geometryCyl2, materialCyl2);;
+    cylinder2.position.set(30, 7.5, -35);
+    scene.add(cylinder2);
+    // bugs
+    const geometryCyl3 = new THREE.CylinderGeometry(2, 2, 8, 32);
+    const materialCyl3 = new THREE.MeshBasicMaterial({ map: loadColorTexture("../lib/bugs.jpg") });
+    const cylinder3 = new THREE.Mesh(geometryCyl3, materialCyl3);;
+    cylinder3.position.set(-5, 4, 30);
+    scene.add(cylinder3);
 
     // CREATE SPHERE
-    // // me seeks
-    // const sphereRadius1 = 2;
-    // const sphereWidthDivisions1 = 32;
-    // const sphereHeightDivisions1 = 16;
-    // const sphereGeo1 = new THREE.SphereGeometry(sphereRadius1, sphereWidthDivisions1, sphereHeightDivisions1);
-    // const sphereMat1 = new THREE.MeshPhongMaterial({ map: loadColorTexture("../lib/meSeeks.jpg") });
-    // const sphere1 = new THREE.Mesh(sphereGeo1, sphereMat1);
-    // sphere1.position.set(15, sphereRadius1, 18);
-    // scene.add(sphere1);
-    // // mr poopy
-    // const sphereRadius2 = 4;
-    // const sphereWidthDivisions2 = 32;
-    // const sphereHeightDivisions2 = 16;
-    // const sphereGeo2 = new THREE.SphereGeometry(sphereRadius2, sphereWidthDivisions2, sphereHeightDivisions2);
-    // const sphereMat2 = new THREE.MeshPhongMaterial({ map: loadColorTexture("../lib/mrPoopy.jpg") });
-    // const sphere2 = new THREE.Mesh(sphereGeo2, sphereMat2);
-    // sphere2.position.set(0, sphereRadius2, -15);
-    // scene.add(sphere2);
-    // // morty face
-    // const sphereRadius3 = 8;
-    // const sphereWidthDivisions3 = 32;
-    // const sphereHeightDivisions3 = 16;
-    // const sphereGeo3 = new THREE.SphereGeometry(sphereRadius3, sphereWidthDivisions3, sphereHeightDivisions3);
-    // const sphereMat3 = new THREE.MeshPhongMaterial({ map: loadColorTexture("../lib/mortyFace.jpg") });
-    // const sphere3 = new THREE.Mesh(sphereGeo3, sphereMat3);
-    // sphere3.position.set(-5, sphereRadius3 + 10, -20);
-    // scene.add(sphere3);
-    //  // rick face
-    //  const sphereRadius4 = 8;
-    //  const sphereWidthDivisions4 = 32;
-    //  const sphereHeightDivisions4 = 16;
-    //  const sphereGeo4 = new THREE.SphereGeometry(sphereRadius4, sphereWidthDivisions4, sphereHeightDivisions4);
-    //  const sphereMat4 = new THREE.MeshPhongMaterial({ map: loadColorTexture("../lib/rickFace.jpg") });
-    //  const sphere4 = new THREE.Mesh(sphereGeo4, sphereMat4);
-    //  sphere4.position.set(15, 20, -20 + sphereRadius4);
-    //  scene.add(sphere4);
-    //  // scary terry
-    // const sphereRadius5 = 3;
-    // const sphereWidthDivisions5= 4;
-    // const sphereHeightDivisions5 = 2;
-    // const sphereGeo5 = new THREE.SphereGeometry(sphereRadius5, sphereWidthDivisions5, sphereHeightDivisions5);
-    // const sphereMat5 = new THREE.MeshPhongMaterial({ map: loadColorTexture("../lib/scaryterry.jpg") });
-    // const sphere5 = new THREE.Mesh(sphereGeo5, sphereMat5);
-    // sphere5.position.set(10 - sphereRadius5, sphereRadius5 + 5, 18);
-    // scene.add(sphere5);
+    // me seeks
+    const sphereRadius1 = 4;
+    const sphereWidthDivisions1 = 32;
+    const sphereHeightDivisions1 = 16;
+    const sphereGeo1 = new THREE.SphereGeometry(sphereRadius1, sphereWidthDivisions1, sphereHeightDivisions1);
+    const sphereMat1 = new THREE.MeshPhongMaterial({ map: loadColorTexture("../lib/meSeeks.jpg") });
+    const sphere1 = new THREE.Mesh(sphereGeo1, sphereMat1);
+    sphere1.position.set(35, sphereRadius1, 35);
+    scene.add(sphere1);
+    // mr poopy
+    const sphereRadius2 = 4;
+    const sphereWidthDivisions2 = 32;
+    const sphereHeightDivisions2 = 16;
+    const sphereGeo2 = new THREE.SphereGeometry(sphereRadius2, sphereWidthDivisions2, sphereHeightDivisions2);
+    const sphereMat2 = new THREE.MeshPhongMaterial({ map: loadColorTexture("../lib/mrPoopy.jpg") });
+    const sphere2 = new THREE.Mesh(sphereGeo2, sphereMat2);
+    sphere2.position.set(0, sphereRadius2, -15);
+    scene.add(sphere2);
+    // morty face
+    const sphereRadius3 = 8;
+    const sphereWidthDivisions3 = 32;
+    const sphereHeightDivisions3 = 16;
+    const sphereGeo3 = new THREE.SphereGeometry(sphereRadius3, sphereWidthDivisions3, sphereHeightDivisions3);
+    const sphereMat3 = new THREE.MeshPhongMaterial({ map: loadColorTexture("../lib/mortyFace.jpg") });
+    const sphere3 = new THREE.Mesh(sphereGeo3, sphereMat3);
+    sphere3.position.set(-5, sphereRadius3 + 20, -20);
+    scene.add(sphere3);
+    // rick face
+    const sphereRadius4 = 8;
+    const sphereWidthDivisions4 = 32;
+    const sphereHeightDivisions4 = 16;
+    const sphereGeo4 = new THREE.SphereGeometry(sphereRadius4, sphereWidthDivisions4, sphereHeightDivisions4);
+    const sphereMat4 = new THREE.MeshPhongMaterial({ map: loadColorTexture("../lib/rickFace.jpg") });
+    const sphere4 = new THREE.Mesh(sphereGeo4, sphereMat4);
+    sphere4.position.set(15, 35, -20 + sphereRadius4);
+    scene.add(sphere4);
     // scary terry
-    //  const sphereRadius6 = 5;
-    //  const sphereWidthDivisions6= 32;
-    //  const sphereHeightDivisions6 = 2;
-    //  const sphereGeo6 = new THREE.SphereGeometry(sphereRadius6, sphereWidthDivisions6, sphereHeightDivisions6);
-    //  const sphereMat6 = new THREE.MeshPhongMaterial({ map: loadColorTexture("../lib/mrJelly.png") });
-    //  const sphere6 = new THREE.Mesh(sphereGeo6, sphereMat6);
-    //  sphere6.position.set(-5, sphereRadius6, 15);
-    //  scene.add(sphere6);
+    const sphereRadius5 = 3;
+    const sphereWidthDivisions5 = 4;
+    const sphereHeightDivisions5 = 2;
+    const sphereGeo5 = new THREE.SphereGeometry(sphereRadius5, sphereWidthDivisions5, sphereHeightDivisions5);
+    const sphereMat5 = new THREE.MeshPhongMaterial({ map: loadColorTexture("../lib/scaryterry.jpg") });
+    const sphere5 = new THREE.Mesh(sphereGeo5, sphereMat5);
+    sphere5.position.set(10 - sphereRadius5, sphereRadius5 + 5, 18);
+    scene.add(sphere5);
+    // mr jelly
+    const sphereRadius6 = 5;
+    const sphereWidthDivisions6 = 32;
+    const sphereHeightDivisions6 = 2;
+    const sphereGeo6 = new THREE.SphereGeometry(sphereRadius6, sphereWidthDivisions6, sphereHeightDivisions6);
+    const sphereMat6 = new THREE.MeshPhongMaterial({ map: loadColorTexture("../lib/mrJelly.png") });
+    const sphere6 = new THREE.Mesh(sphereGeo6, sphereMat6);
+    sphere6.position.set(-35, sphereRadius6, 35);
+    scene.add(sphere6);
 
 
     // CREATE CUBES
     // Portal Cube
-    const boxWidthPortal = 4;
-    const boxHeightPortal = 8;
-    const boxDepthPortal = 8;
+    const boxWidthPortal = 8;
+    const boxHeightPortal = 10;
+    const boxDepthPortal = 10;
     const geometryPortal = new THREE.BoxGeometry(boxWidthPortal, boxHeightPortal, boxDepthPortal);
     const materialPortal = new THREE.MeshBasicMaterial({ map: loadColorTexture('../lib/portal.jpg') });
     const cubePortal = new THREE.Mesh(geometryPortal, materialPortal);
-    cubePortal.position.set(-15, 5, -10);
+    cubePortal.position.set(-25, 5, -20);
     scene.add(cubePortal);
     //portal cube 2
+    const boxWidthPortal2 = 18;
+    const boxHeightPortal2 = 20;
+    const boxDepthPortal2 = 20;
+    const geometryPortal2 = new THREE.BoxGeometry(boxWidthPortal, boxHeightPortal, boxDepthPortal);
     const materialPortal2 = new THREE.MeshBasicMaterial({ map: loadColorTexture('../lib/portal2.jpg') });
-    const cubePortal2 = new THREE.Mesh(geometryPortal, materialPortal2);
-    cubePortal2.position.set(18, 5, 6);
+    const cubePortal2 = new THREE.Mesh(geometryPortal2, materialPortal2);
+    cubePortal2.position.set(18, 5, 26);
     scene.add(cubePortal2);
     //family picture
     const boxWidthPortalFamily = 15;
@@ -264,24 +270,28 @@ function main() {
     const geometryPortalFamily = new THREE.BoxGeometry(boxWidthPortalFamily, boxHeightPortalFamily, boxDepthPortalFamily);
     const materialFamily = new THREE.MeshBasicMaterial({ map: loadColorTexture('../lib/family.jpg') });
     const cubeFamily = new THREE.Mesh(geometryPortalFamily, materialFamily);
-    cubeFamily.position.set(0, 0, 0);
+    cubeFamily.position.set(0, 5, 0);
     scene.add(cubeFamily);
+    // froppy char
+    const materialFroppy = new THREE.MeshBasicMaterial({ map: loadColorTexture('../lib/textures/froppyChar.png') });
+    const cubeFroppy = new THREE.Mesh(geometryPortal, materialFroppy);
+    cubeFroppy.position.set(-28, 25, 0);
+    scene.add(cubeFroppy);
+    // froppy king
+    const materialKing = new THREE.MeshBasicMaterial({ map: loadColorTexture('../lib/textures/froppyKing.png') });
+    const cubeKing = new THREE.Mesh(geometryPortal, materialKing);
+    cubeKing.position.set(-38, 30, -10);
+    scene.add(cubeKing);
+
 
     // creatre cube geometry
-    const cubeSize = 4;
-    const boxWidth = 4;
-    const boxHeight = 4;
-    const boxDepth = 4;
-    const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
     const cubes = [
         makeEvilMorty(0, 0, 0), // evil morty cube
         makeDrunkRick(0, 8, 0), // drunk rick cube
-        makeAcid(0, 8, 0),     //acid cube
-        // makeInstance(geometry, 15, 15, -10),
+        makeAcid(-30, 8, -20),     //acid cube
         makeEvilMorty(10, -20, 8), // evil morty cube
-        makeDrunkRick(0, 8, 18), // drunk rick cube
-        makeAcid(0, 10, -20),     //acid cube
-        // makeInstance(geometry, 2, 15, 0),
+        makeDrunkRick(28, 8, -28), // drunk rick cube
+        makeAcid(0, 30, -20),     //acid cube
     ];
 
 
@@ -307,9 +317,9 @@ function main() {
     }
 
     function makeDrunkRick(x, y, z) {
-        const boxWidth = 2;
-        const boxHeight = 1;
-        const boxDepth = 2;
+        const boxWidth = 4;
+        const boxHeight = 3;
+        const boxDepth = 4;
         const geometryEV = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
         const materials = [
             new THREE.MeshBasicMaterial({ map: loadColorTexture('../lib/drunkRick/drunkRick1.jpg') }),
@@ -347,26 +357,6 @@ function main() {
         return cube;
     }
 
-    function makeInstance(geometry, x, y, z) {
-        // BoxGeometry can use 6 materials one for each face. ConeGeometry can use 2 materials, one for the bottom and one for the cone. CylinderGeometry can use 3 materials, bottom, top, and side. 
-        // CUBE MESH
-        // const cube = new THREE.Mesh(geometry, material);
-        const materials = [
-            new THREE.MeshBasicMaterial({ map: loadColorTexture('../lib/evilMorty.jpg') }),
-            new THREE.MeshBasicMaterial({ map: loadColorTexture('../lib/melting.jpg') }),
-            new THREE.MeshBasicMaterial({ map: loadColorTexture('../lib/negSunset.jpg') }),
-            new THREE.MeshBasicMaterial({ map: loadColorTexture('../lib/susRick.jpg') }),
-            new THREE.MeshBasicMaterial({ map: loadColorTexture('../lib/trippingFade.jpg') }),
-            new THREE.MeshBasicMaterial({ map: loadColorTexture('../lib/vintage.jpg') }),
-        ];
-        // const cube = new THREE.Mesh(geometry, material);
-        const cube = new THREE.Mesh(geometry, materials);
-        cube.position.set(cubeSize + x, (cubeSize / 2) + y, z);
-        scene.add(cube);
-        cube.position.x = x;
-
-        return cube;
-    }
 
     function loadColorTexture(path) {
         // create texture loader
