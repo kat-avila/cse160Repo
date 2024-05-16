@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Draw a blue rectangle (canvas version)</title>
+    <style>
+        body {
+            margin: 0;
+        }
+        #c {
+            /* width: fit-content; */
+            width: 100%;
+            /* height: 100%; */
+            display: block;
+            background: url(../lib/galaxy.png) no-repeat center center;
+            background-size: cover;
+        }
+        
+    </style>
+</head>
+
+<body>
+    <canvas id="c"></canvas>
+    <!-- orbit controls -->
+    <div class="split">
+        <div id="view1" tabindex="1"></div>
+        <div id="view2" tabindex="2"></div>
+    </div>
+    <!-- load lib -->
+    <script src="../lib/webgl-utils.js"></script>
+    <script src="../lib/webgl-debug.js"></script>
+    <script src="../lib/cuon-utils.js"></script>
+    <!-- load three.js -->
+    <script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-modules-shims.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.127.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three/examples/jsm/",
+                "three/examples/jsm/": "https://unpkg.com/three@0.127.0/examples/jsm/"
+            }
+        }
+    </script>
+    <script type="module" src="asg5B.js"></script>
+    <!-- load GUI helpers -->
+    <script src="../lib/helpers/ColorGUIHelper.js"></script>
+    <script src="../lib/helpers/MinMaxGUIHelper.js"></script>
+
+</body>
+
+</html>
