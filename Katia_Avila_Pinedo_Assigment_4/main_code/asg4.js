@@ -501,7 +501,7 @@ function initWorldFunc() {
   // sky.textureNum = COLOR;
   sky.color = [0.16, 0.322, 0.745, 1];
   // sky.textureNum = SKY;
-  sky.matrix.scale(-50, 50, 50);
+  sky.matrix.scale(-50, -50, -50);
   // sky.matrix.translate(-0.4, 0.25, 0.25);
 }
 
@@ -547,6 +547,10 @@ function renderAllShapes() {
   torso.matrix.scale(0.4, 0.4, 0.4);
   // torso.matrix.translate(0, -1.25, 0);
   torso.render();
+
+  var sphere = new Sphere();
+  sphere.matrix.translate(0, 1, 0);
+  sphere.render();
 
 
 }
