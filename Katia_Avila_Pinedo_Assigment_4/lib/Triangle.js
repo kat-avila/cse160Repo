@@ -40,7 +40,7 @@ function initTriangles3D() {
 var g_uvBuffer = null;
 function initTrianglesUV() {
    // Create a buffer object
-   var g_uvBuffer = gl.createBuffer();
+   g_uvBuffer = gl.createBuffer();
    if (!g_uvBuffer) {
      console.log('Failed to create the buffer object');
      return -1;
@@ -70,8 +70,6 @@ function drawTriangle3D(vertices) {
   return n;
 }
 
-
-
 function drawTriangle3DUV(vertices, uv) {
   var n = vertices.length/3; // The number of vertices
 
@@ -87,6 +85,56 @@ function drawTriangle3DUV(vertices, uv) {
    }
   // Write date into the buffer object
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(uv), gl.DYNAMIC_DRAW);
+
+
+  // Draw triangles
+  gl.drawArrays(gl.TRIANGLES, 0, n);
+
+
+  return n;
+}
+
+var g_normalBuffer = null;
+function initTrianglesNormal() {
+   // Create a buffer object
+   g_normalBuffer = gl.createBuffer();
+   if (!g_normalBuffer) {
+     console.log('Failed to create the buffer object');
+     return -1;
+   }
+ // Bind the buffer object to target
+ gl.bindBuffer(gl.ARRAY_BUFFER, g_normalBuffer);
+
+ // Assign the buffer object to a_Position variable, with 2 values
+ gl.vertexAttribPointer(a_Normal, 3, gl.FLOAT, false, 0, 0);
+
+ // Enable the assignment to a_Position variable
+ gl.enableVertexAttribArray(a_Normal);
+}
+
+function drawTriangle3DUVNormal(vertices, uv, normal) {
+  var n = vertices.length/3; // The number of vertices
+
+  //------ Vertex Buffer
+  if (g_vertexBuffer == null) {
+    initTriangles3D();
+  }
+  // Write date into the buffer object
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.DYNAMIC_DRAW);
+
+  //------------ UV buffer
+   if (g_uvBuffer == null) {
+    initTrianglesUV();
+   }
+  // Write date into the buffer object
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(uv), gl.DYNAMIC_DRAW);
+
+  //---------- Normal Buffer
+  if (g_normalBuffer == null) {
+    initTrianglesNormal();
+  }
+  // Write date into the buffer object
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normal), gl.DYNAMIC_DRAW);
 
 
   // Draw triangles

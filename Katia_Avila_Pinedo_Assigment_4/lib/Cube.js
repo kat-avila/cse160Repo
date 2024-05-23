@@ -45,7 +45,22 @@ class Cube {
                 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 1, 1,
             ];
 
-
+        this.allNormal =
+            [
+                // FRONT
+                0, 0, -1,  0, 0, -1,  0, 0, -1,
+                // LEFT
+                -1, 0, 0,  -1, 0, 0,  -1, 0, 0,
+                // RIGHT
+                1, 0, 0,  1, 0, 0,  1, 0, 0,
+                // TOP
+                0, 1, 0,  0, 1, 0,  0, 1, 0,
+                // BACK
+                0, 0, 1,  0, 0, 1,  0, 0, 1,
+                // BOTTOM
+                0, -1, 0,  0, -1, 0,  0, -1, 0,
+            ];
+        
     }
 
     render() {
@@ -60,8 +75,8 @@ class Cube {
         // Pass the matrix to u_ModelMatrix attribute
         gl.uniformMatrix4fv(u_ModelMatrix, false, this.matrix.elements);
 
-        drawTriangle3DUV(this.allVerts, this.allUV);
-
+        // drawTriangle3DUV(this.allVerts, this.allUV);
+        drawTriangle3DUVNormal(this.allVerts, this.allUV, this.allNormal);
     }
 
 }

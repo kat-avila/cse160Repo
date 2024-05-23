@@ -4,6 +4,8 @@
 var VSHADER_SOURCE = `
   attribute vec4 a_Position;
   attribute vec2 a_UV;
+  attribute vec3 a_Normal; 
+  varying vec3 v_Normal; 
   varying vec2 v_UV;
   uniform mat4 u_ModelMatrix;
   uniform mat4 u_ViewMatrix;
@@ -11,11 +13,13 @@ var VSHADER_SOURCE = `
   void main() { 
     gl_Position = u_ProjectionMatrix * u_ViewMatrix * u_ModelMatrix * a_Position;
     v_UV = a_UV;
+    v_Normal = a_Normal;
   }`
 // Fragment shader program
 var FSHADER_SOURCE = `
   precision mediump float;
   varying vec2 v_UV;
+  varying vec3 v_Normal;
   uniform vec4 u_FragColor;  // uniform
   uniform sampler2D u_skyTexture;
   uniform sampler2D u_wallGrassTexture;
@@ -25,7 +29,10 @@ var FSHADER_SOURCE = `
   uniform sampler2D u_rickTexture;
   uniform int u_whichTexture;
   void main() {
-    if (u_whichTexture == -2) { // color
+    if (u_whichTexture == -3) {
+      gl_FragColor = vec4((v_Normal+1.0)/2.0, 1.0); // Use normal
+    
+    } else if (u_whichTexture == -2) { // color
       gl_FragColor = u_FragColor;
 
     } else if (u_whichTexture == -1) { //uv
@@ -125,6 +132,13 @@ function connectVariablesToGLSL() {
     console.log('Failed to get the storage location of a_UV');
     return;
   }
+
+    // Get the storage location of a_Normal
+    a_Normal = gl.getAttribLocation(gl.program, 'a_Normal');
+    if (a_Normal < 0) {
+      console.log('Failed to get the storage location of a_Normal');
+      return;
+    }
 
   // Get the storage location of u_FragColor
   u_FragColor = gl.getUniformLocation(gl.program, 'u_FragColor');
@@ -361,38 +375,11 @@ var startTimeVal = null;
 var endTimeVal;
 var charSelect = KING; // default king, 1 rick
 
+var g_normalOn = false;
 function addActionsForHTMLUI() {
-  document.getElementById("changeChar").onclick = function () {
-    if (charSelect == KING) { // at king swtich to rick
-      charSelect = RICK;
-      document.getElementById("charName").textContent = "You are playing as RICK SANCHEZ";
-    } else if (charSelect == RICK) { // at rick switch to king
-      charSelect = KING;
-      document.getElementById("charName").textContent = "You are playing as KING TOMMY";
-    }
-    // console.log(charSelect);
-  };
+  document.getElementById("normalOn").onclick = function () {g_normalOn = true;};
+  document.getElementById("normalOff").onclick = function () {g_normalOn = false};
 
-  document.getElementById("endTime").onclick = function () {
-    endTimeVal = Date.now();
-    if (startTimeVal) {
-      document.getElementById("userTime").textContent = "Maze Run Time: " + (endTimeVal - startTimeVal) / 1000;
-    } else {
-      document.getElementById("userTime").textContent = "UNABLE TO DETERMINE START TIME";
-
-    }
-  };
-  document.getElementById("resetGame").onclick = function () {
-    endTimeVal = 0
-    startTimeVal = null;
-    g_moveRotate = 0;
-    g_moveSides = 0;
-    g_moveUps = 0;
-    camera.eye.elements.set([0, 0, 0]); // vec3
-    camera.at.elements.set([0, 0, -1]);
-    camera.up.elements.set([0, 1, 0]);
-    document.getElementById("userTime").textContent = "TIMER RESET";
-  };
 
   document.onkeydown = keydown;
   document.onmousedown = function (evt) {
@@ -440,7 +427,6 @@ function main() {
 function timerBegin() {
   if (!startTimeVal) {
     startTimeVal = Date.now();
-    document.getElementById("userTime").textContent = "Running Timer.... ";
   }
 }
 
@@ -512,7 +498,7 @@ function initWorldFunc() {
   ground.matrix.translate(-0.45, 0, -0);
 
   // SKY
-  sky.textureNum = COLOR;
+  // sky.textureNum = COLOR;
   sky.color = [0.16, 0.322, 0.745, 1];
   // sky.textureNum = SKY;
   sky.matrix.scale(-125, 80, 125);
@@ -544,6 +530,8 @@ function renderAllShapes() {
   // GROUND
   ground.render();
   // SKY
+  if (g_normalOn) sky.textureNum = -3;
+  if (!g_normalOn) sky.textureNum = -2;
   sky.render();
 
   // MAP
@@ -551,7 +539,10 @@ function renderAllShapes() {
 
   // TORSO
   var torso = new Cube();
-  torso.textureNum = charSelect;
+  // torso.textureNum = charSelect;
+  if (g_normalOn) torso.textureNum = -3;
+  if (!g_normalOn) torso.textureNum = -2;
+
   torso.matrix.translate(camera.at.elements[0], camera.at.elements[1], camera.at.elements[2]);
   torso.matrix.rotate(g_moveRotate, 0, 1, 0);
   torso.matrix.scale(0.4, 0.4, 0.4);
