@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Assigment 2 : Blocky Animal (Medium) </title>
+  <style>
+    .column {
+      float: left;
+      padding: 20px;
+    }
+
+    /* Clear floats after the columns */
+    .row:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+
+    #welcome {
+      background-image: linear-gradient(45deg,
+          magenta,
+          rebeccapurple,
+          dodgerblue,
+          green);
+      opacity: 0.75;
+    }
+    #userTime {
+      font-size: 30px;
+      background-image: linear-gradient(45deg,
+          magenta,
+          rebeccapurple,
+          dodgerblue,
+          green);
+      opacity: 0.75;
+    }
+  </style>
+</head>
+
+<body onload="main()">
+  <div class="row">
+    <div class="column">
+      <canvas id="webgl" width="1200" height="1000">
+        Please use a browser that supports "canvas"
+      </canvas>
+    </div>
+
+    <div class="column" width="400">
+      <div id="welcome" height="500px">
+        <h1>Welcome to FroppyLand!
+          <br>
+          <div id="charName">
+            You are playing as KING TOMMY
+          </div>
+          <button type="button" id="changeChar">SWITCH CHARACTER</button>
+  
+        </h1>
+        
+      </div>
+      
+      <li>Click and drag with your mouse to move the camera</li>
+      <li>Or use Q to pan Left and R to pan Right</li>
+      <li> Use W,S,A, and D to move foward, backward, left, and right respectively.</li>
+      <li> Press the SWITCH CHARACTER button to toggle between KING TOMMY and RICK SANCHEZ.</li>
+      <li> Press RESET GAME will reset timer and character position.</li>
+
+     <br>
+      <h4>FROOPYLAND MAZE: </h4>
+      <li>Follow the Froppy character on the purple blocks to find your way around the maze.</li>
+      <li> Start is at the golden tower + Froppy Character tower, located at spawnpoint. </li>
+      <li> Finish is at the golden Froppy wall, located across the map from the spawnpoint. </li>
+      <h4>
+        Time your maze run!
+      </h4>
+      <li> The timer begins on the first keypress of W, A, S, or D.</li>
+        <li> Timer will not begin if Q or E are pressed.</li>
+        <li> When you reach the finishline, press "END TIMER" button to see your maze run time.</li>
+        <br>
+        <button type="button" id="endTime">END TIMER</button>
+        <div Id="userTime">Maze Run Time: </div>
+        <br>
+        <button type="button" id="resetGame">RESET GAME</button>
+    </div>
+  </div>
+  <p>
+
+
+    <script src="../lib/webgl-utils.js"></script>
+    <script src="../lib/webgl-debug.js"></script>
+    <script src="../lib/cuon-utils.js"></script>
+    <script src="../lib/cuon-matrix-cse160.js"></script>
+    <script src="../lib/Point.js"></script>
+    <script src="../lib/Triangle.js"></script>
+    <script src="../lib/Circle.js"></script>
+    <script src="../lib/Cube.js"></script>
+    <script src="../lib/Camera.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/stats.js/17/Stats.js"></script> -->
+    <script src="asg4.js"></script>
+</body>
+
+</html>
