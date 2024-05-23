@@ -492,17 +492,17 @@ function initWorldFunc() {
   // GROUND
   ground.textureNum = COLOR;
   ground.color = [0.86, 0.58, 0.47, 1];
-  ground.matrix.translate(0, -4, 25);
+  ground.matrix.translate(0, -0.5, 0);
   gndCoordMatrix.set(ground.matrix);
-  ground.matrix.scale(-100, 0, 100);
-  ground.matrix.translate(-0.45, 0, -0);
+  ground.matrix.scale(-48, 0, 48);
+  // ground.matrix.translate(-0.45, 0, -0);
 
   // SKY
   // sky.textureNum = COLOR;
   sky.color = [0.16, 0.322, 0.745, 1];
   // sky.textureNum = SKY;
-  sky.matrix.scale(-125, 80, 125);
-  sky.matrix.translate(-0.4, 0.25, 0.25);
+  sky.matrix.scale(-50, 50, 50);
+  // sky.matrix.translate(-0.4, 0.25, 0.25);
 }
 
 var viewMat = new Matrix4();
@@ -542,11 +542,11 @@ function renderAllShapes() {
   // torso.textureNum = charSelect;
   if (g_normalOn) torso.textureNum = -3;
   if (!g_normalOn) torso.textureNum = -2;
-
-  torso.matrix.translate(camera.at.elements[0], camera.at.elements[1], camera.at.elements[2]);
+  // torso.matrix.translate(camera.at.elements[0], 0, camera.at.elements[2]);
+  torso.matrix.translate(camera.at.elements[0], camera.at.elements[1] - 0.25, camera.at.elements[2]);
   torso.matrix.rotate(g_moveRotate, 0, 1, 0);
   torso.matrix.scale(0.4, 0.4, 0.4);
-  torso.matrix.translate(0.2, -0.5, 0);
+  // torso.matrix.translate(0, -1.25, 0);
   torso.render();
 
 
