@@ -512,7 +512,9 @@ function initWorldFunc() {
   ground.matrix.translate(-0.45, 0, -0);
 
   // SKY
-  sky.textureNum = SKY;
+  sky.textureNum = COLOR;
+  sky.color = [0.16, 0.322, 0.745, 1];
+  // sky.textureNum = SKY;
   sky.matrix.scale(-125, 80, 125);
   sky.matrix.translate(-0.4, 0.25, 0.25);
 }
@@ -545,7 +547,7 @@ function renderAllShapes() {
   sky.render();
 
   // MAP
-  createWorld();
+  // createWorld();
 
   // TORSO
   var torso = new Cube();
