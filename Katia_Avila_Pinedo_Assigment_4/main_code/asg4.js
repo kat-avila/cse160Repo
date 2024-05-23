@@ -541,8 +541,7 @@ function renderAllShapes() {
   var torso = new Cube();
   // torso.textureNum = charSelect;
   if (g_normalOn) torso.textureNum = -3;
-  if (!g_normalOn) torso.textureNum = -2;
-  // torso.matrix.translate(camera.at.elements[0], 0, camera.at.elements[2]);
+  if (!g_normalOn) torso.textureNum = UV;
   torso.matrix.translate(camera.at.elements[0], camera.at.elements[1] - 0.25, camera.at.elements[2]);
   torso.matrix.rotate(g_moveRotate, 0, 1, 0);
   torso.matrix.scale(0.4, 0.4, 0.4);
