@@ -531,7 +531,7 @@ function renderAllShapes() {
   ground.render();
   // SKY
   if (g_normalOn) sky.textureNum = -3;
-  if (!g_normalOn) sky.textureNum = -2;
+  if (!g_normalOn) sky.textureNum = -1;
   sky.render();
 
   // MAP
