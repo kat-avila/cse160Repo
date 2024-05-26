@@ -528,7 +528,7 @@ function renderAllShapes() {
     initWorld = true;
   }
   // GROUND
-  ground.render();
+  // ground.render();
   // SKY
   if (g_normalOn) sky.textureNum = -3;
   if (!g_normalOn) sky.textureNum = -1;
