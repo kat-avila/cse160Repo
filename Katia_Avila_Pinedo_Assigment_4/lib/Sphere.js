@@ -39,7 +39,7 @@ class Sphere {
                 v = v.concat(p4); uv=uv.concat([0,0]);
 
                 gl.uniform4f(u_FragColor, 1,1,1,1); // white color
-                // drawTriangle3DUVNormal(v, uv, v);
+                drawTriangle3DUVNormal(v, uv, v);
 
                 v=[]; uv=[];
                 v=v.concat(p1); uv=uv.concat([0,0]);

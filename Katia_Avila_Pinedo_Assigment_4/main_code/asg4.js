@@ -374,37 +374,41 @@ function sendTextureToGLSL(image, txtCode) {
 var startTimeVal = null;
 var endTimeVal;
 var charSelect = KING; // default king, 1 rick
-
 var g_normalOn = false;
+let g_lightPos = [0, 1, -2];
 function addActionsForHTMLUI() {
   document.getElementById("normalOn").onclick = function () {g_normalOn = true;};
   document.getElementById("normalOff").onclick = function () {g_normalOn = false};
 
+  document.getElementById("lightSlideX").addEventListener('mousemove', function(ev) {if (ev.buttons ==1) {g_lightPos[0] = this.value/100;}});
+  document.getElementById("lightSlideY").addEventListener('mousemove', function(ev) {if (ev.buttons ==1) {g_lightPos[1] = this.value/100;}});
+  document.getElementById("lightSlideZ").addEventListener('mousemove', function(ev) {if (ev.buttons ==1) {g_lightPos[2] = this.value/100;}});
+
 
   document.onkeydown = keydown;
-  document.onmousedown = function (evt) {
-    isMouseDown = true,
-      evt = evt || window;
-    startX = evt.pageX;
-    startY = evt.pageY;
-    // console.log("start", startX, startY);  
-  };
-  document.onmouseup = function () { isMouseDown = false; };
-  document.onmousemove = function (evt) {
-    if (isMouseDown) {
-      evt = evt || window;
-      endX = evt.pageX;
-      endY = evt.pageY;
-      if (endX > startX) { // pan left
-        camera.panLeft();
-        g_moveRotate = g_moveRotate + 8;
-      } else if (endX < startX) { // pan right
-        camera.panRight();
-        g_moveRotate = g_moveRotate - 8;
+  // document.onmousedown = function (evt) {
+  //   isMouseDown = true,
+  //     evt = evt || window;
+  //   startX = evt.pageX;
+  //   startY = evt.pageY;
+  //   // console.log("start", startX, startY);  
+  // };
+  // document.onmouseup = function () { isMouseDown = false; };
+  // document.onmousemove = function (evt) {
+  //   if (isMouseDown) {
+  //     evt = evt || window;
+  //     endX = evt.pageX;
+  //     endY = evt.pageY;
+  //     if (endX > startX) { // pan left
+  //       camera.panLeft();
+  //       g_moveRotate = g_moveRotate + 8;
+  //     } else if (endX < startX) { // pan right
+  //       camera.panRight();
+  //       g_moveRotate = g_moveRotate - 8;
 
-      }
-    }
-  };
+  //     }
+  //   }
+  // };
 }
 
 function main() {
@@ -457,12 +461,6 @@ function keydown(ev) {
 
   }
 
-  if (ev.keycode == 37) {
-    g_moveSides = g_moveSides - 0.1;
-    console.log(g_moveSides);
-    requestAnimationFrame(tick);
-  }
-
 }
 
 function tick() {
@@ -487,8 +485,8 @@ var initWorld = false;
 var ground = new Cube();
 var sky = new Cube();
 var gndCoordMatrix = new Matrix4();
-
 function initWorldFunc() {
+
   // GROUND
   ground.textureNum = COLOR;
   ground.color = [0.86, 0.58, 0.47, 1];
@@ -527,6 +525,14 @@ function renderAllShapes() {
     initWorldFunc();
     initWorld = true;
   }
+  // LIGHT
+  // light
+  var light = new Cube();
+  light.color = [2, 2, 0, 1];
+  light.matrix.translate(g_lightPos[0], g_lightPos[1], g_lightPos[2]);
+  light.matrix.scale(.1, .1, .1);
+  // light.matrix.translate(-.5, -.5, -.5);
+  light.render();
   // GROUND
   ground.render();
   // SKY
@@ -550,6 +556,8 @@ function renderAllShapes() {
 
   var sphere = new Sphere();
   sphere.matrix.translate(0, 1, 0);
+  if (g_normalOn) sphere.textureNum = -3;
+  if (!g_normalOn) sphere.textureNum = -2;
   sphere.render();
 
 
