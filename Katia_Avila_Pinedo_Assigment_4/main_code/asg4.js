@@ -463,6 +463,9 @@ function keydown(ev) {
 
 }
 
+var bounceX = false;
+var bounceY = false;
+var bounceZ = false;
 function tick() {
   const time = Date.now();
   frames++;
@@ -471,6 +474,28 @@ function tick() {
     prevTime = time;
     frames = 0;
     console.info('FPS: ', fps);
+  }
+
+  if (g_lightPos[0] >= 10) {
+    bounceX = true; 
+  }  else if (g_lightPos[0] < -10) {
+    bounceX = false;
+  }
+  if (bounceX) {
+    g_lightPos[0] -= 0.1;
+  }  else {
+    g_lightPos[0] += 0.1;
+  }
+  
+  if (g_lightPos[1] >= 5) {
+    bounceY = true; 
+  }  else if (g_lightPos[1] < 2.5) {
+    bounceY = false;
+  }
+  if (bounceY) {
+    g_lightPos[1] -= 0.05;
+  }  else {
+    g_lightPos[1] += 0.05;
   }
 
   // Draw everthing
@@ -496,7 +521,7 @@ function initWorldFunc() {
   // ground.matrix.translate(-0.45, 0, -0);
 
   // SKY
-  // sky.textureNum = COLOR;
+  sky.textureNum = COLOR;
   sky.color = [0.16, 0.322, 0.745, 1];
   // sky.textureNum = SKY;
   sky.matrix.scale(-50, -50, -50);
@@ -537,7 +562,7 @@ function renderAllShapes() {
   ground.render();
   // SKY
   if (g_normalOn) sky.textureNum = -3;
-  if (!g_normalOn) sky.textureNum = -1;
+  if (!g_normalOn) sky.textureNum = -2;
   sky.render();
 
   // MAP
